@@ -3,8 +3,8 @@
 ## Group T0xG0y
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| Beatriz Aguiar   | 201906230 | up201906230@fe.up.pt |
+| João Marinho     | 201905952 | up201905952@fe.up.pt |
 
 ----
 
