@@ -47,6 +47,12 @@
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
+        <primitive id="demoTriangle">
+            <triangle x1="1" y1="-1" z1="0" x2="1" y2="0" z2="0" x3="0" y3="0" z3="0" />
+        </primitive>
+        <primitive id="demoCylinder">
+            <cylinder base="2" top="2" height="5" slices="4" stacks="2" />
+        </primitive>
     </primitives>
 
     <components>
@@ -61,7 +67,9 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoRectangle" />
+                <primitiveref id="demoTriangle" />
+                <primitiveref id="demoCylinder" />
             </children>
         </component>
     </components>
-</sxs>
+</lxs>
