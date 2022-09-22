@@ -31,51 +31,8 @@ export class MyCylinder extends CGFobject {
     this.texCoords = [];
 
     var ang = 0;
-    var alphaAng = 2 * Math.PI / this.slices;
-    var counterVertices = 0;
-    var increment = 1 / this.slices;
-
-    /*
-    for (var i = 0; i < this.stacks; i++) {
-      // All vertices have to be declared for a given face
-      // even if they are shared with others, as the normals 
-      // in each face will be different
-
-      var sa = Math.sin(ang);  //0
-      var saa = Math.sin(ang + alphaAng); //sin(60)
-      var ca = Math.cos(ang); //1
-      var caa = Math.cos(ang + alphaAng); //1/2 cos(60)
-
-      this.vertices.push(ca, -sa, 0);//0
-      this.vertices.push(caa,-saa, 0); //1
-      this.vertices.push(ca, -sa, 1); //2
-
-      this.vertices.push(caa, -saa, 0); //3
-      this.vertices.push(caa, -saa, 1); //4
-      this.vertices.push(ca, -sa, 1); //5
-
-      this.indices.push(6 * i, (6 * i + 2), (6 * i + 1));
-      this.indices.push(6 * i + 3, (6 * i + 5), (6 * i + 4));
-
-
-      this.normals.push(ca, 0, -sa); //0
-      this.normals.push(caa, 0, -saa); //1
-      this.normals.push(ca, 0, -sa); //2
-
-      this.normals.push(caa, 0, -saa); //3
-      this.normals.push(caa, 0, -saa); //4
-      this.normals.push(ca, 0, -sa); //5
-
-      this.texCoords.push(i * increment, 1);
-      this.texCoords.push((i + 1) * increment, 1);
-      this.texCoords.push(i * increment, 0);
-      this.texCoords.push((i + 1) * increment, 1);
-      this.texCoords.push((i + 1) * increment, 0);
-      this.texCoords.push(i * increment, 0);
-
-      ang += alphaAng;
-    }
-    */
+    const alphaAng = 2 * Math.PI / this.slices;
+    const increment = 1 / this.slices;
 
     const incrementHeight = this.height / this.stacks;
     const incrementRadius = (this.topRadius - this.baseRadius) / this.stacks;
@@ -87,7 +44,7 @@ export class MyCylinder extends CGFobject {
       const baseRadius = this.baseRadius + incrementRadius * i;
       const topRadius = baseRadius + incrementRadius;
 
-      for (var ii = 0; ii <= this.slices; ii++) {
+      for (var ii = 0; ii < this.slices; ii++) {
 
         var sa = Math.sin(ang);
         var saa = Math.sin(ang + alphaAng);
@@ -102,7 +59,7 @@ export class MyCylinder extends CGFobject {
         this.vertices.push(caa * topRadius, saa * topRadius, topHeight);     //4
         this.vertices.push(ca * topRadius, sa * topRadius, topHeight);       //5
 
-        const incrementIndice = verticesPerStack * i + 6 * ii + 1;
+        const incrementIndice = verticesPerStack * i + 6 * ii;
 
         this.indices.push(incrementIndice, incrementIndice + 1, incrementIndice + 2);
         this.indices.push(incrementIndice + 3, incrementIndice + 4, incrementIndice + 5);
@@ -127,11 +84,6 @@ export class MyCylinder extends CGFobject {
     }
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
-  }
-
-  display() {
-    this.enableNormalViz();
-    super.display()
   }
 }
 
