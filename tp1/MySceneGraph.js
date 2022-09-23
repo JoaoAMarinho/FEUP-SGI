@@ -716,8 +716,8 @@ export class MySceneGraph {
             return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
         //TODO: definir primitiva
-        //var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
-        //this.primitives[primitiveId] = rect;
+        var sphere = new Sphere(this.scene, primitiveId, radius, slices, stacks);
+        this.primitives[primitiveId] = sphere;
         return null;
     }
 
@@ -932,7 +932,7 @@ export class MySceneGraph {
     displayScene() {
         ////TODO: Create display loop for transversing the scene graph
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoCylinder'].display();
+        this.primitives['demoSphere'].display();
 
     }
 }
