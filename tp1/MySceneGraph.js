@@ -2,6 +2,7 @@ import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
+import { MySphere } from './objects/primitives/MySphere.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -716,7 +717,7 @@ export class MySceneGraph {
             return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
         //TODO: definir primitiva
-        var sphere = new Sphere(this.scene, primitiveId, radius, slices, stacks);
+        var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
         this.primitives[primitiveId] = sphere;
         return null;
     }

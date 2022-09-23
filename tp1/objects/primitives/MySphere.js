@@ -1,21 +1,18 @@
-import {CGFobject, CGFappearance, CGFtexture} from '../../../lib/CGF.js';
+import {CGFobject} from '../../../lib/CGF.js';
 
  /**
    * @method constructor
    * @param  {CGFscene} scene - MyScene object
    * @param  {integer} slices - number of slices around Y axis
    * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
-   * @param  {CGFtexture} texture - texture to be applied to the object
    */
 export class MySphere extends CGFobject {
-  constructor(scene, slices, stacks, texture) {
+  constructor(scene, id, radius, slices, stacks) {
     super(scene);
+    this.id = id;
+    this.radius = radius;
     this.latDivs = stacks * 2;
     this.longDivs = slices;
-
-    this.material = new CGFappearance(scene);
-    this.material.setTexture(texture);
-    this.material.setEmission(1,1,1,1);
 
     this.initBuffers();
   }
@@ -47,9 +44,9 @@ export class MySphere extends CGFobject {
       theta = 0;
       for (let longitude = 0; longitude <= this.longDivs; longitude++) {
         //--- Vertices coordinates
-        var x = Math.cos(theta) * sinPhi;
-        var y = cosPhi;
-        var z = Math.sin(-theta) * sinPhi;
+        var x = Math.cos(theta) * sinPhi * this.radius;
+        var y = Math.sin(-theta) * sinPhi * this.radius;
+        var z = cosPhi * this.radius;
         this.vertices.push(x, y, z);
 
         //--- Indices
@@ -60,16 +57,12 @@ export class MySphere extends CGFobject {
           // and the ones directly south (next, next+1)
           // (i.e. one full round of slices ahead)
           
-          this.indices.push( current + 1, current, next);
-          this.indices.push( current + 1, next, next +1);
+          this.indices.push( current + 1, next, current);
+          this.indices.push( current + 1, next + 1, next);
         }
 
-        //--- Normals
-        // at each vertex, the direction of the normal is equal to 
-        // the vector from the center of the sphere to the vertex.
-        // in a sphere of radius equal to one, the vector length is one.
-        // therefore, the value of the normal is equal to the position vectro
-        this.normals.push(x, y, z);
+        const distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)); 
+        this.normals.push(x/distance, y/distance, z/distance);
         theta += thetaInc;
 
         //--- Texture Coordinates 
