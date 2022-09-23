@@ -38,13 +38,13 @@ export class MyCylinder extends CGFobject {
     const incrementRadius = (this.topRadius - this.baseRadius) / this.stacks;
     const verticesPerStack = 6 * this.slices;
 
-    for (var i = 0; i < this.stacks; i++) {
-      const baseHeight = incrementHeight * i;
+    for (var stack = 0; stack < this.stacks; stack++) {
+      const baseHeight = incrementHeight * stack;
       const topHeight = baseHeight + incrementHeight;
-      const baseRadius = this.baseRadius + incrementRadius * i;
+      const baseRadius = this.baseRadius + incrementRadius * stack;
       const topRadius = baseRadius + incrementRadius;
 
-      for (var ii = 0; ii < this.slices; ii++) {
+      for (var slice = 0; slice < this.slices; slice++) {
 
         var sa = Math.sin(ang);
         var saa = Math.sin(ang + alphaAng);
@@ -59,7 +59,7 @@ export class MyCylinder extends CGFobject {
         this.vertices.push(caa * topRadius, saa * topRadius, topHeight);     //4
         this.vertices.push(ca * topRadius, sa * topRadius, topHeight);       //5
 
-        const incrementIndice = verticesPerStack * i + 6 * ii;
+        const incrementIndice = verticesPerStack * stack + 6 * slice;
 
         this.indices.push(incrementIndice, incrementIndice + 1, incrementIndice + 2);
         this.indices.push(incrementIndice + 3, incrementIndice + 4, incrementIndice + 5);
@@ -72,12 +72,12 @@ export class MyCylinder extends CGFobject {
         this.normals.push(caa, saa, 0);  //4
         this.normals.push(ca, sa, 0);    //5
 
-        this.texCoords.push(i * increment, 1);
-        this.texCoords.push((i + 1) * increment, 1);
-        this.texCoords.push(i * increment, 0);
-        this.texCoords.push((i + 1) * increment, 1);
-        this.texCoords.push((i + 1) * increment, 0);
-        this.texCoords.push(i * increment, 0);
+        this.texCoords.push(stack * increment, 1);
+        this.texCoords.push((stack + 1) * increment, 1);
+        this.texCoords.push(stack * increment, 0);
+        this.texCoords.push((stack + 1) * increment, 1);
+        this.texCoords.push((stack + 1) * increment, 0);
+        this.texCoords.push(stack * increment, 0);
   
         ang += alphaAng;
       }

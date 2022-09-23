@@ -3,6 +3,7 @@ import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
 import { MySphere } from './objects/primitives/MySphere.js';
+import { MyTorus } from './objects/primitives/MyTorus.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -745,13 +746,12 @@ export class MySceneGraph {
             return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
         // loops
-        var loops = this.reader.getInteger(sphere, 'loops');
+        var loops = this.reader.getInteger(torus, 'loops');
         if (!(loops != null && !isNaN(loops)))
             return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
-        //TODO: definir primitiva
-        //var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
-        //this.primitives[primitiveId] = rect;
+        var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
+        this.primitives[primitiveId] = torus;
         return null;
     }
 
@@ -933,7 +933,7 @@ export class MySceneGraph {
     displayScene() {
         ////TODO: Create display loop for transversing the scene graph
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoSphere'].display();
+        this.primitives['demoTorus'].display();
 
     }
 }

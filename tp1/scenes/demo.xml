@@ -56,6 +56,9 @@
         <primitive id="demoSphere">
             <sphere radius="2" slices="100" stacks="10" />
         </primitive>
+        <primitive id="demoTorus">
+            <torus inner="1" outer="2" slices="10" loops="10" />
+        </primitive>
     </primitives>
 
     <components>
@@ -73,6 +76,7 @@
                 <primitiveref id="demoTriangle" />
                 <primitiveref id="demoCylinder" />
                 <primitiveref id="demoSphere" />
+                <primitiveref id="demoTorus" />
             </children>
         </component>
     </components>
