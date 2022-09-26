@@ -434,12 +434,15 @@ export class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
-            //TODO Parse materials.
+            // Checks for material attributes' errors.
+            var material = {};
+            if ((error = this.parseMaterial(children[i].children, materialID, material)) != null)
+                return error;
+            
+            this.materials[materialID] = material;
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -900,6 +903,39 @@ export class MySceneGraph {
         color.push(...[r, g, b, a]);
 
         return color;
+    }
+
+    //TODO perguntar à professor sobre @params
+    /**
+     * Parse a material block
+     * @param {block element} nodes
+     * @param {string} materialID 
+     * @param {}
+     */
+     parseMaterial(nodes, materialID, material) {
+        var nodeNames = [];
+        const attributeNames = ["ambient", "diffuse", "specular", "emission"];
+
+        for (var i = 0; i < nodes.length; i++) {
+            nodeNames.push(nodes[i].nodeName);
+        }
+
+        for (var i = 0; i < attributeNames.length; i++) {
+            var attributeIndex = nodeNames.indexOf(attributeNames[i]);
+
+            if (attributeIndex != -1) {
+                var color = this.parseColor(nodes[attributeIndex]);
+
+                if (!Array.isArray(color))
+                    return color;
+
+                material[attributeNames[i]] = color;
+            }
+            else
+            return "material " + attributeNames[i] + " undefined for ID = " + materialID;
+        }
+
+        return null;
     }
 
     /*
