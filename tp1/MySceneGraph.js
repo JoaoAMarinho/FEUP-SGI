@@ -434,10 +434,10 @@ export class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //REVIEW Parse materials.
-            var material;
-            if ((material = this.parseMaterial(children[i].children)) == null)
-                return "material component undefined for ID = " + materialID;
+            // Checks for material attributes' errors.
+            var material = {};
+            if ((error = this.parseMaterial(children[i].children, materialID, material)) != null)
+                return error;
             
             this.materials[materialID] = material;
         }
@@ -905,13 +905,14 @@ export class MySceneGraph {
         return color;
     }
 
+    //TODO perguntar à professor sobre @params
     /**
      * Parse a material block
      * @param {block element} nodes
+     * @param {string} materialID 
+     * @param {}
      */
-     parseMaterial(nodes) {
-        //REVIEW
-        var material = {};
+     parseMaterial(nodes, materialID, material) {
         var nodeNames = [];
         const attributeNames = ["ambient", "diffuse", "specular", "emission"];
 
@@ -926,15 +927,15 @@ export class MySceneGraph {
                 var color = this.parseColor(nodes[attributeIndex]);
 
                 if (!Array.isArray(color))
-                    return null;
+                    return color;
 
                 material[attributeNames[i]] = color;
             }
             else
-                return null;
+            return "material " + attributeNames[i] + " undefined for ID = " + materialID;
         }
 
-        return material;
+        return null;
     }
 
     /*
