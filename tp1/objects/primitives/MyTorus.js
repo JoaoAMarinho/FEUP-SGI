@@ -1,12 +1,15 @@
 import { CGFobject } from '../../../lib/CGF.js';
 
+//TODO complete slices and loops
 /**
- * MyRectangle
+ * MyTorus
  * @constructor
  * @param scene - Reference to MyScene object
  * @param id - Object identifier
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param inner - The "tube" radius
+ * @param outer - The circular axis radius
+ * @param slices - 
+ * @param loops - 
  */
 export class MyTorus extends CGFobject {
 	constructor(scene, id, inner, outer, slices, loops) {
