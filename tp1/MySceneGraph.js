@@ -479,8 +479,8 @@ export class MySceneGraph {
                 continue;
             }
 
-            grandChildren = children[i].children;
             // Specifications for the current transformation.
+            grandChildren = children[i].children;
             var transfMatrix = this.parseTransformation(grandChildren, transformationID);
 
             if (transfMatrix === null)
@@ -523,6 +523,31 @@ export class MySceneGraph {
             }
         }
         return transfMatrix;
+    }
+
+    parseComponentTransformations(nodes, componentID) {
+        if (nodes.length === 0) {
+            this.onXMLMinorError("There must be one or more transformation tag (transformationref or explicit transformation) (conflictt: ID = " + componentID + ")");
+            return null;
+        }
+
+        if (nodes.length === 1) {
+            const nodeName = nodes[0].nodeName;
+            const id = this.reader.getString(nodes[0], 'id');
+            if (nodeName !== "transformationref") {
+                this.onXMLMinorError("Wrong tag for unique transformation (conflictt: ID = " + componentID + ")");
+                return null;
+            }
+
+            return this.transformations[id];
+        }
+
+        if (nodes.length === 3) {
+            return this.parseTransformation(nodes, "of component " + componentID);
+        }
+
+        this.onXMLMinorError("Invalid transformation block (conflictt: ID = " + componentID + ")");
+        return null;
     }
 
     /**
@@ -824,6 +849,9 @@ export class MySceneGraph {
 
             //TODO Parse components.
             // Transformations
+            var transformation;
+            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) !== null) 
+                component.setTransformation(transformation);
 
             // Materials
 
@@ -1063,9 +1091,5 @@ export class MySceneGraph {
         //To test the parsing/creation of the primitives, call the display function directly
         if (this.rootNode !== null)
             this.rootNode.display();
-        /* for (var i = 0; i < this.nodes.length; i++) {
-            this.nodes[i].display();
-        } */
-
     }
 }

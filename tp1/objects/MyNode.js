@@ -8,8 +8,10 @@ export class MyNode {
 	constructor(scene, id) {
 		this.scene = scene;
 		this.id = id;
+
     this.children = [];
     this.materials = [];
+    this.transformation = null;
 	}
 
   addChild(child) {
@@ -20,8 +22,8 @@ export class MyNode {
     this.materials.push(material);
   }
 
-  setTransformation(transformations) {
-    this.transformations = transformations;
+  setTransformation(transformation) {
+    this.transformation = transformation;
   }
 
   setTexture(texture) {
@@ -29,12 +31,15 @@ export class MyNode {
   }
 
   display() {
-    //TODO push matrix
-    //TODO mult matrix
+    this.scene.pushMatrix();
+    if (this.transformation !== null)
+      this.scene.multMatrix(this.transformation);
+
     for(var i = 0; i < this.children.length; i++) {
       this.children[i].display();
     }
-    //TODO pop matrix
+
+    this.scene.popMatrix();
   }
 }
 
