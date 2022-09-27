@@ -9,13 +9,21 @@ export class MyNode {
 		this.scene = scene;
 		this.id = id;
 
-    this.children = [];
+    // children
+    this.primitives = [];
+    this.components = [];
+    
+    // node attributes
     this.materials = [];
     this.transformation = null;
 	}
 
-  addChild(child) {
-    this.children.push(child);
+  addComponent(component) {
+    this.components.push(component);
+  }
+
+  addPrimitive(primitive) {
+    this.primitives.push(primitive);
   }
 
   addMaterial(material) {
@@ -28,18 +36,6 @@ export class MyNode {
 
   setTexture(texture) {
     this.texture = texture;
-  }
-
-  display() {
-    this.scene.pushMatrix();
-    if (this.transformation !== null)
-      this.scene.multMatrix(this.transformation);
-
-    for(var i = 0; i < this.children.length; i++) {
-      this.children[i].display();
-    }
-
-    this.scene.popMatrix();
   }
 }
 

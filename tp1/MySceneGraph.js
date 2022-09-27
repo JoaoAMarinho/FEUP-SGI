@@ -438,7 +438,7 @@ export class MySceneGraph {
 
             // Checks for material attributes' errors.
             var material = {};
-            if ( this.parseMaterial(children[i].children, materialID, material) === null)
+            if (this.parseMaterial(children[i].children, materialID, material) === null)
                 continue;
 
             this.materials[materialID] = material;
@@ -516,7 +516,7 @@ export class MySceneGraph {
                     var rotationParameters = this.parseRotationParameters(nodes[j], "scale transformation for ID " + transformationID);
                     if (rotationParameters === null)
                         return null;
-                    
+
                     [axis, angle] = rotationParameters;
                     transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
                     break;
@@ -737,7 +737,7 @@ export class MySceneGraph {
         var stacks = this.reader.getInteger(cylinder, 'stacks');
         if (!(stacks != null && !isNaN(stacks)))
             return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
-        
+
         var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
         this.primitives[primitiveId] = cylinder;
 
@@ -850,7 +850,7 @@ export class MySceneGraph {
             //TODO Parse components.
             // Transformations
             var transformation;
-            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) !== null) 
+            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) !== null)
                 component.setTransformation(transformation);
 
             // Materials
@@ -861,18 +861,20 @@ export class MySceneGraph {
             grandgrandChildren = grandChildren[childrenIndex].children;
 
             if (grandgrandChildren.length == 0) {
-                this.onXMLMinorError( "There must be one or more component tag (componentref or primitiveref) (conflict: ID = " + componentID + ")");
+                this.onXMLMinorError("There must be one or more component tag (componentref or primitiveref) (conflict: ID = " + componentID + ")");
                 continue;
             }
 
-            var node;
+            var child;
             for (var j = 0; j < grandgrandChildren.length; j++) {
-                if ((node = this.parseChild(grandgrandChildren[j], componentID)) == null) {
+                child = this.parseChild(grandgrandChildren[j], componentID);
+
+                if (child.node === null)
                     continue;
-                }
-                component.addChild(node);
+
+                child.isPrimitive ? component.addPrimitive(child.node) : component.addComponent(child.node);
             }
-            
+
             if (this.rootNode === null && componentID === this.idRoot) {
                 this.rootNode = component;
                 continue;
@@ -942,32 +944,32 @@ export class MySceneGraph {
         return position;
     }
 
-       /**
-        * Parse the coordinates from a node with ID = id
-        * @param {block element} node
-        * @param {message to be displayed in case of error} messageError
-        */
-        parseRotationParameters(node, messageError) {
-            var parameters = [];
-    
-            // axis
-            var axis = this.reader.getString(node, 'axis');
-            axis = this.axisCoords[axis];
-            if (!(axis != null)) {
-                this.onXMLMinorError("unable to parse axis of the " + messageError);
-                return null;
-            }
-    
-            // angle
-            var angle = this.reader.getFloat(node, 'angle');
-            if (!(angle != null && !isNaN(angle))) {
-                this.onXMLMinorError("unable to parse the angle of the " + messageError);
-                return null;
-            }
-    
-            parameters.push(...[axis, angle * Math.PI / 180]);
-            return parameters;
+    /**
+     * Parse the coordinates from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+    parseRotationParameters(node, messageError) {
+        var parameters = [];
+
+        // axis
+        var axis = this.reader.getString(node, 'axis');
+        axis = this.axisCoords[axis];
+        if (!(axis != null)) {
+            this.onXMLMinorError("unable to parse axis of the " + messageError);
+            return null;
         }
+
+        // angle
+        var angle = this.reader.getFloat(node, 'angle');
+        if (!(angle != null && !isNaN(angle))) {
+            this.onXMLMinorError("unable to parse the angle of the " + messageError);
+            return null;
+        }
+
+        parameters.push(...[axis, angle * Math.PI / 180]);
+        return parameters;
+    }
 
     /**
      * Parse the color components from a node
@@ -1045,18 +1047,24 @@ export class MySceneGraph {
     parseChild(node, componentID) {
         const nodeName = node.nodeName;
         const id = this.reader.getString(node, 'id');
-        var child = null;
+
+        var child = {
+            node: null,
+            isPrimitive: true,
+        };
 
         if (nodeName === "componentref") {
-            child = this.components[id];
+            child.node = this.components[id];
+            child.isPrimitive = false;
         }
         else if (nodeName === "primitiveref") {
-            child = this.primitives[id];
+            child.node = this.primitives[id];
         }
-        if (child !== null) return child;
 
-        this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")");
-        return null;
+        child.node === null ?
+            this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")") : child.node = child.node.id;
+
+        return child;
     }
 
     /*
@@ -1087,9 +1095,27 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    displayScene() {        
+    displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
         if (this.rootNode !== null)
-            this.rootNode.display();
+            this.processNode(this.rootNode);
+    }
+
+    processNode(node) {
+
+        this.scene.pushMatrix();
+        
+        // Apply transformations
+        if (node.transformation !== null)
+            this.scene.multMatrix(node.transformation);
+
+        for(var i = 0; i < node.primitives.length; i++) {
+            this.primitives[node.primitives[i]].display();
+        }
+        for(var i = 0; i < node.components.length; i++) {
+            this.processNode(this.components[node.components[i]]);
+        }
+
+        this.scene.popMatrix();
     }
 }
