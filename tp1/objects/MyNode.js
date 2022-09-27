@@ -29,9 +29,12 @@ export class MyNode {
   }
 
   display() {
+    //TODO push matrix
+    //TODO mult matrix
     for(var i = 0; i < this.children.length; i++) {
       this.children[i].display();
     }
+    //TODO pop matrix
   }
 }
 

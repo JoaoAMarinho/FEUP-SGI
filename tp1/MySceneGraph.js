@@ -33,7 +33,7 @@ export class MySceneGraph {
         this.scene = scene;
         scene.graph = this;
 
-        this.nodes = [];
+        this.rootNode = null;
 
         this.idRoot = null;                    // The id of the root element.
 
@@ -788,7 +788,7 @@ export class MySceneGraph {
                 return "no ID defined for componentID";
 
             // Checks for repeated IDs.
-            if (this.nodes[componentID] != null)
+            if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
 
             grandChildren = children[i].children;
@@ -818,15 +818,19 @@ export class MySceneGraph {
             if (grandgrandChildren.length == 0) return "There must be one or more component tag (componentref or primitiveref) (conflict: ID = " + componentID + ")";
             
             var node;
-            for (var i = 0; i < grandgrandChildren.length; i++) {
-                if ((node = this.parseChild(grandgrandChildren[i], componentID)) == null) {
+            for (var j = 0; j < grandgrandChildren.length; j++) {
+                if ((node = this.parseChild(grandgrandChildren[j], componentID)) == null) {
                     continue;
                 }
                 component.addChild(node);
             }
             
+            if (this.rootNode === null && componentID === this.idRoot) {
+                this.rootNode = component;
+                continue;
+            }
+
             this.components[componentID] = component;
-            this.nodes.push(component);
         }
     }
 
@@ -995,13 +999,13 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    displayScene() {
-        ////TODO: Create display loop for transversing the scene graph
-        
+    displayScene() {        
         //To test the parsing/creation of the primitives, call the display function directly
-        for (var i = 0; i < this.nodes.length; i++) {
+        if (this.rootNode !== null)
+            this.rootNode.display();
+        /* for (var i = 0; i < this.nodes.length; i++) {
             this.nodes[i].display();
-        }
+        } */
 
     }
 }
