@@ -436,15 +436,58 @@ export class MySceneGraph {
                 continue;
             }
 
+            var materialShininess = this.reader.getFloat(children[i], 'shininess');
+            if (materialShininess == null) {
+                this.onXMLMinorError("no shininess attribute defined for material (conflict: ID = " + materialID + ")");
+                continue;
+            }
+
             // Checks for material attributes' errors.
             var material = {};
             if (this.parseMaterial(children[i].children, materialID, material) === null)
                 continue;
 
+            material.shininess = materialShininess; 
             this.materials[materialID] = material;
         }
 
         this.log("Parsed materials");
+    }
+
+    /**
+     * Parse a <material> block.
+     * @param {block element} nodes
+     * @param {string} materialID 
+     * @param {}
+     */
+    parseMaterial(nodes, materialID, material) {
+        var nodeNames = [];
+        const attributeNames = ["ambient", "diffuse", "specular", "emission"];
+
+        for (var i = 0; i < nodes.length; i++) {
+            nodeNames.push(nodes[i].nodeName);
+        }
+
+        for (var i = 0; i < attributeNames.length; i++) {
+            var attributeIndex = nodeNames.indexOf(attributeNames[i]);
+
+            if (attributeIndex != -1) {
+                var color = this.parseColor(nodes[attributeIndex]);
+
+                if (color === null)
+                    return null;
+
+                material[attributeNames[i]] = color;
+            }
+            else {
+                this.onXMLMinorError("material " + attributeNames[i] + " undefined for ID = " + materialID);
+                return null;
+            }
+        }
+    }
+
+    parseComponentMaterials(nodes, componentID) {
+
     }
 
     /**
@@ -854,7 +897,8 @@ export class MySceneGraph {
                 component.setTransformation(transformation);
 
             // Materials
-
+            var materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID);
+            
             // Texture
 
             // Children
@@ -1009,39 +1053,6 @@ export class MySceneGraph {
 
         color.push(...[r, g, b, a]);
         return color;
-    }
-
-    //TODO perguntar à professor sobre @params
-    /**
-     * Parse a <material> block.
-     * @param {block element} nodes
-     * @param {string} materialID 
-     * @param {}
-     */
-    parseMaterial(nodes, materialID, material) {
-        var nodeNames = [];
-        const attributeNames = ["ambient", "diffuse", "specular", "emission"];
-
-        for (var i = 0; i < nodes.length; i++) {
-            nodeNames.push(nodes[i].nodeName);
-        }
-
-        for (var i = 0; i < attributeNames.length; i++) {
-            var attributeIndex = nodeNames.indexOf(attributeNames[i]);
-
-            if (attributeIndex != -1) {
-                var color = this.parseColor(nodes[attributeIndex]);
-
-                if (color === null)
-                    return null;
-
-                material[attributeNames[i]] = color;
-            }
-            else {
-                this.onXMLMinorError("material " + attributeNames[i] + " undefined for ID = " + materialID);
-                return null;
-            }
-        }
     }
 
     parseChild(node, componentID) {
