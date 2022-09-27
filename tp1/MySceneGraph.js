@@ -397,10 +397,32 @@ export class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
+        this.textures = {};
         //For each texture in textures block, check ID and file URL
         this.onXMLMinorError("To do: Parse textures.");
         //TODO Parse textures.
         return null;
+    }
+
+    parseComponentTexture(node, componentID) {
+        var textureID = this.reader.getString(node, 'id');
+        var length_s = this.reader.getFloat(node, 'length_s');
+        var length_t = this.reader.getFloat(node, 'length_t');
+
+
+        if (textureID === 'inherit' || textureID === 'none') {
+            if (length_s !== null || length_t !== null) {
+                this.onXMLMinorError("invalid attributes in texture tag (conflictt: ID = " + componentID + ")");
+                return null;
+            }
+            return { id : textureID };
+        }
+        
+        if (length_s === null || length_t === null || this.textures[textureID] === null) {
+            this.onXMLMinorError("invalid texture tag definition (conflictt: ID = " + componentID + ")");
+            return null;
+        }
+        return { id: this.textures[textureID], length_s, length_t};
     }
 
     /**
@@ -436,15 +458,58 @@ export class MySceneGraph {
                 continue;
             }
 
+            var materialShininess = this.reader.getFloat(children[i], 'shininess');
+            if (materialShininess == null) {
+                this.onXMLMinorError("no shininess attribute defined for material (conflict: ID = " + materialID + ")");
+                continue;
+            }
+
             // Checks for material attributes' errors.
             var material = {};
             if (this.parseMaterial(children[i].children, materialID, material) === null)
                 continue;
 
+            material.shininess = materialShininess; 
             this.materials[materialID] = material;
         }
 
         this.log("Parsed materials");
+    }
+
+    /**
+     * Parse a <material> block.
+     * @param {block element} nodes
+     * @param {string} materialID 
+     * @param {}
+     */
+    parseMaterial(nodes, materialID, material) {
+        var nodeNames = [];
+        const attributeNames = ["ambient", "diffuse", "specular", "emission"];
+
+        for (var i = 0; i < nodes.length; i++) {
+            nodeNames.push(nodes[i].nodeName);
+        }
+
+        for (var i = 0; i < attributeNames.length; i++) {
+            var attributeIndex = nodeNames.indexOf(attributeNames[i]);
+
+            if (attributeIndex != -1) {
+                var color = this.parseColor(nodes[attributeIndex]);
+
+                if (color === null)
+                    return null;
+
+                material[attributeNames[i]] = color;
+            }
+            else {
+                this.onXMLMinorError("material " + attributeNames[i] + " undefined for ID = " + materialID);
+                return null;
+            }
+        }
+    }
+
+    parseComponentMaterials(nodes, componentID) {
+        //TODO
     }
 
     /**
@@ -845,17 +910,31 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            if([transformationIndex, materialsIndex, textureIndex, childrenIndex].some((i)=> i == -1)) {
+                this.onXMLMinorError("missing mandatory block in component (conflict: ID = " + componentID + ")");
+                continue;
+            }
+
             const component = new MyNode(this.scene, componentID);
 
-            //TODO Parse components.
             // Transformations
             var transformation;
-            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) !== null)
-                component.setTransformation(transformation);
+            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) === null)
+                continue;
+            component.setTransformation(transformation);
 
             // Materials
-
+            var materials;
+            if((materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID)))
+                continue;
+            component.setMaterials(materials);
+            
             // Texture
+            var texture;
+            if ((texture = this.parseComponentTexture(grandChildren[textureIndex], componentID)) === null)
+                continue;
+            console.log(texture);
+            component.setTexture(texture);
 
             // Children
             grandgrandChildren = grandChildren[childrenIndex].children;
@@ -1011,39 +1090,6 @@ export class MySceneGraph {
         return color;
     }
 
-    //TODO perguntar à professor sobre @params
-    /**
-     * Parse a <material> block.
-     * @param {block element} nodes
-     * @param {string} materialID 
-     * @param {}
-     */
-    parseMaterial(nodes, materialID, material) {
-        var nodeNames = [];
-        const attributeNames = ["ambient", "diffuse", "specular", "emission"];
-
-        for (var i = 0; i < nodes.length; i++) {
-            nodeNames.push(nodes[i].nodeName);
-        }
-
-        for (var i = 0; i < attributeNames.length; i++) {
-            var attributeIndex = nodeNames.indexOf(attributeNames[i]);
-
-            if (attributeIndex != -1) {
-                var color = this.parseColor(nodes[attributeIndex]);
-
-                if (color === null)
-                    return null;
-
-                material[attributeNames[i]] = color;
-            }
-            else {
-                this.onXMLMinorError("material " + attributeNames[i] + " undefined for ID = " + materialID);
-                return null;
-            }
-        }
-    }
-
     parseChild(node, componentID) {
         const nodeName = node.nodeName;
         const id = this.reader.getString(node, 'id');
@@ -1060,6 +1106,7 @@ export class MySceneGraph {
         else if (nodeName === "primitiveref") {
             child.node = this.primitives[id];
         }
+        console.log(child, componentID, this.components);
 
         child.node === null ?
             this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")") : child.node = child.node.id;

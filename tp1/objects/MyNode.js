@@ -26,8 +26,8 @@ export class MyNode {
     this.primitives.push(primitive);
   }
 
-  addMaterial(material) {
-    this.materials.push(material);
+  setMaterials(materials) {
+    this.materials = materials;
   }
 
   setTransformation(transformation) {

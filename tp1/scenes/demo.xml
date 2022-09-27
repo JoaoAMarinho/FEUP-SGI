@@ -71,7 +71,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -85,7 +85,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoTorus" />
             </children>
@@ -99,7 +99,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -113,7 +113,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <componentref id="topTable" />
                 <componentref id="topTableBase" />
@@ -122,14 +122,14 @@
         </component>
         <component id="bottomCup">
             <transformation>
-                <translate x="0" y="" z="2" />
+                <translate x="0" y="6X" z="2" />
                 <rotate axis="x" angle="90" />
                 <scale x="1" y="0" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -143,7 +143,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="demoCylinder" />
                 <componentref id="bottomCup" />
@@ -158,7 +158,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <componentref id="table" />
                 <componentref id="cup" />
