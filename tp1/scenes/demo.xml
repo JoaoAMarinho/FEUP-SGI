@@ -66,11 +66,12 @@
             <transformation>
                 <translate x="0" y="0" z="1" />
                 <scale x="2" y="1" z="1" />
+                <rotate axis="y" angle="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -84,7 +85,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="1.0" length_t="1.0" />
             <children>
                <primitiveref id="demoCylinder" />
             </children>
