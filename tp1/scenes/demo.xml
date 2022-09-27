@@ -24,12 +24,27 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="faceTexture" file="scenes/images/face.jpg" />
+        <texture id="bodyTexture" file="scenes/images/body.jpg" />
+        <texture id="underweareTexture" file="scenes/images/underwear.jpg" />
     </textures>
 
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="darkGreyMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="skinMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.96" g="0.96" b="0.86" a="1.0" />
             <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
@@ -51,7 +66,7 @@
             <triangle x1="1" y1="-1" z1="0" x2="1" y2="0" z2="0" x3="0" y3="0" z3="0" />
         </primitive>
         <primitive id="demoCylinder">
-            <cylinder base="0.1" top="0.1" height="1" slices="100" stacks="6" />
+            <cylinder base="2.5" top="0.5" height="5" slices="100" stacks="6" />
         </primitive>
         <primitive id="demoSphere">
             <sphere radius="1" slices="100" stacks="10" />
@@ -62,49 +77,63 @@
     </primitives>
 
     <components>
-        <component id="topTableBase">
+        <component id="topper">
             <transformation>
                 <translate x="0" y="2" z="0" />
                 <scale x="2" y="1" z="2" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="x" angle="90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="darkGreyMaterial" />
             </materials>
             <texture id="none"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
-        <component id="topTable">
+        <component id="topperDown">
+            <transformation>
+                <translate x="0" y="4" z="0" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180" />
+            </transformation>
+            <materials>
+                <material id="darkGreyMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="topper" />
+            </children>
+        </component>
+        <component id="topperBase">
             <transformation>
                 <translate x="0" y="1.8" z="0" />
                 <scale x="0.6" y="0.2" z="0.6" />
                 <rotate axis="x" angle="90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="darkGreyMaterial" />
             </materials>
             <texture id="none"/>
             <children>
                 <primitiveref id="demoTorus" />
             </children>
         </component>
-        <component id="bottomTable">
+        <component id="face">
             <transformation>
                 <translate x="0" y="1" z="0" />
                 <rotate axis="y" angle="-90" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="skinMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="faceTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="demoSphere" />
             </children>
         </component>
-        <component id="table">
+        <component id="head">
             <transformation>
                 <translate x="0" y="0" z="0" />
                 <scale x="1" y="1" z="1" />
@@ -113,42 +142,62 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="none" />
             <children>
-                <componentref id="topTable" />
-                <componentref id="topTableBase" />
-                <componentref id="bottomTable" />
+                <!-- cartola -->
+                <componentref id="topperDown" />
+                <componentref id="topper" />
+                <componentref id="topperBase" />
+                <!-- cabeça -->
+                <componentref id="face" />
             </children>
         </component>
-        <component id="bottomCup">
+
+        <component id="skeleton">
             <transformation>
-                <translate x="0" y="6X" z="2" />
-                <rotate axis="x" angle="90" />
-                <scale x="1" y="0" z="1" />
+                <translate x="0" y="-4.8" z="0" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+        <component id="underware">
+            <transformation>
+                <translate x="0" y="-4.8" z="0" />
+                <scale x="2.5" y="0.1" z="2.5" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="underweareTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="demoSphere" />
             </children>
         </component>
-        <component id="cup">
+
+        <component id="body">
             <transformation>
-                <translate x="0" y="2.4" z="0" />
-                <rotate axis="x" angle="90" />
-                <scale x="0.2" y="0.2" z="0.4" />
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="y" angle="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="bodyTexture" length_s="1.0" length_t="1.0" />
             <children>
-                <primitiveref id="demoCylinder" />
-                <componentref id="bottomCup" />
+                <componentref id="skeleton" />
+                <componentref id="underware" />
             </children>
         </component>
+
         <component id="demoRoot">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -158,10 +207,10 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="demoTexture" length_s="1.0" length_t="1.0" />
             <children>
-                <componentref id="table" />
-                <componentref id="cup" />
+                <componentref id="head" />
+                <componentref id="body" />
             </children>
         </component>
         
