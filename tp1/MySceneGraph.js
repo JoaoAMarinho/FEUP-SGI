@@ -509,7 +509,26 @@ export class MySceneGraph {
     }
 
     parseComponentMaterials(nodes, componentID) {
-        //TODO
+        if (nodes.length === 0) {
+            this.onXMLMinorError("There must be one or more material tag (conflictt: ID = " + componentID + ")");
+            return null;
+        }
+
+        var materials = [];
+        var materialID;
+
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].nodeName !== 'material') {
+                this.onXMLMinorError("(conflictt: ID = " + componentID + ")");
+                continue;
+            }
+            
+            materialID = this.reader.getString(nodes[i], 'id');
+            if (this.materials[materialID] !== null)
+                materials.push(materialID);
+        }
+
+        return materials.length === 0 ? null : materials;
     }
 
     /**
@@ -925,7 +944,7 @@ export class MySceneGraph {
 
             // Materials
             var materials;
-            if((materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID)))
+            if((materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID)) === null)
                 continue;
             component.setMaterials(materials);
             
@@ -1105,7 +1124,6 @@ export class MySceneGraph {
         else if (nodeName === "primitiveref") {
             child.node = this.primitives[id];
         }
-        console.log(child, componentID, this.components);
 
         child.node === null ?
             this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")") : child.node = child.node.id;
