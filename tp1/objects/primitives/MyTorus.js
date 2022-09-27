@@ -85,4 +85,3 @@ export class MyTorus extends CGFobject {
         this.initGLBuffers();
 	}
 }
-

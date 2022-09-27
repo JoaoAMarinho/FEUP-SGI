@@ -38,4 +38,3 @@ export class MyNode {
     this.texture = texture;
   }
 }
-
