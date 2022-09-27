@@ -933,7 +933,6 @@ export class MySceneGraph {
             var texture;
             if ((texture = this.parseComponentTexture(grandChildren[textureIndex], componentID)) === null)
                 continue;
-            console.log(texture);
             component.setTexture(texture);
 
             // Children
