@@ -16,6 +16,7 @@ export class MyNode {
     // node attributes
     this.materials = [];
     this.transformation = null;
+    this.texture = null; // { id, [length_s, length_t] }
 	}
 
   addComponent(component) {

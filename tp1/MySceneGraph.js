@@ -1,4 +1,4 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
@@ -36,6 +36,10 @@ export class MySceneGraph {
         this.rootNode = null;
 
         this.idRoot = null;                    // The id of the root element.
+
+        this.textures = {};                   // CFGTexture dictionary.
+        this.primitives = {};                 // CFGObject dictionary.
+        this.components = {};                 // MyNode dictionary.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -149,8 +153,7 @@ export class MySceneGraph {
                 this.onXMLMinorError("tag <textures> out of order");
 
             //Parse textures block
-            if ((error = this.parseTextures(nodes[index])) != null)
-                return error;
+            this.parseTextures(nodes[index]);
         }
 
         // <materials>
@@ -396,13 +399,44 @@ export class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        var children = texturesNode.children;
 
-        this.textures = {};
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
-        //TODO Parse textures.
-        return null;
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeName != "texture")  {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+            
+            var textureID = this.reader.getString(children[i], 'id');
+            if (textureID == null) {
+                this.onXMLError("no ID defined for material");
+                continue;
+            }
+
+            if (this.textures[textureID] != null) {
+                this.onXMLMinorError("ID must be unique for each texture (conflict: ID = " + textureID + ")");
+                continue;
+            }
+
+            // Parse texture
+            var file = this.reader.getString(children[i], 'file');
+
+            if (!file.endsWith('.jpg') && !file.endsWith('.png')) {
+                this.onXMLMinorError("File must be of type .jpg or .png (conflict: ID = " + textureID + ")");
+                continue;      
+            }
+
+            if (!this.fileExists(file)) {
+                this.onXMLMinorError("File " + file + " does no exist (conflict: ID = " + textureID + ")");
+                continue; 
+            }
+
+            this.textures[textureID] = new CGFtexture(this.scene, file);
+        }
+
+        console.log("Parsed textures.");
     }
+
 
     parseComponentTexture(node, componentID) {
         var textureID = this.reader.getString(node, 'id');
@@ -411,18 +445,18 @@ export class MySceneGraph {
 
 
         if (textureID === 'inherit' || textureID === 'none') {
-            if (length_s !== null || length_t !== null) {
+            if (length_s != null || length_t != null) {
                 this.onXMLMinorError("invalid attributes in texture tag (conflictt: ID = " + componentID + ")");
                 return null;
             }
             return { id : textureID };
         }
-        
-        if (length_s === null || length_t === null || this.textures[textureID] === null) {
+
+        if (length_s === null || length_t === null || this.textures[textureID] == null) {
             this.onXMLMinorError("invalid texture tag definition (conflictt: ID = " + componentID + ")");
             return null;
         }
-        return { id: this.textures[textureID], length_s, length_t};
+        return { id: textureID, length_s, length_t};
     }
 
     /**
@@ -454,7 +488,7 @@ export class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null) {
-                this.onXMLMinorError("ID must be unique for each light (conflict: ID = " + materialID + ")");
+                this.onXMLMinorError("ID must be unique for each material (conflict: ID = " + materialID + ")");
                 continue;
             }
 
@@ -630,9 +664,6 @@ export class MySceneGraph {
      */
     parsePrimitives(primitivesNode) {
         var children = primitivesNode.children;
-
-        this.primitives = {};
-
         var grandChildren = [];
 
         // Any number of primitives.
@@ -884,8 +915,6 @@ export class MySceneGraph {
     parseComponents(componentsNode) {
         var children = componentsNode.children;
 
-        this.components = {};
-
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
@@ -961,7 +990,7 @@ export class MySceneGraph {
             for (var j = 0; j < grandgrandChildren.length; j++) {
                 child = this.parseChild(grandgrandChildren[j], componentID);
 
-                if (child.node === null)
+                if (child.node == null)
                     continue;
 
                 child.isPrimitive ? component.addPrimitive(child.node) : component.addComponent(child.node);
@@ -1103,6 +1132,14 @@ export class MySceneGraph {
         return color;
     }
 
+    
+    fileExists(file) {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', file, false);
+        http.send();
+        return http.status!=404;
+    }
+
     parseChild(node, componentID) {
         const nodeName = node.nodeName;
         const id = this.reader.getString(node, 'id');
@@ -1120,7 +1157,7 @@ export class MySceneGraph {
             child.node = this.primitives[id];
         }
 
-        child.node === null ?
+        child.node == null ?
             this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")") : child.node = child.node.id;
 
         return child;
@@ -1168,13 +1205,27 @@ export class MySceneGraph {
         if (node.transformation !== null)
             this.scene.multMatrix(node.transformation);
 
+        // Apply material and texture
+        this.applyMaterial(node);
+
         for(var i = 0; i < node.primitives.length; i++) {
             this.primitives[node.primitives[i]].display();
         }
+
         for(var i = 0; i < node.components.length; i++) {
             this.processNode(this.components[node.components[i]]);
         }
 
         this.scene.popMatrix();
+    }
+
+    applyMaterial(node) {
+        if (node.texture === null) return;
+
+        var material = new CGFappearance(this.scene);
+        if (node.texture.id !== 'none' && node.texture.id !== 'inherit') {
+            material.setTexture(this.textures[node.texture.id]);
+        }
+        material.apply();
     }
 }

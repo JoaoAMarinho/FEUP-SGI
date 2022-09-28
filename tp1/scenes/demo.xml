@@ -24,9 +24,9 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
-        <texture id="faceTexture" file="scenes/images/face.jpg" />
-        <texture id="bodyTexture" file="scenes/images/body.jpg" />
-        <texture id="underweareTexture" file="scenes/images/underwear.jpg" />
+        <texture id="faceTexture" file="scenes/images/bank.jpg" />
+        <texture id="bodyTexture" file="scenes/images/rocks.jpg" />
+        <texture id="underweareTexture" file="scenes/images/trunk-image.jpg" />
     </textures>
 
     <materials>
