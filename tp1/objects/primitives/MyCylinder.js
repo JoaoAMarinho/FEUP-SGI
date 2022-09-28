@@ -37,6 +37,7 @@ export class MyCylinder extends CGFobject {
     const incrementHeight = this.height / this.stacks;
     const incrementRadius = (this.topRadius - this.baseRadius) / this.stacks;
     const verticesPerStack = 6 * this.slices;
+    const normalZ = Math.sin( Math.atan(this.baseRadius-this.topRadius) / this.height );
 
     for (var stack = 0; stack < this.stacks; stack++) {
       const baseHeight = incrementHeight * stack;
@@ -64,13 +65,13 @@ export class MyCylinder extends CGFobject {
         this.indices.push(incrementIndice, incrementIndice + 1, incrementIndice + 2);
         this.indices.push(incrementIndice + 3, incrementIndice + 4, incrementIndice + 5);
 
-        this.normals.push(ca, sa, 0);    //0
-        this.normals.push(caa, saa, 0);  //1
-        this.normals.push(ca, sa, 0);    //2
+        this.normals.push(ca, sa, normalZ);    //0
+        this.normals.push(caa, saa, normalZ);  //1
+        this.normals.push(ca, sa, normalZ);    //2
 
-        this.normals.push(caa, saa, 0);  //3
-        this.normals.push(caa, saa, 0);  //4
-        this.normals.push(ca, sa, 0);    //5
+        this.normals.push(caa, saa, normalZ);  //3
+        this.normals.push(caa, saa, normalZ);  //4
+        this.normals.push(ca, sa, normalZ);    //5
 
         this.texCoords.push(stack * increment, 1);
         this.texCoords.push((stack + 1) * increment, 1);
