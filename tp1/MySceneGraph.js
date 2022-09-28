@@ -604,34 +604,24 @@ export class MySceneGraph {
                     [axis, angle] = rotationParameters;
                     transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
                     break;
+                default:
+                    this.onXMLMinorError('invalid tag name in transformation for ID ' + transformationID)
+                    return null;
             }
         }
         return transfMatrix;
     }
 
     parseComponentTransformations(nodes, componentID) {
-        if (nodes.length === 0) {
-            this.onXMLMinorError("There must be one or more transformation tag (transformationref or explicit transformation) (conflictt: ID = " + componentID + ")");
-            return null;
-        }
-
         if (nodes.length === 1) {
             const nodeName = nodes[0].nodeName;
-            const id = this.reader.getString(nodes[0], 'id');
-            if (nodeName !== "transformationref") {
-                this.onXMLMinorError("Wrong tag for unique transformation (conflictt: ID = " + componentID + ")");
-                return null;
+            if (nodeName === "transformationref") {
+                const id = this.reader.getString(nodes[0], 'id');
+                return this.transformations[id];
             }
-
-            return this.transformations[id];
         }
 
-        if (nodes.length === 3) {
-            return this.parseTransformation(nodes, "of component " + componentID);
-        }
-
-        this.onXMLMinorError("Invalid transformation block (conflictt: ID = " + componentID + ")");
-        return null;
+        return this.parseTransformation(nodes, "of component " + componentID);
     }
 
     /**
@@ -938,9 +928,14 @@ export class MySceneGraph {
 
             // Transformations
             var transformation;
-            if ((transformation = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)) === null)
-                continue;
-            component.setTransformation(transformation);
+            grandgrandChildren = grandChildren[transformationIndex].children;
+
+            if (grandgrandChildren.length !== 0) {
+                if ((transformation = this.parseComponentTransformations(grandgrandChildren, componentID)) === null)
+                    continue;
+                
+                component.setTransformation(transformation);
+            }
 
             // Materials
             var materials;

@@ -94,7 +94,6 @@
         <component id="topperDown">
             <transformation>
                 <translate x="0" y="4" z="0" />
-                <scale x="1" y="1" z="1" />
                 <rotate axis="z" angle="180" />
             </transformation>
             <materials>
@@ -123,7 +122,6 @@
             <transformation>
                 <translate x="0" y="1" z="0" />
                 <rotate axis="y" angle="-90" />
-                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="skinMaterial" />
@@ -135,9 +133,6 @@
         </component>
         <component id="head">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
-                <rotate axis="y" angle="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -156,7 +151,6 @@
         <component id="skeleton">
             <transformation>
                 <translate x="0" y="-4.8" z="0" />
-                <scale x="1" y="1" z="1" />
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
@@ -184,9 +178,6 @@
 
         <component id="body">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
-                <rotate axis="y" angle="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -200,9 +191,6 @@
 
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <rotate axis="y" angle="0" />
-                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
