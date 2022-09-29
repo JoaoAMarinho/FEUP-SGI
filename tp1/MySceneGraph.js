@@ -1088,7 +1088,7 @@ export class MySceneGraph {
             return null;
         }
 
-        parameters.push(...[axis, angle * Math.PI / 180]);
+        parameters.push(...[axis, angle * DEGREE_TO_RAD]);
         return parameters;
     }
 
