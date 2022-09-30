@@ -1194,10 +1194,10 @@ export class MySceneGraph {
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
         if (this.rootNode !== null)
-            this.processNode(this.rootNode);
+            this.processNode(this.rootNode, null);
     }
 
-    processNode(node) {
+    processNode(node, prevNode) {
 
         this.scene.pushMatrix();
         
@@ -1206,26 +1206,27 @@ export class MySceneGraph {
             this.scene.multMatrix(node.transformation);
 
         // Apply material and texture
-        this.applyMaterial(node);
+        this.applyMaterial(node, prevNode);
 
         for(var i = 0; i < node.primitives.length; i++) {
             this.primitives[node.primitives[i]].display();
         }
 
         for(var i = 0; i < node.components.length; i++) {
-            this.processNode(this.components[node.components[i]]);
+            this.processNode(this.components[node.components[i]], node.id);
         }
 
         this.scene.popMatrix();
     }
 
-    applyMaterial(node) {
-        if (node.texture === null) return;
+    applyMaterial(node, prevNode) {
+        if (node.texture === null || node.texture.id == 'none') return;
+
+        if (node.texture.id == 'inherit')
+            node.texture.id = this.components[prevNode].texture.id;
 
         var material = new CGFappearance(this.scene);
-        if (node.texture.id !== 'none' && node.texture.id !== 'inherit') {
-            material.setTexture(this.textures[node.texture.id]);
-        }
+        material.setTexture(this.textures[node.texture.id]);
         material.apply();
     }
 }
