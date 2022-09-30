@@ -18,6 +18,8 @@ export class MyNode {
         this.transformation = null;  // {matrix, isExplicit} 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
         this.texture = null;         // { id, [length_s, length_t] }
+
+        this.materialIndex = 0;
     }
 
     addComponent(component) {
@@ -38,5 +40,13 @@ export class MyNode {
 
     setTexture(texture) {
         this.texture = texture;
+    }
+
+    setCurrentMaterial(material) {
+        this.materials[this.materialIndex] = material;
+    }
+
+    getMaterial() {
+        return this.materials[this.materialIndex];
     }
 }

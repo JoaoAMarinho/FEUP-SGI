@@ -35,10 +35,10 @@ export class MySceneGraph {
 
         this.rootNode = null;
 
-        this.idRoot = null;                    // The id of the root element.
+        this.idRoot = null;                   // The id of the root element.
 
-        this.textures = {};                   // CFGTexture dictionary.
-        this.materials = {};                  // Material object dictionary.
+        this.textures = {};                   // CGFtexture dictionary.
+        this.materials = {};                  // CGFappearance dictionary.
         this.transformations = {};            // Mat4 transformation dictionary.
         this.primitives = {};                 // CFGObject dictionary.
         this.components = {};                 // MyNode dictionary.
@@ -458,6 +458,7 @@ export class MySceneGraph {
     parseMaterials(materialsNode) {
         var children = materialsNode.children;
         var material;
+        var appearence;
 
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
@@ -490,9 +491,14 @@ export class MySceneGraph {
             if ((material = this.parseMaterial(children[i].children, materialID)) == null)
                 continue;
 
-            //TODO create appearence
-            material.shininess = materialShininess;
-            this.materials[materialID] = material;
+            appearence = new CGFappearance(this.scene);
+            appearence.setAmbient(...material.ambient);
+            appearence.setDiffuse(...material.diffuse);
+            appearence.setSpecular(...material.specular);
+            appearence.setEmission(...material.emission);
+            appearence.setShininess(materialShininess);
+
+            this.materials[materialID] = appearence;
         }
 
         this.log("Parsed materials");
@@ -1192,8 +1198,8 @@ export class MySceneGraph {
 
         // Apply transformations
         if (node.transformation !== null) {
-            var matrix = node.transformation.isExplicit ? node.transformation.matrix 
-                                                        : this.transformations[node.transformation.matrix];
+            var matrix = node.transformation.isExplicit ? node.transformation.matrix
+                : this.transformations[node.transformation.matrix];
             this.scene.multMatrix(matrix);
         }
 
@@ -1205,20 +1211,31 @@ export class MySceneGraph {
         }
 
         for (var i = 0; i < node.components.length; i++) {
-            this.processNode(this.components[node.components[i]], node.id);
+            this.processNode(this.components[node.components[i]], node);
         }
 
         this.scene.popMatrix();
     }
 
     applyMaterial(node, prevNode) {
-        if (node.texture === null || node.texture.id == 'none') return;
+        if (node.texture === null) return;
+        
+        if (node.getMaterial() == 'inherit') {
+            node.setCurrentMaterial(prevNode.getMaterial());
+        } 
+        
+        var material = this.materials[node.getMaterial()];
+        
+        if (node.texture.id != 'none') {
+            if (node.texture.id == 'inherit')
+                node.texture.id = prevNode.texture.id;
+    
+            material.setTexture(this.textures[node.texture.id]);
+        }
 
-        if (node.texture.id == 'inherit')
-            node.texture.id = this.components[prevNode].texture.id;
-
-        var material = new CGFappearance(this.scene);
-        material.setTexture(this.textures[node.texture.id]);
         material.apply();
+
+        // Reset material texture
+        material.setTexture(null);
     }
 }
