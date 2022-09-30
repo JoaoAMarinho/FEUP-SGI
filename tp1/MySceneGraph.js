@@ -217,7 +217,6 @@ export class MySceneGraph {
         this.referenceLength = axis_length || 1;
 
         this.log("Parsed scene");
-
         return null;
     }
 
@@ -491,6 +490,7 @@ export class MySceneGraph {
             if ((material = this.parseMaterial(children[i].children, materialID)) == null)
                 continue;
 
+            //TODO create appearence
             material.shininess = materialShininess;
             this.materials[materialID] = material;
         }
@@ -549,8 +549,7 @@ export class MySceneGraph {
 
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i].nodeName != 'material') {
-                //TODO improve error
-                this.onXMLMinorError("(conflict: ID = " + componentID + ")");
+                this.onXMLMinorError("unknown tag <" + nodes[i].nodeName + "> in component materials block (conflict: ID = " + componentID + ")");
                 continue;
             }
 
