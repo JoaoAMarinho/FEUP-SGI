@@ -654,11 +654,13 @@ export class MySceneGraph {
             const nodeName = nodes[0].nodeName;
             if (nodeName == "transformationref") {
                 const id = this.reader.getString(nodes[0], 'id');
-                return this.transformations[id];
+                return this.transformations[id] != null ? { isExplicit: false, matrix: id } : null;
             }
         }
 
-        return this.parseTransformation(nodes, "of component " + componentID);
+        var matrix = this.parseTransformation(nodes, "of component " + componentID);
+
+        return matrix != null ? { isExplicit: true, matrix } : null;
     }
 
     /**
@@ -1190,8 +1192,11 @@ export class MySceneGraph {
         this.scene.pushMatrix();
 
         // Apply transformations
-        if (node.transformation !== null)
-            this.scene.multMatrix(node.transformation);
+        if (node.transformation !== null) {
+            var matrix = node.transformation.isExplicit ? node.transformation.matrix 
+                                                        : this.transformations[node.transformation.matrix];
+            this.scene.multMatrix(matrix);
+        }
 
         // Apply material and texture
         this.applyMaterial(node, prevNode);

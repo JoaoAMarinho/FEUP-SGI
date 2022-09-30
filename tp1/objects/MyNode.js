@@ -9,14 +9,15 @@ export class MyNode {
 		this.scene = scene;
 		this.id = id;
 
-    // children
+    // children ids
     this.primitives = [];
     this.components = [];
     
     // node attributes
     this.materials = [];
-    this.transformation = null;
-    this.texture = null; // { id, [length_s, length_t] }
+    this.transformation = null;  // {matrix, isExplicit} 
+                                 // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
+    this.texture = null;         // { id, [length_s, length_t] }
 	}
 
   addComponent(component) {
