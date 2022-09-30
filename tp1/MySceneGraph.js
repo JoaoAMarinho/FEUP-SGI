@@ -103,104 +103,94 @@ export class MySceneGraph {
         var index;
         if ((index = nodeNames.indexOf("scene")) == -1)
             return "tag <scene> missing";
-        else {
-            if (index != SCENE_INDEX)
-                this.onXMLMinorError("tag <scene> out of order " + index);
+        if (index != SCENE_INDEX)
+            this.onXMLMinorError("tag <scene> out of order " + index);
 
-            //Parse scene block
-            if ((error = this.parseScene(nodes[index])) != null)
-                return error;
-        }
+        //Parse scene block
+        if ((error = this.parseScene(nodes[index])) != null)
+            return error;
 
         // <views>
         if ((index = nodeNames.indexOf("views")) == -1)
             return "tag <views> missing";
-        else {
-            if (index != VIEWS_INDEX)
-                this.onXMLMinorError("tag <views> out of order");
+        if (index != VIEWS_INDEX)
+            this.onXMLMinorError("tag <views> out of order");
 
-            //Parse views block
-            if ((error = this.parseView(nodes[index])) != null)
-                return error;
-        }
+        //Parse views block
+        if ((error = this.parseView(nodes[index])) != null)
+            return error;
 
         // <ambient>
         if ((index = nodeNames.indexOf("ambient")) == -1)
             return "tag <ambient> missing";
-        else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+        if (index != AMBIENT_INDEX)
+            this.onXMLMinorError("tag <ambient> out of order");
 
-            //Parse ambient block
-            this.parseAmbient(nodes[index]);
-        }
+        //Parse ambient block
+        if ((error = this.parseAmbient(nodes[index])) != null)
+            return error;
 
         // <lights>
         if ((index = nodeNames.indexOf("lights")) == -1)
             return "tag <lights> missing";
-        else {
-            if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <lights> out of order");
+        if (index != LIGHTS_INDEX)
+            this.onXMLMinorError("tag <lights> out of order");
 
-            //Parse lights block
-            this.parseLights(nodes[index]);
-        }
+        //Parse lights block
+        if ((error = this.parseLights(nodes[index])) != null)
+            return error;
+
         // <textures>
         if ((index = nodeNames.indexOf("textures")) == -1)
             return "tag <textures> missing";
-        else {
-            if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <textures> out of order");
 
-            //Parse textures block
-            this.parseTextures(nodes[index]);
-        }
+        if (index != TEXTURES_INDEX)
+            this.onXMLMinorError("tag <textures> out of order");
+
+        //Parse textures block
+        if ((error = this.parseTextures(nodes[index])) != null)
+            return error;
 
         // <materials>
         if ((index = nodeNames.indexOf("materials")) == -1)
             return "tag <materials> missing";
-        else {
-            if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <materials> out of order");
+        if (index != MATERIALS_INDEX)
+            this.onXMLMinorError("tag <materials> out of order");
 
-            //Parse materials block
-            this.parseMaterials(nodes[index]);
-        }
+        //Parse materials block
+        if ((error = this.parseMaterials(nodes[index])) != null)
+            return error;
 
         // <transformations>
         if ((index = nodeNames.indexOf("transformations")) == -1)
             return "tag <transformations> missing";
-        else {
-            if (index != TRANSFORMATIONS_INDEX)
-                this.onXMLMinorError("tag <transformations> out of order");
+        if (index != TRANSFORMATIONS_INDEX)
+            this.onXMLMinorError("tag <transformations> out of order");
 
-            //Parse transformations block
-            this.parseTransformations(nodes[index]);
-        }
+        //Parse transformations block
+        if ((error = this.parseTransformations(nodes[index])) != null)
+            return error;
 
         // <primitives>
         if ((index = nodeNames.indexOf("primitives")) == -1)
             return "tag <primitives> missing";
-        else {
-            if (index != PRIMITIVES_INDEX)
-                this.onXMLMinorError("tag <primitives> out of order");
+        if (index != PRIMITIVES_INDEX)
+            this.onXMLMinorError("tag <primitives> out of order");
 
-            //Parse primitives block
-            if ((error = this.parsePrimitives(nodes[index])) != null)
-                return error;
-        }
+        //Parse primitives block
+        if ((error = this.parsePrimitives(nodes[index])) != null)
+            return error;
 
         // <components>
         if ((index = nodeNames.indexOf("components")) == -1)
             return "tag <components> missing";
-        else {
-            if (index != COMPONENTS_INDEX)
-                this.onXMLMinorError("tag <components> out of order");
+        if (index != COMPONENTS_INDEX)
+            this.onXMLMinorError("tag <components> out of order");
 
-            //Parse components block
-            if ((error = this.parseComponents(nodes[index])) != null)
-                return error;
-        }
+        //Parse components block
+        if ((error = this.parseComponents(nodes[index])) != null)
+            return error;
+
         this.log("all parsed");
     }
 
@@ -402,11 +392,11 @@ export class MySceneGraph {
         var children = texturesNode.children;
 
         for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeName != "texture")  {
+            if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-            
+
             var textureID = this.reader.getString(children[i], 'id');
             if (textureID == null) {
                 this.onXMLError("no ID defined for material");
@@ -423,12 +413,12 @@ export class MySceneGraph {
 
             if (!file.endsWith('.jpg') && !file.endsWith('.png')) {
                 this.onXMLMinorError("File must be of type .jpg or .png (conflict: ID = " + textureID + ")");
-                continue;      
+                continue;
             }
 
             if (!this.fileExists(file)) {
                 this.onXMLMinorError("File " + file + " does no exist (conflict: ID = " + textureID + ")");
-                continue; 
+                continue;
             }
 
             this.textures[textureID] = new CGFtexture(this.scene, file);
@@ -449,14 +439,14 @@ export class MySceneGraph {
                 this.onXMLMinorError("invalid attributes in texture tag (conflictt: ID = " + componentID + ")");
                 return null;
             }
-            return { id : textureID };
+            return { id: textureID };
         }
 
         if (length_s === null || length_t === null || this.textures[textureID] == null) {
             this.onXMLMinorError("invalid texture tag definition (conflictt: ID = " + componentID + ")");
             return null;
         }
-        return { id: textureID, length_s, length_t};
+        return { id: textureID, length_s, length_t };
     }
 
     /**
@@ -503,7 +493,7 @@ export class MySceneGraph {
             if (this.parseMaterial(children[i].children, materialID, material) === null)
                 continue;
 
-            material.shininess = materialShininess; 
+            material.shininess = materialShininess;
             this.materials[materialID] = material;
         }
 
@@ -556,7 +546,7 @@ export class MySceneGraph {
                 this.onXMLMinorError("(conflictt: ID = " + componentID + ")");
                 continue;
             }
-            
+
             materialID = this.reader.getString(nodes[i], 'id');
             if (this.materials[materialID] !== null)
                 materials.push(materialID);
@@ -948,7 +938,7 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            if([transformationIndex, materialsIndex, textureIndex, childrenIndex].some((i)=> i == -1)) {
+            if ([transformationIndex, materialsIndex, textureIndex, childrenIndex].some((i) => i == -1)) {
                 this.onXMLMinorError("missing mandatory block in component (conflict: ID = " + componentID + ")");
                 continue;
             }
@@ -962,16 +952,16 @@ export class MySceneGraph {
             if (grandgrandChildren.length !== 0) {
                 if ((transformation = this.parseComponentTransformations(grandgrandChildren, componentID)) === null)
                     continue;
-                
+
                 component.setTransformation(transformation);
             }
 
             // Materials
             var materials;
-            if((materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID)) === null)
+            if ((materials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID)) === null)
                 continue;
             component.setMaterials(materials);
-            
+
             // Texture
             var texture;
             if ((texture = this.parseComponentTexture(grandChildren[textureIndex], componentID)) === null)
@@ -1132,12 +1122,12 @@ export class MySceneGraph {
         return color;
     }
 
-    
+
     fileExists(file) {
         var http = new XMLHttpRequest();
         http.open('HEAD', file, false);
         http.send();
-        return http.status!=404;
+        return http.status != 404;
     }
 
     parseChild(node, componentID) {
@@ -1200,7 +1190,7 @@ export class MySceneGraph {
     processNode(node, prevNode) {
 
         this.scene.pushMatrix();
-        
+
         // Apply transformations
         if (node.transformation !== null)
             this.scene.multMatrix(node.transformation);
@@ -1208,11 +1198,11 @@ export class MySceneGraph {
         // Apply material and texture
         this.applyMaterial(node, prevNode);
 
-        for(var i = 0; i < node.primitives.length; i++) {
+        for (var i = 0; i < node.primitives.length; i++) {
             this.primitives[node.primitives[i]].display();
         }
 
-        for(var i = 0; i < node.components.length; i++) {
+        for (var i = 0; i < node.components.length; i++) {
             this.processNode(this.components[node.components[i]], node.id);
         }
 
