@@ -53,4 +53,15 @@ export class MyTriangle extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
+
+    /**
+    * @method updateTexCoords
+    * Updates the list of texture coordinates of the rectangle
+    * @param {Array} coords - Array of texture coordinates
+    */
+    updateTexCoords(coords) {
+        //TODO verify if correct
+        this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
 }

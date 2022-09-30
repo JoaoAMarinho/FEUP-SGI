@@ -5,38 +5,38 @@
  * @param id - Object identifier
  */
 export class MyNode {
-	constructor(scene, id) {
-		this.scene = scene;
-		this.id = id;
+    constructor(scene, id) {
+        this.scene = scene;
+        this.id = id;
 
-    // children ids
-    this.primitives = [];
-    this.components = [];
-    
-    // node attributes
-    this.materials = [];
-    this.transformation = null;  // {matrix, isExplicit} 
-                                 // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
-    this.texture = null;         // { id, [length_s, length_t] }
-	}
+        // children ids
+        this.primitives = [];
+        this.components = [];
 
-  addComponent(component) {
-    this.components.push(component);
-  }
+        // node attributes
+        this.materials = [];
+        this.transformation = null;  // {matrix, isExplicit} 
+        // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
+        this.texture = null;         // { id, [length_s, length_t] }
+    }
 
-  addPrimitive(primitive) {
-    this.primitives.push(primitive);
-  }
+    addComponent(component) {
+        this.components.push(component);
+    }
 
-  setMaterials(materials) {
-    this.materials = materials;
-  }
+    addPrimitive(primitive) {
+        this.primitives.push(primitive);
+    }
 
-  setTransformation(transformation) {
-    this.transformation = transformation;
-  }
+    setMaterials(materials) {
+        this.materials = materials;
+    }
 
-  setTexture(texture) {
-    this.texture = texture;
-  }
+    setTransformation(transformation) {
+        this.transformation = transformation;
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
+    }
 }
