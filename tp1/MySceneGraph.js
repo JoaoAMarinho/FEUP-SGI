@@ -1219,17 +1219,17 @@ export class MySceneGraph {
 
     applyMaterial(node, prevNode) {
         if (node.texture === null) return;
-        
+
         if (node.getMaterial() == 'inherit') {
             node.setCurrentMaterial(prevNode.getMaterial());
-        } 
-        
+        }
+
         var material = this.materials[node.getMaterial()];
-        
+
         if (node.texture.id != 'none') {
             if (node.texture.id == 'inherit')
                 node.texture.id = prevNode.texture.id;
-    
+
             material.setTexture(this.textures[node.texture.id]);
         }
 
