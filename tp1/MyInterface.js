@@ -24,6 +24,7 @@ export class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
+        this.gui.add(this.scene, 'displayAxis').name('Display Axis');
 
         this.initKeys();
 
