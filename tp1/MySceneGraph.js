@@ -425,7 +425,7 @@ export class MySceneGraph {
             this.textures[textureID] = new CGFtexture(this.scene, file);
         }
 
-        this.log("Parsed textures.");
+        this.log("Parsed textures");
         return null;
     }
 
@@ -1009,12 +1009,20 @@ export class MySceneGraph {
             }
 
             if (this.rootNode == null && componentID == this.idRoot) {
+                if (component.texture.id == 'inherit')
+                    return "root component must not 'inherit' texture (conflict: ID = " + componentID + ")";
+
+                //TODO verify inherit materials
+                
                 this.rootNode = component;
                 continue;
             }
 
             this.components[componentID] = component;
         }
+
+        this.log("Parsed components");
+        return null;
     }
 
 
