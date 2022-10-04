@@ -18,6 +18,13 @@ export class MyTriangle extends CGFobject {
         [this.y1, this.y2, this.y3] = y;
         [this.z1, this.z2, this.z3] = z;
 
+        this.v1_v2 = Math.sqrt(Math.pow(this.x2-this.x1, 2) + Math.pow(this.y2-this.y1, 2));
+        this.v2_v3 = Math.sqrt(Math.pow(this.x3-this.x2, 2) + Math.pow(this.y3-this.y2, 2));
+        this.v3_v1 = Math.sqrt(Math.pow(this.x1-this.x3, 2) + Math.pow(this.y1-this.y3, 2));
+
+        this.cosv1_v2 = (Math.pow(this.v1_v2, 2) - Math.pow(this.v2_v3, 2) + Math.pow(this.v3_v1, 2)) / (2 * this.v1_v2 * this.v3_v1);;
+        this.sinv1_v2 = Math.sqrt(1 - Math.pow(this.cosv1_v2, 2));
+
         this.initBuffers();
     }
 
@@ -59,9 +66,12 @@ export class MyTriangle extends CGFobject {
     * Updates the list of texture coordinates of the rectangle
     * @param {Array} coords - Array of texture coordinates
     */
-    updateTexCoords(coords) {
-        //TODO verify if correct
-        this.texCoords = [...coords];
+    updateTexCoords(lenght_s, length_t) {
+        this.texCoords = [
+            0,                                     1,
+            this.v1_v2 / lenght_s,                 1,
+            this.v3_v1 * this.cosv1_v2 / lenght_s, 1 - this.v3_v1 * this.sinv1_v2 / length_t,
+        ];
         this.updateTexCoordsGLBuffers();
     }
 }

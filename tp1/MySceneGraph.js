@@ -438,12 +438,12 @@ export class MySceneGraph {
         var length_t = this.reader.getFloat(node, 'length_t');
 
         if (textureID == 'inherit' || textureID == 'none') {
-            if (length_s != null || length_t != null) {
-                this.onXMLMinorError("invalid attributes in texture tag (conflict: ID = " + componentID + ")");
+            if (length_s != 1.0 || length_t != 1.0) {
+                this.onXMLMinorError("invalid texture values (lenght_s or length_t != 1.0) (conflict: ID = " + componentID + ")");
                 return null;
             }
 
-            return { id: textureID };
+            return { id: textureID, length_s, length_t };
         }
         if (length_s == null || length_t == null || this.textures[textureID] == null) {
             this.onXMLMinorError("invalid texture tag definition (conflict: ID = " + componentID + ")");
@@ -1230,7 +1230,9 @@ export class MySceneGraph {
         this.applyMaterial(node, prevNode);
 
         for (var i = 0; i < node.primitives.length; i++) {
-            this.primitives[node.primitives[i]].display();
+            var primitive = this.primitives[node.primitives[i]];
+            primitive.updateTexCoords(node.texture.length_s, node.texture.length_t);
+            primitive.display();
         }
 
         for (var i = 0; i < node.components.length; i++) {
@@ -1251,7 +1253,7 @@ export class MySceneGraph {
 
         if (node.texture.id != 'none') {
             if (node.texture.id == 'inherit')
-                node.texture.id = prevNode.texture.id;
+                node.texture = prevNode.texture;
 
             material.setTexture(this.textures[node.texture.id]);
         }
