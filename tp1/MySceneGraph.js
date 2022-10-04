@@ -74,6 +74,8 @@ export class MySceneGraph {
             return;
         }
 
+        this.validateGraphComponents(this.rootNode);
+
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -560,7 +562,7 @@ export class MySceneGraph {
             }
 
             materialID = this.reader.getString(nodes[i], 'id');
-            if (this.materials[materialID] !== null)
+            if (materialID == 'inherit' || this.materials[materialID] != null)
                 materials.push(materialID);
         }
 
@@ -742,7 +744,6 @@ export class MySceneGraph {
         return null;
     }
 
-
     /**
      * Parses a <rectangle> block.
      * @param {rectangle block element} rectangle 
@@ -883,7 +884,6 @@ export class MySceneGraph {
         return null;
     }
 
-
     /**
      * Parses a <torus> block.
      * @param {torus block element} sphere 
@@ -1012,8 +1012,9 @@ export class MySceneGraph {
                 if (component.texture.id == 'inherit')
                     return "root component must not 'inherit' texture (conflict: ID = " + componentID + ")";
 
-                //TODO verify inherit materials
-                
+                if (component.materials.some((x) => x == 'inherit'))
+                    return "root component must not 'inherit' material (conflict: ID = " + componentID + ")";
+
                 this.rootNode = component;
                 continue;
             }
@@ -1025,6 +1026,31 @@ export class MySceneGraph {
         return null;
     }
 
+    parseChild(node, componentID) {
+        const nodeName = node.nodeName;
+        const id = this.reader.getString(node, 'id');
+
+        var child = {
+            node: null,
+            isPrimitive: true,
+        };
+
+        if (nodeName == "componentref") {
+            child.node = id;
+            child.isPrimitive = false;
+        }
+        else if (nodeName == "primitiveref") {
+            if (this.primitives[id] != null)
+                child.node = id;
+            else
+                this.onXMLMinorError("unknown primitive with id '" + id + "' (conflict: ID = " + componentID + ")");
+        }
+        else {
+            this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")");
+        }
+
+        return child;
+    }
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1053,7 +1079,6 @@ export class MySceneGraph {
 
         return position;
     }
-
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1134,36 +1159,26 @@ export class MySceneGraph {
         return color;
     }
 
+    validateGraphComponents(node) {
+        var index = node.components.length;
+
+        while(index--) {
+            var component = this.components[node.components[index]]
+            if (component == null) {
+                this.onXMLMinorError("child component '" + node.components[index] + "' is not defined. (conflict: ID = " + node.id + ")");
+                node.components.splice(index, 1);
+            }
+            else
+                this.validateGraphComponents(component);
+        }
+
+    }
 
     fileExists(file) {
         var http = new XMLHttpRequest();
         http.open('HEAD', file, false);
         http.send();
         return http.status != 404;
-    }
-
-    parseChild(node, componentID) {
-        const nodeName = node.nodeName;
-        const id = this.reader.getString(node, 'id');
-
-        var child = {
-            node: null,
-            isPrimitive: true,
-        };
-
-        if (nodeName == "componentref") {
-            child.node = this.components[id];
-            child.isPrimitive = false;
-        }
-        else if (nodeName == "primitiveref") {
-            child.node = this.primitives[id];
-        }
-
-        child.node == null ?
-            this.onXMLMinorError("unknown tag <" + nodeName + "> (conflict: ID = " + componentID + ")")
-            : child.node = child.node.id;
-
-        return child;
     }
 
     /*
