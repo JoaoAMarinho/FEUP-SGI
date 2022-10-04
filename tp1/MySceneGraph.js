@@ -74,7 +74,15 @@ export class MySceneGraph {
             return;
         }
 
+        // Check for cycles in the graph
+        if (!this.isAcyclic(this.rootNode)) {
+            this.onXMLError("graph contains cycles");
+            return;
+        }
+
+        // Remove undefined child components
         this.validateGraphComponents(this.rootNode);
+
 
         this.loadedOk = true;
 
@@ -1162,7 +1170,7 @@ export class MySceneGraph {
     validateGraphComponents(node) {
         var index = node.components.length;
 
-        while(index--) {
+        while (index--) {
             var component = this.components[node.components[index]]
             if (component == null) {
                 this.onXMLMinorError("child component '" + node.components[index] + "' is not defined. (conflict: ID = " + node.id + ")");
@@ -1172,6 +1180,25 @@ export class MySceneGraph {
                 this.validateGraphComponents(component);
         }
 
+    }
+
+    isAcyclic(node) {
+        var component;
+        node.visited = true;
+
+        for (let index = 0; index < node.components.length; index++) {
+            if((component = this.components[node.components[index]]) == null)
+                continue;
+            
+            if (component.visited)
+                return false;
+
+            if (!this.isAcyclic(component))
+                return false;
+        }
+
+        node.visited = false;
+        return true;
     }
 
     fileExists(file) {

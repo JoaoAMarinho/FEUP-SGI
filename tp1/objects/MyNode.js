@@ -15,11 +15,12 @@ export class MyNode {
 
         // node attributes
         this.materials = [];
+        this.texture = null;         // { id, [length_s, length_t] }
         this.transformation = null;  // {matrix, isExplicit} 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
-        this.texture = null;         // { id, [length_s, length_t] }
 
         this.materialIndex = 0;
+        this.visited = false;
     }
 
     addComponent(component) {
