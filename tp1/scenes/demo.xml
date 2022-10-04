@@ -155,6 +155,8 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="darkGreyMaterial" />
+                <material id="skinMaterial" />
             </materials>
             <texture id="inherit" />
             <children>

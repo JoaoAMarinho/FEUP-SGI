@@ -93,8 +93,5 @@ export class MyCylinder extends CGFobject {
      * @param {Array} coords - Array of texture coordinates
      */
     updateTexCoords(coords) {
-        //TODO verify if correct
-        this.texCoords = [...coords];
-        this.updateTexCoordsGLBuffers();
     }
 }

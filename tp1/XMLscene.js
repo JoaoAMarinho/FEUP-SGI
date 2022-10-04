@@ -147,4 +147,14 @@ export class XMLscene extends CGFscene {
         this.popMatrix();
         // ---- END Background, camera and axis setup
     }
+
+    update(t) {
+        this.checkKeys();
+    }
+
+    checkKeys() {
+        if (this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym")) {
+            this.graph.updateMaterials(this.graph.rootNode);
+        }
+    }
 }

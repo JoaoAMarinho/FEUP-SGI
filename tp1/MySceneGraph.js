@@ -1261,4 +1261,9 @@ export class MySceneGraph {
         // Reset material texture
         material.setTexture(null);
     }
+
+    updateMaterials(node) {
+        node.nextMaterialIndex();
+        node.components.forEach(child => this.updateMaterials(this.components[child]));
+    }
 }

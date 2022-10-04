@@ -49,4 +49,8 @@ export class MyNode {
     getMaterial() {
         return this.materials[this.materialIndex];
     }
+
+    nextMaterialIndex() {
+        this.materialIndex = (this.materialIndex + 1) % this.materials.length;
+    }
 }
