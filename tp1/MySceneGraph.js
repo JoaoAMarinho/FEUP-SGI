@@ -74,11 +74,8 @@ export class MySceneGraph {
             return;
         }
 
-        // Check for cycles in the graph
-        if (!this.isAcyclic(this.rootNode)) {
-            this.onXMLError("graph contains cycles");
-            return;
-        }
+        // Remove graph cycles
+        this.isAcyclic(this.rootNode);
 
         // Remove undefined child components
         this.validateGraphComponents(this.rootNode);
@@ -917,7 +914,7 @@ export class MySceneGraph {
         var loops = this.reader.getInteger(torus, 'loops');
         if (!(loops != null && !isNaN(loops)))
             return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
-
+        //TODO review torus normals
         this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
         return null;
     }
@@ -1169,10 +1166,10 @@ export class MySceneGraph {
 
     validateGraphComponents(node) {
         var index = node.components.length;
+        var component;
 
         while (index--) {
-            var component = this.components[node.components[index]]
-            if (component == null) {
+            if ((component = this.components[node.components[index]]) == null) {
                 this.onXMLMinorError("child component '" + node.components[index] + "' is not defined. (conflict: ID = " + node.id + ")");
                 node.components.splice(index, 1);
             }
@@ -1184,21 +1181,23 @@ export class MySceneGraph {
 
     isAcyclic(node) {
         var component;
+        var index = node.components.length;
         node.visited = true;
 
-        for (let index = 0; index < node.components.length; index++) {
+        while (index--) {
             if((component = this.components[node.components[index]]) == null)
                 continue;
             
-            if (component.visited)
-                return false;
-
-            if (!this.isAcyclic(component))
-                return false;
+            if (component.visited) {
+                this.onXMLMinorError("child component '" + component.id + "' creates a graph cycle (conflict: ID = " + node.id + ")");
+                node.components.splice(index, 1);
+                continue;
+            }
+            
+            this.isAcyclic(component);
         }
 
         node.visited = false;
-        return true;
     }
 
     fileExists(file) {
