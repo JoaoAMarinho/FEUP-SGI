@@ -1,4 +1,4 @@
-import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
@@ -37,6 +37,8 @@ export class MySceneGraph {
 
         this.idRoot = null;                   // The id of the root element.
 
+        this.views = {};                     // CGFcamera dictionary.
+        this.lights = {};
         this.textures = {};                   // CGFtexture dictionary.
         this.materials = {};                  // CGFappearance dictionary.
         this.transformations = {};            // Mat4 transformation dictionary.
@@ -79,7 +81,6 @@ export class MySceneGraph {
 
         // Remove undefined child components
         this.validateGraphComponents(this.rootNode);
-
 
         this.loadedOk = true;
 
@@ -126,7 +127,7 @@ export class MySceneGraph {
             this.onXMLMinorError("tag <views> out of order");
 
         //Parse views block
-        if ((error = this.parseView(nodes[index])) != null)
+        if ((error = this.parseViews(nodes[index])) != null)
             return error;
 
         // <ambient>
@@ -229,11 +230,12 @@ export class MySceneGraph {
 
     /**
      * Parses the <views> block.
-     * @param {view block element} viewsNode
+     * @param {views block element} viewsNode
      */
-    parseView(viewsNode) {
+    parseViews(viewsNode) {
         this.onXMLMinorError("To do: Parse views and create cameras.");
         //TODO Parse views and create cameras.
+        //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         return null;
     }
 
@@ -277,7 +279,6 @@ export class MySceneGraph {
     parseLights(lightsNode) {
         var children = lightsNode.children;
 
-        this.lights = [];
         var numLights = 0;
 
         var grandChildren = [];
