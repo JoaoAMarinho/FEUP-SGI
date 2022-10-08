@@ -1,4 +1,4 @@
-import { CGFappearance, CGFcamera, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
@@ -37,7 +37,7 @@ export class MySceneGraph {
 
         this.idRoot = null;                   // The id of the root element.
 
-        this.views = {};                     // CGFcamera dictionary.
+        this.views = {};                     // CGFcamera or CGFcameraOrtho dictionary.
         this.lights = {};
         this.textures = {};                   // CGFtexture dictionary.
         this.materials = {};                  // CGFappearance dictionary.
@@ -233,9 +233,134 @@ export class MySceneGraph {
      * @param {views block element} viewsNode
      */
     parseViews(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
-        //TODO Parse views and create cameras.
-        //this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        var defaultCamera = this.reader.getString(viewsNode, 'default')
+        if (defaultCamera == null) {
+            this.onXMLMinorError("no default camera id defined for views")
+            return null;        
+        }
+        
+        var children = viewsNode.children;
+        var grandChildren;
+        var child = null;
+        var nodeNames;
+
+        for (var i = 0; i < children.length; i++) {
+            var id, near, far, angle, left, right, top, bottom;
+            var from, to , up;
+            
+            child = children[i];
+            grandChildren = child.children;
+
+            nodeNames = [];
+            for (var i = 0; i < child.children.length; i++) {
+                nodeNames.push(grandChildren[i].nodeName);
+            }
+
+            id = this.reader.getString(child, 'id');
+            if (id == null) {
+                this.onXMLMinorError("no ID defined for view");
+                continue;
+            }
+
+            if (nodeNames.length == 0 || nodeNames.length > 3) {
+                this.onXMLMinorError("view must have 2 or 3 child nodes (conflict: ID = " + id + ")");
+                continue;
+            }
+
+            from = nodeNames.indexOf("from");
+            to = nodeNames.indexOf("to");
+            up = nodeNames.indexOf("up");
+
+            if (from == -1) {
+                this.onXMLMinorError("node <from> must be defined in view (conflict: ID = " + id + ")");
+                continue;     
+            }
+            if (to == -1) {
+                this.onXMLMinorError("node <to> must be defined in view (conflict: ID = " + id + ")");
+                continue;     
+            }
+             
+            from = this.parseCoordinates3D(grandChildren[from], "attribute 'from' in view (conflict: ID = " + id + ")");
+            if (!Array.isArray(from)) {
+                this.onXMLMinorError(from);
+                continue;
+            }
+            
+            to = this.parseCoordinates3D(grandChildren[to], "attribute 'to' in view (conflict: ID = " + id + ")");
+            if (!Array.isArray(to)) {
+                this.onXMLMinorError(to);
+                continue;
+            }
+
+            near = this.reader.getFloat(child, 'near');
+            if (near == null) {
+                this.onXMLMinorError("no near attribute defined for view (conflict: ID = " + id + ")");
+                continue;
+            }
+
+            far = this.reader.getFloat(child, 'far');
+            if (far == null) {
+                this.onXMLMinorError("no far attribute defined for view (conflict: ID = " + id + ")");
+                continue;
+            }
+            
+            if (child.nodeName == "perspective") {
+                angle = this.reader.getFloat(child, 'angle');
+                if (angle == null) {
+                    this.onXMLMinorError("no angle attribute defined for view (conflict: ID = " + id + ")");
+                    continue;
+                }
+
+                if (up != -1) {
+                    this.onXMLMinorError("up attribute wrongly defined for perspective view (conflict: ID = " + id + ")");
+                    continue;             
+                }
+                this.views[id] = new CGFcamera(angle * DEGREE_TO_RAD, near, far, from, to);
+
+            } else if (child.nodeName == "ortho") {
+                left = this.reader.getFloat(child, 'left');
+                if (left == null) {
+                    this.onXMLMinorError("no left attribute for view (conflict: ID = " + id + ")");
+                    continue;
+                }
+                
+                right = this.reader.getFloat(child, 'right');
+                if (right == null) {
+                    this.onXMLMinorError("no right attribute defined for view (conflict: ID = " + id + ")");
+                    continue;
+                }
+                
+                top = this.reader.getFloat(child, 'top');
+                if (top == null) {
+                    this.onXMLMinorError("no top attribute defined for view (conflict: ID = " + id + ")");
+                    continue;
+                }
+                
+                bottom = this.reader.getFloat(child, 'bottom');
+                if (bottom == null) {
+                    this.onXMLMinorError("no bottom attribute defined for view (conflict: ID = " + id + ")");
+                    continue;
+                }
+
+                up = up == -1 ? [0, 1, 0] : 
+                                this.parseCoordinates3D(grandChildren[up], "attribute 'up' in view (conflict: ID = " + id + ")");
+                
+                this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up);
+            } else {
+                this.onXMLMinorError("unknown camera type '" + child.nodeName + "' (conflict: ID = " + id + ")");
+                continue;
+            }
+        }
+
+        if (Object.keys(this.views).length == 0)
+            this.onXMLMinorError("there must exist at least one view (ortho or perspective)")
+        else if (this.views[defaultCamera] == null)
+            this.onXMLMinorError("missing default camera in <views> (ID = " + defaultCamera + ")")
+        else {
+            this.camera = this.views[defaultCamera];
+        }
+
+        this.log("Parsed views");
         return null;
     }
 
@@ -408,7 +533,7 @@ export class MySceneGraph {
 
             var textureID = this.reader.getString(children[i], 'id');
             if (textureID == null) {
-                this.onXMLError("no ID defined for material");
+                this.onXMLError("no ID defined for texture");
                 continue;
             }
 

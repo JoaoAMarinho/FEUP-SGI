@@ -6,6 +6,11 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+        <ortho id="d" near="0.1" far="500" left="-5.0" right="5.0" bottom="-5.0" top="5.0">
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+        </ortho>
+ 
     </views>
 
     <ambient>
