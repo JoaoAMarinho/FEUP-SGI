@@ -30,54 +30,50 @@ export class MyTorus extends CGFobject {
         this.normals = [];
         this.texCoords = [];
 
-        for (let slice = 0; slice <= this.slices; ++slice) {
-            const v = slice / this.slices;
-            const slice_angle = v * 2 * Math.PI;
-            const cos_slices = Math.cos(slice_angle);
-            const sin_slices = Math.sin(slice_angle);
-            const slice_rad = this.outer + this.inner * cos_slices;
+        var phi = 0;
+        var phiInc = (2 * Math.PI) / this.slices;
 
-            for (let loop = 0; loop <= this.loops; ++loop) {
+        var theta = 0;
+        var thetaInc = (2 * Math.PI) / this.loops;
+
+        for (var loop = 0; loop <= this.loops; loop++) {
+            var sinTheta = Math.sin(theta);
+            var cosTheta = Math.cos(theta);
+
+            phi = 0;
+            for (var slice = 0; slice <= this.slices; slice++) {
+                var sinPhi = Math.sin(phi);
+                var cosPhi = Math.cos(phi);
+
                 //   x=(R+r·cos(v))cos(w)
                 //   y=(R+r·cos(v))sin(w)
                 //             z=r.sin(v)
-                const u = loop / this.loops;
-                const loop_angle = u * 2 * Math.PI;
-                const cos_loops = Math.cos(loop_angle);
-                const sin_loops = Math.sin(loop_angle);
-
-                const x = slice_rad * cos_loops;
-                const y = slice_rad * sin_loops;
-                const z = this.inner * sin_slices;
+                var x = (this.outer + (this.inner * cosTheta)) * cosPhi;
+                var y = (this.outer + (this.inner * cosTheta)) * sinPhi
+                var z = this.inner * sinTheta;
+                var s = 1 - (loop / this.loops);
+                var t = 1 - (slice / this.slices);
 
                 this.vertices.push(x, y, z);
                 this.normals.push(
-                    cos_loops * sin_slices,
-                    sin_loops * sin_slices,
-                    cos_slices);
+                    cosPhi * cosTheta,
+                    sinPhi * cosTheta,
+                    sinTheta);
+                this.texCoords.push(s, t);
 
-                this.texCoords.push(u);
-                this.texCoords.push(v);
+                phi += phiInc;
             }
+
+            theta += thetaInc;
         }
 
-        const vertsPerSlice = this.loops + 1;
-        for (let i = 0; i < this.slices; ++i) {
-            let v1 = i * vertsPerSlice;
-            let v2 = v1 + vertsPerSlice;
-
-            for (let j = 0; j < this.loops; ++j) {
-
-                this.indices.push(v1);
-                this.indices.push(v1 + 1);
-                this.indices.push(v2);
-
-                this.indices.push(v2);
-                this.indices.push(v1 + 1);
-                this.indices.push(v2 + 1);
-
-                v1 += 1;
-                v2 += 1;
+        for (var loop = 0; loop < this.loops; loop++) {
+            for (var slice = 0; slice < this.slices; slice++) {
+                var first = (loop * (this.slices + 1)) + slice;
+                var second = first + this.slices + 1;
+    
+                this.indices.push(first, second + 1, second);
+                this.indices.push(first, first + 1, second + 1);
             }
         }
 
