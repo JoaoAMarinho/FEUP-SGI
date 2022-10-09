@@ -114,7 +114,7 @@
             <cylinder base="2.5" top="0.5" height="5" slices="100" stacks="6" />
         </primitive>
         <primitive id="planet">
-            <sphere radius="1" slices="40" stacks="40" />
+            <sphere radius="1" slices="60" stacks="60" />
         </primitive>
         <primitive id="torus">
             <torus inner="1" outer="1" slices="10" loops="10" />
