@@ -2,7 +2,7 @@
     <scene root="space" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
+        <perspective id="defaultCamera" near="0.1" far="700" angle="45">
             <from x="0" y="0" z="500" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -44,54 +44,19 @@
             <diffuse r="0.96" g="0.61" b="0.07" a="1.0" />
             <specular r="0.96" g="0.61" b="0.07" a="1.0" />
         </material>
-
-        <material id="sunMaterial" shininess="10">
-            <emission r="0.72" g="0.54" b="0.31" a="1.0" />
-            <ambient r="0.72" g="0.54" b="0.31" a="1.0" />
-            <diffuse r="0.72" g="0.54" b="0.31" a="1.0" />
-            <specular r="0.72" g="0.54" b="0.31" a="1.0" />
-        </material>
-
-        <material id="earthMaterial" shininess="10">
-            <emission r="0" g="0.2" b="0.32" a="1.0" />
-            <ambient r="0" g="0.2" b="0.32" a="1.0" />
-            <diffuse r="0.2" g="0.3" b="0.32" a="1.0" />
-            <specular r="0.3" g="0.3" b="0.32" a="1.0" />
-        </material>
-
-        <material id="moonMaterial" shininess="10">
-            <emission r="0.5" g="0.5" b="0.5" a="1.0" />
-            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
-            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
-        </material>
         
-        <material id="mercuryMaterial" shininess="10">
-            <emission r="0.96" g="0.61" b="0.07" a="1.0" />
-            <ambient r="0.96" g="0.61" b="0.07" a="1.0" />
-            <diffuse r="0.96" g="0.61" b="0.07" a="1.0" />
-            <specular r="0.96" g="0.61" b="0.07" a="1.0" />
+        <material id="sunMaterial" shininess="10">
+            <emission r="1" g="1" b="1" a="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="0" g="0" b="0" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
         </material>
 
-        <material id="venusMaterial" shininess="10">
-            <emission r="0.75" g="0.39" b="0.05" a="1.0" />
-            <ambient r="0.75" g="0.39" b="0.05" a="1.0" />
-            <diffuse r="0.75" g="0.39" b="0.05" a="1.0" />
-            <specular r="0.75" g="0.39" b="0.05" a="1.0" />
-        </material>
-
-        <material id="marsMaterial" shininess="10">
-            <emission r="0.1" g="0.08" b="0.06" a="1.0" />
-            <ambient r="0.1" g="0.08" b="0.06" a="1.0" />
-            <diffuse r="0.1" g="0.08" b="0.06" a="1.0" />
-            <specular r="0.1" g="0.08" b="0.06" a="1.0" />
-        </material>
-
-        <material id="jupiterMaterial" shininess="10">
-            <emission r="0.1" g="0.08" b="0.06" a="1.0" />
-            <ambient r="0.1" g="0.08" b="0.06" a="1.0" />
-            <diffuse r="0.1" g="0.08" b="0.06" a="1.0" />
-            <specular r="0.1" g="0.08" b="0.06" a="1.0" />
+        <material id="planetMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0" g="0" b="0" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
         </material>
     </materials>
 
@@ -157,7 +122,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="default" />
+                <material id="planetMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -176,7 +141,7 @@
                 <scale x="4.8" y="4.8" z="4.8" />
             </transformation>
             <materials>
-                <material id="mercuryMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="mercuryTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -191,7 +156,7 @@
                 <scale x="12.1" y="12.1" z="12.1" />
             </transformation>
             <materials>
-                <material id="venusMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="venusTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -206,7 +171,7 @@
                 <scale x="12.7" y="12.7" z="12.7" />
             </transformation>
             <materials>
-                <material id="earthMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="earthTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -221,7 +186,7 @@
                 <translate x="4" y="0" z="4" />
             </transformation>
             <materials>
-                <material id="moonMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="moonTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -236,7 +201,7 @@
                 <scale x="6.7" y="6.7" z="6.7" />
             </transformation>
             <materials>
-                <material id="marsMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="marsTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -251,7 +216,7 @@
                 <scale x="20" y="20" z="20" />
             </transformation>
             <materials>
-                <material id="jupiterMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="jupiterTexture" length_s="1.0" length_t="1.0" />
             <children>
