@@ -51,4 +51,8 @@ export class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
+
+    addCameraDropdown() {
+        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIds).name('Camera').onChange(() => this.scene.updateCamera());
+    }
 }

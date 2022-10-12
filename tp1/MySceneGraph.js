@@ -252,8 +252,8 @@ export class MySceneGraph {
             grandChildren = child.children;
 
             nodeNames = [];
-            for (var i = 0; i < child.children.length; i++) {
-                nodeNames.push(grandChildren[i].nodeName);
+            for (var j = 0; j < child.children.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
             }
 
             id = this.reader.getString(child, 'id');
@@ -357,7 +357,7 @@ export class MySceneGraph {
         else if (this.views[defaultCamera] == null)
             this.onXMLMinorError("missing default camera in <views> (ID = " + defaultCamera + ")")
         else {
-            this.camera = this.views[defaultCamera];
+            this.camera = defaultCamera;
         }
 
         this.log("Parsed views");
@@ -1419,5 +1419,10 @@ export class MySceneGraph {
     updateMaterials(node) {
         node.nextMaterialIndex();
         node.components.forEach(child => this.updateMaterials(this.components[child]));
+    }
+
+    updateCamera(id) {
+        this.camera = id;
+        return this.views[id];
     }
 }
