@@ -92,6 +92,9 @@
         <primitive id="metalPiece">
             <torus inner="0.2" outer="0.2" slices="10" loops="10" />
         </primitive>
+        <primitive id="metalPieceRound">
+            <torus inner="0.1" outer="0.05" slices="30" loops="30" />
+        </primitive>
     </primitives>
 
     <components>
@@ -105,7 +108,7 @@
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satellite" />
-                <componentref id="satelliteWings" />
+                <componentref id="satelliteWings" /> 
             </children>
         </component>
 
@@ -244,7 +247,7 @@
             <children>
                 <componentref id="satelliteWing" />
                 <componentref id="satelliteWing1" />
-
+                <componentref id="satelliteWingConnectors" />
             </children>
         </component>
         <component id="satelliteWing">
@@ -528,6 +531,101 @@
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satellitePanelConnector" />
+            </children>
+        </component>
+        <!-- Satellite Wings Body Connector-->
+        <component id="satelliteWingConnectors">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="sunMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteWingConnector" />
+                <componentref id="satelliteWingConnector1" />
+            </children>
+        </component>
+        <component id="satelliteWingConnector1">
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="sunMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteWingConnector" />
+                <componentref id="satelliteWingConnector2" />
+            </children>
+        </component>
+        <component id="satelliteWingConnector2">
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="sunMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteWingConnector" />
+                <componentref id="satelliteWingConnector3" />
+            </children>
+        </component>
+        <component id="satelliteWingConnector3">
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="sunMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteWingConnector" />
+            </children>
+        </component>
+        <!-- Satellite Wings Body Connector's Piece-->
+        <component id="satelliteWingConnector">
+            <transformation>
+                <rotate axis="y" angle="45" />
+                <translate x="0.1" y="-1.45" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="sunMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="metalPieceRound" />
+                <componentref id="satelliteWingConnectorCylinderLeft" />
+                <componentref id="satelliteWingConnectorCylinderRight" />
+            </children>
+        </component>
+        <component id="satelliteWingConnectorCylinderLeft">
+            <transformation>
+                <translate x="-0.1" y="0" z="0" />
+                <scale x="0.05" y="0.07" z="0.3" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="cubicCylinder" />
+            </children>
+        </component>
+        <component id="satelliteWingConnectorCylinderRight">
+            <transformation>
+                <translate x="0.1" y="0" z="0" />
+                <scale x="0.05" y="0.07" z="0.3" />
+                <rotate axis="z" angle="45" />            
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="cubicCylinder" />
             </children>
         </component>
 
