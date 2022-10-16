@@ -109,7 +109,7 @@
             </children>
         </component>
 
-        <!-- Satellite Component -->
+        <!-- Satellite Main Body -->
         <component id="satellite">
             <transformation>
                 <rotate axis="x" angle="-90" />
@@ -125,6 +125,8 @@
                 <componentref id="satelliteBases" />
             </children>
         </component>
+
+        <!-- Satellite Antenna -->
         <component id="satelliteAntennas">
             <transformation>
             </transformation>
@@ -176,7 +178,7 @@
                 <primitiveref id="innerAntenna" />
             </children>
         </component>
-
+        <!-- Satellite Inner Box -->
         <component id="satelliteBody">
             <transformation>
                 <translate x="0" y="0" z="-3.4" />
@@ -190,7 +192,6 @@
                 <primitiveref id="cubicCylinder" />
             </children>
         </component>
-
         <component id="satelliteBases">
             <transformation>
                 <scale x="2.2627417" y="2.2627417" z="1" />
@@ -231,6 +232,7 @@
             </children>
         </component>
 
+        <!-- Satellite 4 Wings -->
         <component id="satelliteWings">
             <transformation>
                 
@@ -297,7 +299,7 @@
                 <componentref id="satelliteWing" />
             </children>
         </component>
-
+        <!-- Satellite Wing -->
         <component id="satellitePanels">
             <transformation>
                 <rotate axis="x" angle="-90" />
@@ -354,8 +356,7 @@
                 <componentref id="satelliteSolarPanel" />
             </children>
         </component>
-
-
+        <!-- Satellite Wing Component -->
         <component id="satelliteSolarPanel">
             <transformation>
                 <scale x="1" y="1" z="0.1" />
@@ -397,7 +398,7 @@
                 <primitiveref id="square" />
             </children>
         </component>
-
+        <!-- Satellite Wing Component's Connector Piece -->
         <component id="satellitePanelConnector">
             <transformation>
                 <rotate axis="z" angle="180" />
@@ -452,7 +453,7 @@
                 <componentref id="satellitePanelConnectorHorizontal" />
             </children>
         </component>
-
+        <!-- Satellite Wing Component's Connectors -->
         <component id="satellitePanelConnectors">
             <transformation>
             </transformation>
