@@ -18,12 +18,12 @@
     </ambient>
 
     <lights>
-        <omni id="demoLight" enabled="0">
-            <location x="0.0" y="0.0" z="0.0" w="0.0" />
-            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="0" g="0" b="0" a="0" />
-            <attenuation constant="1.0" linear="1.0" quadratic="1.0" />  
+        <omni id="demoLight" enabled="1">
+            <location x="80.0" y="0.0" z="0.0" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="0.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="0.0" linear="1.0" quadratic="0.0" />  
         </omni>
     </lights>
 
@@ -100,7 +100,7 @@
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="stars" />
-                <componentref id="sun" /> 
+                <componentref id="sun" />
                 <componentref id="planets" />
             </children>
         </component>
@@ -123,7 +123,6 @@
                 <componentref id="starsBottom" />
             </children>
         </component>    
-
         <component id="starsFront">
             <transformation>
                 <translate x="0" y="0" z="-0.5" />
@@ -136,7 +135,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>   
-
         <component id="starsBack">
             <transformation>
                 <rotate axis="x" angle="-180" />
@@ -150,7 +148,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>  
-
         <component id="starsRight">
             <transformation>
                 <rotate axis="y" angle="90" />
@@ -164,7 +161,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component> 
-
         <component id="starsLeft">
             <transformation>
                 <rotate axis="y" angle="-90" />
@@ -178,7 +174,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>  
-
         <component id="starsUp">
             <transformation>
                 <rotate axis="x" angle="90" />
@@ -192,7 +187,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>  
-
         <component id="starsBottom">
             <transformation>
                 <rotate axis="x" angle="-90" />
@@ -284,7 +278,6 @@
                 <primitiveref id="planet" />
             </children>
         </component>
-
         <component id="earthMoon">
             <transformation>
                 <scale x="0.4" y="0.4" z="0.4" />
