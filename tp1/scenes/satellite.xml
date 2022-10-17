@@ -103,7 +103,7 @@
         </primitive>
 
         <primitive id="antenna1">
-            <cylinder base="0.5" top="1.5" height="0.3" slices="30" stacks="3" />
+            <cylinder base="0" top="1.5" height="0.3" slices="30" stacks="3" />
         </primitive>
         <primitive id="antenna2">
             <cylinder base="1.5" top="2.5" height="0.5" slices="30" stacks="3" />
@@ -112,7 +112,7 @@
             <cylinder base="2.5" top="2.8" height="0.3" slices="30" stacks="3" />
         </primitive>
         <primitive id="innerAntenna">
-            <cylinder base="0.5" top="2.8" height="1.1" slices="30" stacks="3" />
+            <cylinder base="0" top="2.8" height="1.1" slices="30" stacks="3" />
         </primitive>
 
         <primitive id="metalPiece">
@@ -123,7 +123,15 @@
         </primitive>
 
         <primitive id="irregularSphere">
-                <sphere radius="1" slices="8" stacks="6" />
+            <sphere radius="1" slices="8" stacks="6" />
+        </primitive>
+
+        <primitive id="planet">
+            <sphere radius="7" slices="60" stacks="60" />
+        </primitive>
+
+        <primitive id="roundCylinder">
+            <torus inner="0.1" outer="1" slices="30" loops="30" />
         </primitive>
     </primitives>
 
@@ -138,7 +146,7 @@
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteMainBody" />
-                <!-- <componentref id="satelliteWings" /> -->
+                <componentref id="satelliteWings" />
             </children>
         </component>
 
@@ -154,10 +162,65 @@
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteAntenna" />
-                <!-- <componentref id="satelliteBody" />
+                <componentref id="satelliteAntennaBodyBottomConnector" />
+                <componentref id="satelliteAntennaBodyTopConnector" />
+                <componentref id="satelliteBody" />
                 <componentref id="satelliteBases" />
                 <componentref id="satelliteBaseBall" />
-                <componentref id="satelliteThrusters" /> -->
+                <componentref id="satelliteThrusters" />
+            </children>
+        </component>
+
+        <!-- Satellite Antenna Body Top Connector -->
+        <component id="satelliteAntennaBodyTopConnector">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="default" />
+            </materials>
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <children>
+                <!-- TODO one outer cylinder, one torus achatado no meio, one inner cylinder virado ao contrário e uma esfera achatada de tampa -->
+            </children>
+        </component>
+        
+        <!-- Satellite Antenna Body Bottom Connector -->
+        <component id="satelliteAntennaBodyBottomConnector">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="default" />
+            </materials>
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteAntennaBodyConnectorRing" />
+                <componentref id="satelliteAntennaBodyConnectorRingBase" />
+            </children>
+        </component>
+        <component id="satelliteAntennaBodyConnectorRing">
+            <transformation>
+                <translate x="0" y="0" z="-0.37" />
+                <scale x="0.35" y="0.35" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="default" />
+            </materials>
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="roundCylinder" />
+            </children>
+        </component>
+        <component id="satelliteAntennaBodyConnectorRingBase">
+            <transformation>
+                <translate x="0" y="0" z="-0.39" />
+                <scale x="0.05" y="0.05" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>                
+                <primitiveref id="planet" />
             </children>
         </component>
 
@@ -296,10 +359,85 @@
             <children>
                 <componentref id="satelliteBowlShape" />
                 <componentref id="satelliteAntennaTip" />
+                <componentref id="satelliteAntennaTip2" />
+                <componentref id="satelliteAntennaTip3" />
+                <componentref id="satelliteAntennaUnion" />
+                <componentref id="satelliteAntennaUnionTip" />
             </children>
         </component>
 
+        <!-- Satellite Antenna Bars Union Tip -->
+        <component id="satelliteAntennaUnionTip">
+            <transformation>
+                <translate x="0" y="0" z="2.2" />
+                <scale x="0.05" y="0.05" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="darkMetalMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="normalCylinder" />
+                <componentref id="satelliteAntennaUnionTipBase" />
+            </children>
+        </component>
+        <component id="satelliteAntennaUnionTipBase">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+                <scale x="0.143" y="0.143" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="planet" />
+            </children>
+        </component>
 
+        <!-- Satellite Antenna Bars Union -->
+        <component id="satelliteAntennaUnion">
+            <transformation>
+                <translate x="0" y="0" z="2" />
+                <scale x="0.4" y="0.4" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="normalCylinder" />
+                <componentref id="satelliteAntennaUnionBase" />
+                <componentref id="satelliteAntennaUnionTop" />
+            </children>
+        </component>
+        <component id="satelliteAntennaUnionBase">
+            <transformation>
+                <scale x="0.143" y="0.143" z="0.15" />
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="planet" />
+            </children>
+        </component>
+        <component id="satelliteAntennaUnionTop">
+            <transformation>
+                <translate x="0" y="0" z="0.95" />
+                <scale x="0.143" y="0.143" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <primitiveref id="planet" />
+            </children>
+        </component>
+
+        <!-- Satellite Antenna's Bars -->
         <component id="satelliteAntennaTip">
             <transformation>
                 <translate x="0" y="2.45" z="0.9" />
@@ -313,10 +451,34 @@
                 <componentref id="satelliteAntennaTipBar2" />
             </children>
         </component>
+        <component id="satelliteAntennaTip2">
+            <transformation>
+                <rotate axis="z" angle="120" />
+            </transformation>
+            <materials>
+                <material id="darkMetalMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteAntennaTip" />
+            </children>
+        </component>
+        <component id="satelliteAntennaTip3">
+            <transformation>
+                <rotate axis="z" angle="-120" />
+            </transformation>
+            <materials>
+                <material id="darkMetalMaterial" />
+            </materials>
+                <texture id="none" length_s="1.0" length_t="1.0" />
+            <children>
+                <componentref id="satelliteAntennaTip" />
+            </children>
+        </component>
         <component id="satelliteAntennaTipBar1">
             <transformation>
-                <rotate axis="y" angle="-30" />
-                <rotate axis="x" angle="70" />
+                <rotate axis="y" angle="-10" />
+                <rotate axis="x" angle="60" />
                 <scale x="0.05" y="0.05" z="2.5" /> 
             </transformation>
             <materials>
@@ -329,8 +491,8 @@
         </component>
         <component id="satelliteAntennaTipBar2">
             <transformation>
-                <rotate axis="y" angle="30" />
-                <rotate axis="x" angle="70" />
+                <rotate axis="y" angle="10" />
+                <rotate axis="x" angle="60" />
                 <scale x="0.05" y="0.05" z="2.5" /> 
             </transformation>
             <materials>
