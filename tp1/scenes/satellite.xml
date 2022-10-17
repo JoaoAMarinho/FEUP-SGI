@@ -3,7 +3,7 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="15" y="8gi" z="25" />
+            <from x="15" y="8" z="25" />
             <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="d" near="0.1" far="500" left="-5.0" right="5.0" bottom="-5.0" top="5.0">
@@ -28,7 +28,6 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
         <texture id="sunTexture" file="scenes/images/sun.png" />
         <texture id="antennaTexture" file="scenes/images/antenna.png" />
         <texture id="solarPanelTexture" file="scenes/images/solar_panel_2.jpg" />
