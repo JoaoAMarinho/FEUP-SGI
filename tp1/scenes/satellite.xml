@@ -31,11 +31,14 @@
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
         <texture id="sunTexture" file="scenes/images/sun.png" />
         <texture id="antennaTexture" file="scenes/images/antenna.png" />
+        <texture id="solarPanelTexture" file="scenes/images/solar_panel_2.jpg" />
+        <texture id="metalTexture" file="scenes/images/metal.jpg" />
+        <texture id="bronzeTexture" file="scenes/images/bronze.jpg" />
     </textures>
 
     <materials>
         <material id="default" shininess="10">
-            <emission r="0.4" g="0.4" b="0.4" a="1.0" />
+            <emission r="1.0" g="1.0" b="1.0" a="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="0" g="0" b="0" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
@@ -136,7 +139,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="antenna1" />
                 <componentref id="antenna2" />
@@ -150,7 +153,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="inherit" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="antenna2" />
                 <componentref id="antenna3" />
@@ -163,7 +166,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="inherit" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="antenna3" />
             </children>
@@ -176,7 +179,7 @@
             <materials>
                 <material id="antenna" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="inherit" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="innerAntenna" />
             </children>
@@ -190,7 +193,7 @@
             <materials>
                 <material id="default" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="bronzeTexture" length_s="0.25" length_t="0.25" />
             <children>                
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -201,9 +204,9 @@
                 <rotate axis="z" angle="45" />
             </transformation>
             <materials>
-                <material id="antenna" />
+                <material id="default" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
             <children>                
                 <componentref id="satelliteBaseTop" />
                 <componentref id="satelliteBaseBottom" />
@@ -216,7 +219,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="inherit" length_s="1.0" length_t="1.0" />
             <children>                
                 <primitiveref id="square" />
             </children>
@@ -229,7 +232,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="inherit" length_s="1.0" length_t="1.0" />
             <children>                
                 <primitiveref id="square" />
             </children>
@@ -367,7 +370,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="cubicCylinder" />
                 <componentref id="satellitePanelTop" />
@@ -382,7 +385,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="solarPanelTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="square" />
                 <componentref id="satellitePanelBottom" />
@@ -396,7 +399,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -409,9 +412,9 @@
                 <translate x="-15.1" y="-1.0" z="13.8" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satellitePanelConnectorHorizontal" />
                 <componentref id="satellitePanelConnectorInclined" />
@@ -461,7 +464,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -538,7 +541,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -551,7 +554,7 @@
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -564,7 +567,7 @@
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -577,7 +580,7 @@
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="inherit" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -591,9 +594,9 @@
                 <translate x="0.1" y="-1.45" z="0.8" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="inherit" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="metalPieceRound" />
                 <componentref id="satelliteWingConnectorCylinderLeft" />
