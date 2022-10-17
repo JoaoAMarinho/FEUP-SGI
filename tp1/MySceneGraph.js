@@ -423,8 +423,8 @@ export class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
-                attributeTypes.push(...["position", "color", "color", "color"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
+                attributeTypes.push(...["position", "color", "color", "color", "attenuation"]);
             }
 
             // Get id of the current light.
@@ -462,16 +462,18 @@ export class MySceneGraph {
 
             for (var j = 0; j < attributeNames.length; j++) {
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+                var attributeType;
 
                 if (attributeIndex != -1) {
-                    if (attributeTypes[j] == "position")
+                    if ((attributeType = attributeTypes[j]) == "position")
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
+                    else if (attributeType == "attenuation") 
+                        var aux = this.parseAttenuation(grandChildren[attributeIndex], "light attenuation for ID" + lightId);
                     else
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
                     if (!Array.isArray(aux))
                         return aux;
-
                     global.push(aux);
                 }
                 else
@@ -1288,6 +1290,30 @@ export class MySceneGraph {
         color.push(...[r, g, b, a]);
 
         return color;
+    }
+
+
+    parseAttenuation(node, messageError) {
+        // constant
+        var constant = this.reader.getFloat(node, 'constant');
+        console.log(!(constant != "null" && !isNaN(constant)));
+        if (!(constant != "null" && !isNaN(constant)) && (constant != 0 && constant != 1.0))
+            return "unable to parse constant component of the " + messageError;
+
+        // linear
+        var linear = this.reader.getFloat(node, 'linear');
+        if (!(linear != null && !isNaN(linear)) && (linear != 0.0 && linear != 1.0))
+            return "unable to parse linear component of the " + messageError;
+
+        // quadratic
+        var quadratic = this.reader.getFloat(node, 'quadratic');
+        if (!(quadratic != null && !isNaN(quadratic)) && (quadratic != 0.0 && quadratic != 1.0))
+            return "unable to parse quadratic component of the " + messageError;
+
+        if ((constant + linear + quadratic) != 1.0) 
+            return "light attenuation component must only one of constant, linear or quadratic with value 1.0"
+
+        return [constant, linear, quadratic];
     }
 
     validateGraphComponents(node) {
