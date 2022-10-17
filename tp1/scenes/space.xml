@@ -23,9 +23,8 @@
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="0.0" linear="0.0" quadratic="1.0" />  
+            <attenuation constant="1.0" linear="0.0" quadratic="0.0" />  
         </omni>
-
     </lights>
 
     <textures>
@@ -276,7 +275,6 @@
         <component id="saturnRings">
             <transformation>
                 <scale x="1" y="1" z="0.2" />
-                <translate x="-78" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="ringMaterial" />
