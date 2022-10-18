@@ -34,21 +34,22 @@
     </ambient>
 
     <lights>
-        <omni id="demoLight" enabled="1">
-            <location x="0.0" y="0.0" z="0.0" w="1.0" />
+        <omni id="Sun Light" enabled="1">
+            <location x="-8000.0" y="0.0" z="2.0" w="1.0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="0.0" linear="0.0" quadratic="1.0" />  
+            <attenuation constant="0.0" linear="0.0004" quadratic="0.0" />  
         </omni>
 
-        <spot id="mercury" enabled="1" angle="0.3" exponent="0">
-            <location x="150" y="0.0" z="-300" w="1.0" />
-            <target x="60" y="0.0" z="-104.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="0.0" linear="1.0" quadratic="0.0" />
+
+        <spot id="Satellite Light" enabled="1" angle="0.3" exponent="0">
+            <location x="0.0" y="-2.0" z="0" w="1.0" />
+            <target x="0" y="-100.0" z="0.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="0.2" b="1.0" a="1.0" />
+            <specular r="1.0" g="0.2" b="1.0" a="1.0" />
+            <attenuation constant="0.0" linear="0.1" quadratic="0.0" />
         </spot>
     </lights>
 
@@ -74,10 +75,10 @@
     <materials>
 
         <material id="default" shininess="10">
-            <emission r="1.0" g="1.0" b="1.0" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0" g="0" b="0" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
         </material>
         
         <material id="sunMaterial" shininess="10">
@@ -88,14 +89,14 @@
         </material>
 
         <material id="planetMaterial" shininess="10">
-            <emission r="0.7" g="0.7" b="0.7" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
             <specular r="0.6" g="0.6" b="0.6" a="0.4" />
         </material>
 
         <material id="ringMaterial" shininess="10">
-            <emission r="0.6" g="0.6" b="0.6" a="1" />
+            <emission r="0.0" g="0.0" b="0.0" a="1" />
             <ambient r="0.8" g="0.8" b="0.8" a="1" />
             <diffuse r="0.8" g="0.8" b="0.8" a="1" />
             <specular r="0.8" g="0.8" b="0.8" a="1" />
@@ -109,45 +110,45 @@
         </material>
 
         <material id="yellow" shininess="10">
-            <emission r="0.83" g="0.63" b="0.09" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="0" g="0" b="0" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
 
         <material id="bronze" shininess="10">
-            <emission r="0.69" g="0.55" b="0.34" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.69" g="0.55" b="0.34"  a="1.0" />
             <diffuse r="0.69" g="0.55" b="0.34"  a="1.0" />
             <specular r="0.69" g="0.55" b="0.34"  a="1.0" />
         </material>
 
         <material id="antenna" shininess="10">
-            <emission r="0.6" g="0.6" b="0.6" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1" g="1" b="1" a="1.0" />
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="1" g="1" b="1" a="1.0" />
         </material>
 
         <material id="metalMaterial" shininess="50">
-            <emission r="0.41" g="0.41" b="0.41" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0" g="0" b="0" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.41" g="0.41" b="0.41" a="1.0" />
+            <diffuse r="0.41" g="0.41" b="0.41" a="1.0" />
+            <specular r="0.41" g="0.41" b="0.41" a="1.0" />
         </material>
         
         <material id="darkMetalMaterial" shininess="50">
-            <emission r="0.27" g="0.27" b="0.27" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0" g="0" b="0" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.27" g="0.27" b="0.27" a="1.0"/>
+            <diffuse r="0.27" g="0.27" b="0.27" a="1.0" />
+            <specular r="0.27" g="0.27" b="0.27" a="1.0" />
         </material>
 
         <material id="darkMaterial" shininess="50">
-            <emission r="0.15" g="0.15" b="0.15" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0" g="0" b="0" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1.0" />
+            <diffuse r="0.15" g="0.15" b="0.15" a="1.0" />
+            <specular r="0.15" g="0.15" b="0.15" a="1.0" />
         </material>
 
     </materials>
@@ -227,6 +228,7 @@
                 <componentref id="sun" />
                 <componentref id="planets" />
                 <componentref id="satellite" />
+                <componentref id="meteor" />
             </children>
         </component>
 
@@ -1106,7 +1108,7 @@
                 <rotate axis="z" angle="45" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -1272,7 +1274,7 @@
                 <translate x="0" y="0" z="-1.37" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -1286,7 +1288,7 @@
                 <translate x="1.47" y="-0.165" z="1.36" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -1299,7 +1301,7 @@
                 <translate x="1.47" y="-0.165" z="0" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -1312,7 +1314,7 @@
                 <translate x="1.5" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -1324,7 +1326,7 @@
                 <translate x="1.5" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="sunMaterial" />
+                <material id="default" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>

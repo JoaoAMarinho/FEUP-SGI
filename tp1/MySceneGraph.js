@@ -503,7 +503,7 @@ export class MySceneGraph {
                 }
                 else
                     return "light target undefined for ID = " + lightId;
-
+                
                 global.push(...[angle, exponent, targetLight])
             }
 
@@ -1326,16 +1326,13 @@ export class MySceneGraph {
 
         // linear
         var linear = this.reader.getFloat(node, 'linear');
-        if (!(linear != null && !isNaN(linear)) && (linear != 0.0 && linear != 1.0))
+        if (!(linear != null && !isNaN(linear)))
             return "unable to parse linear component of the " + messageError;
 
         // quadratic
         var quadratic = this.reader.getFloat(node, 'quadratic');
-        if (!(quadratic != null && !isNaN(quadratic)) && (quadratic != 0.0 && quadratic != 1.0))
+        if (!(quadratic != null && !isNaN(quadratic)))
             return "unable to parse quadratic component of the " + messageError;
-
-        if ((constant + linear + quadratic) != 1.0)
-            return "light attenuation component must only one of constant, linear or quadratic with value 1.0"
 
         return [constant, linear, quadratic];
     }
