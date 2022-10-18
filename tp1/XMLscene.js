@@ -40,7 +40,7 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         // Objects conneted to MyInterface
-        this.displayAxis = true;
+        this.displayAxis = false;
     }
 
     /**

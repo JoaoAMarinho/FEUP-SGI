@@ -1,19 +1,31 @@
 <sxs>
     <scene root="space" axis_length="5"/>
 
-    <views default="origin">
-        <perspective id="origin" near="0.1" far="10000000" angle="45">
-            <from x="10" y="10" z="10" />
+    <views default="Origin">
+        <perspective id="Origin" near="0.1" far="10000000" angle="45">
+            <from x="-40" y="7" z="-40" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="defaultCamera" near="0.1" far="10000000" angle="45">
-            <from x="500" y="500" z="500" />
-            <to x="0" y="0" z="0" />
+
+        <perspective id="Sun Perspective" near="0.1" far="10000000" angle="30">
+            <from x="-8500" y="300" z="0" />
+            <to x="0" y="-100" z="0" />
         </perspective>
-        <ortho id="d" near="0.1" far="500" left="-5.0" right="5.0" bottom="-5.0" top="5.0">
+
+        <perspective id="Satellite Perspective" near="0.01" far="10000000" angle="50">
+            <from x="0" y="-0.6" z="0" />
+            <to x="-800" y="-3" z="-50" />
+        </perspective>
+
+        <ortho id="Satellite Ortho" near="0.1" far="500" left="-10.0" right="10.0" bottom="-5.0" top="5.0">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </ortho>
+
+        <perspective id="Moon Camera" near="0.1" far="10000000" angle="45">
+            <from x="490.0" y="55.0" z="-285.0" />
+            <to x="470.0" y="0.0" z="-270.0" />
+        </perspective>
     </views>
 
     <ambient>
@@ -297,8 +309,8 @@
         <!-- Earth planet & Moon -->
         <component id="earth">
             <transformation>
-                <translate x="139.8" y="0" z="0" />
                 <rotate axis="z" angle="30" />
+                <translate x="139.8" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
