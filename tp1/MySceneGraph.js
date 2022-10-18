@@ -236,9 +236,9 @@ export class MySceneGraph {
         var defaultCamera = this.reader.getString(viewsNode, 'default')
         if (defaultCamera == null) {
             this.onXMLMinorError("no default camera id defined for views")
-            return null;        
+            return null;
         }
-        
+
         var children = viewsNode.children;
         var grandChildren;
         var child = null;
@@ -246,8 +246,8 @@ export class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
             var id, near, far, angle, left, right, top, bottom;
-            var from, to , up;
-            
+            var from, to, up;
+
             child = children[i];
             grandChildren = child.children;
 
@@ -273,19 +273,19 @@ export class MySceneGraph {
 
             if (from == -1) {
                 this.onXMLMinorError("node <from> must be defined in view (conflict: ID = " + id + ")");
-                continue;     
+                continue;
             }
             if (to == -1) {
                 this.onXMLMinorError("node <to> must be defined in view (conflict: ID = " + id + ")");
-                continue;     
+                continue;
             }
-             
+
             from = this.parseCoordinates3D(grandChildren[from], "attribute 'from' in view (conflict: ID = " + id + ")");
             if (!Array.isArray(from)) {
                 this.onXMLMinorError(from);
                 continue;
             }
-            
+
             to = this.parseCoordinates3D(grandChildren[to], "attribute 'to' in view (conflict: ID = " + id + ")");
             if (!Array.isArray(to)) {
                 this.onXMLMinorError(to);
@@ -303,7 +303,7 @@ export class MySceneGraph {
                 this.onXMLMinorError("no far attribute defined for view (conflict: ID = " + id + ")");
                 continue;
             }
-            
+
             if (child.nodeName == "perspective") {
                 angle = this.reader.getFloat(child, 'angle');
                 if (angle == null) {
@@ -313,7 +313,7 @@ export class MySceneGraph {
 
                 if (up != -1) {
                     this.onXMLMinorError("up attribute wrongly defined for perspective view (conflict: ID = " + id + ")");
-                    continue;             
+                    continue;
                 }
                 this.views[id] = new CGFcamera(angle * DEGREE_TO_RAD, near, far, from, to);
 
@@ -323,28 +323,28 @@ export class MySceneGraph {
                     this.onXMLMinorError("no left attribute for view (conflict: ID = " + id + ")");
                     continue;
                 }
-                
+
                 right = this.reader.getFloat(child, 'right');
                 if (right == null) {
                     this.onXMLMinorError("no right attribute defined for view (conflict: ID = " + id + ")");
                     continue;
                 }
-                
+
                 top = this.reader.getFloat(child, 'top');
                 if (top == null) {
                     this.onXMLMinorError("no top attribute defined for view (conflict: ID = " + id + ")");
                     continue;
                 }
-                
+
                 bottom = this.reader.getFloat(child, 'bottom');
                 if (bottom == null) {
                     this.onXMLMinorError("no bottom attribute defined for view (conflict: ID = " + id + ")");
                     continue;
                 }
 
-                up = up == -1 ? [0, 1, 0] : 
-                                this.parseCoordinates3D(grandChildren[up], "attribute 'up' in view (conflict: ID = " + id + ")");
-                
+                up = up == -1 ? [0, 1, 0] :
+                    this.parseCoordinates3D(grandChildren[up], "attribute 'up' in view (conflict: ID = " + id + ")");
+
                 this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up);
             } else {
                 this.onXMLMinorError("unknown camera type '" + child.nodeName + "' (conflict: ID = " + id + ")");
@@ -467,7 +467,7 @@ export class MySceneGraph {
                 if (attributeIndex != -1) {
                     if ((attributeType = attributeTypes[j]) == "position")
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else if (attributeType == "attenuation") 
+                    else if (attributeType == "attenuation")
                         var aux = this.parseAttenuation(grandChildren[attributeIndex], "light attenuation for ID" + lightId);
                     else
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
@@ -567,17 +567,12 @@ export class MySceneGraph {
 
     parseComponentTexture(node, componentID) {
         var textureID = this.reader.getString(node, 'id');
-        var length_s = this.reader.getFloat(node, 'length_s');
-        var length_t = this.reader.getFloat(node, 'length_t');
+        var length_s = this.reader.getFloat(node, 'length_s', false);
+        var length_t = this.reader.getFloat(node, 'length_t', false);
 
-        if (textureID == 'inherit' || textureID == 'none') {
-            if (length_s != 1.0 || length_t != 1.0) {
-                this.onXMLMinorError("invalid texture values (lenght_s or length_t != 1.0) (conflict: ID = " + componentID + ")");
-                return null;
-            }
+        if (textureID == 'inherit' || textureID == 'none')
+            return { id: textureID, length_s: 1.0, length_t: 1.0 };
 
-            return { id: textureID, length_s, length_t };
-        }
         if (length_s == null || length_t == null || this.textures[textureID] == null) {
             this.onXMLMinorError("invalid texture tag definition (conflict: ID = " + componentID + ")");
             return null;
@@ -1310,7 +1305,7 @@ export class MySceneGraph {
         if (!(quadratic != null && !isNaN(quadratic)) && (quadratic != 0.0 && quadratic != 1.0))
             return "unable to parse quadratic component of the " + messageError;
 
-        if ((constant + linear + quadratic) != 1.0) 
+        if ((constant + linear + quadratic) != 1.0)
             return "light attenuation component must only one of constant, linear or quadratic with value 1.0"
 
         return [constant, linear, quadratic];
@@ -1337,15 +1332,15 @@ export class MySceneGraph {
         node.visited = true;
 
         while (index--) {
-            if((component = this.components[node.components[index]]) == null)
+            if ((component = this.components[node.components[index]]) == null)
                 continue;
-            
+
             if (component.visited) {
                 this.onXMLMinorError("child component '" + component.id + "' creates a graph cycle (conflict: ID = " + node.id + ")");
                 node.components.splice(index, 1);
                 continue;
             }
-            
+
             this.isAcyclic(component);
         }
 
@@ -1390,10 +1385,10 @@ export class MySceneGraph {
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
         if (this.rootNode !== null)
-            this.newprocessNode(this.rootNode, null, null);
+            this.processNode(this.rootNode, null, null);
     }
 
-    newprocessNode(node, prevMaterial, prevTexture) {
+    processNode(node, prevMaterial, prevTexture) {
 
         this.scene.pushMatrix();
 
@@ -1405,26 +1400,30 @@ export class MySceneGraph {
         }
 
         // Apply material and texture
-        [prevMaterial, prevTexture] = this.newapplyMaterial(node, prevMaterial, prevTexture);
+        [prevMaterial, prevTexture] = this.applyMaterial(node, prevMaterial, prevTexture);
 
         for (var i = 0; i < node.primitives.length; i++) {
             var primitive = this.primitives[node.primitives[i]];
-            primitive.updateTexCoords(node.texture.length_s, node.texture.length_t);
+            primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
             primitive.display();
         }
 
         for (var i = 0; i < node.components.length; i++) {
-            this.newprocessNode(this.components[node.components[i]], prevMaterial, prevTexture);
+            this.processNode(this.components[node.components[i]], prevMaterial, prevTexture);
         }
 
         this.scene.popMatrix();
     }
 
-    newapplyMaterial(node, prevMaterial, prevTexture) {
+    applyMaterial(node, prevMaterial, prevTexture) {
         if (node.texture === null) return;
 
         let materialId;
-        let textureId = node.texture.id;
+        let textureInfo = {
+            id: node.texture.id,
+            length_s: node.texture.length_s,
+            length_t: node.texture.length_t
+        };
 
         if ((materialId = node.getMaterial()) == 'inherit') {
             materialId = prevMaterial;
@@ -1433,66 +1432,17 @@ export class MySceneGraph {
         var material = this.materials[materialId];
 
         if (node.texture.id != 'none') {
-            if ((textureId = node.texture.id) == 'inherit')
-                textureId = prevTexture;
+            if ((textureInfo.id = node.texture.id) == 'inherit')
+                textureInfo = prevTexture;
 
-            material.setTexture(this.textures[textureId]);
+            material.setTexture(this.textures[textureInfo.id]);
         }
 
         material.apply();
 
         // Reset material texture
         material.setTexture(null);
-        return [materialId, textureId];
-    }
-
-    processNode(node, prevNode) {
-
-        this.scene.pushMatrix();
-
-        // Apply transformations
-        if (node.transformation !== null) {
-            var matrix = node.transformation.isExplicit ? node.transformation.matrix
-                : this.transformations[node.transformation.matrix];
-            this.scene.multMatrix(matrix);
-        }
-
-        // Apply material and texture
-        this.applyMaterial(node, prevNode);
-
-        for (var i = 0; i < node.primitives.length; i++) {
-            var primitive = this.primitives[node.primitives[i]];
-            primitive.updateTexCoords(node.texture.length_s, node.texture.length_t);
-            primitive.display();
-        }
-
-        for (var i = 0; i < node.components.length; i++) {
-            this.processNode(this.components[node.components[i]], node);
-        }
-
-        this.scene.popMatrix();
-    }
-
-    applyMaterial(node, prevNode) {
-        if (node.texture === null) return;
-
-        if (node.getMaterial() == 'inherit') {
-            node.setCurrentMaterial(prevNode.getMaterial());
-        }
-
-        var material = this.materials[node.getMaterial()];
-
-        if (node.texture.id != 'none') {
-            if (node.texture.id == 'inherit')
-                node.texture = prevNode.texture;
-
-            material.setTexture(this.textures[node.texture.id]);
-        }
-
-        material.apply();
-
-        // Reset material texture
-        material.setTexture(null);
+        return [materialId, textureInfo];
     }
 
     updateMaterials(node) {
