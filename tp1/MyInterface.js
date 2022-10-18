@@ -52,7 +52,17 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
-    addCameraDropdown() {
-        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIds).name('Camera').onChange(() => this.scene.updateCamera());
+    addCameraControls() {
+        var camerasFolder = this.gui.addFolder('Cameras');
+        camerasFolder.add(this.scene, 'selectedCamera', this.scene.cameraIds).name('Camera').onChange(() => this.scene.updateCamera());
+    }
+
+    addLightsControls() {
+        var lightsFolder = this.gui.addFolder('Lights');
+        for (const light of this.scene.lights) {
+            if (light.name == undefined) continue;
+
+            lightsFolder.add(light, 'enabled').name(light.name).onChange(() => light.update());
+        }
     }
 }

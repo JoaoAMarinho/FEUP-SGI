@@ -64,6 +64,7 @@ export class XMLscene extends CGFscene {
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
 
+                this.lights[i].name = key;
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
@@ -90,6 +91,8 @@ export class XMLscene extends CGFscene {
                 i++;
             }
         }
+
+        this.interface.addLightsControls();
     }
 
     setDefaultAppearance() {
@@ -110,12 +113,12 @@ export class XMLscene extends CGFscene {
 
         if ((this.selectedCamera = this.graph.camera) != undefined) {
             this.cameraIds = {};
-            Object.keys(this.graph.views).forEach((key, i) => {
+            Object.keys(this.graph.views).forEach(key => {
                 this.cameraIds[key] = key;
             });
 
             this.updateCamera();
-            this.interface.addCameraDropdown();
+            this.interface.addCameraControls();
         }
 
         this.initLights();
