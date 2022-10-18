@@ -565,6 +565,11 @@ export class MySceneGraph {
     }
 
 
+    /**
+     * Parses the <textures> block of a component. 
+     * @param {textures block element} texturesNode
+     * @param {string} componentID
+     */
     parseComponentTexture(node, componentID) {
         var textureID = this.reader.getString(node, 'id');
         var length_s = this.reader.getFloat(node, 'length_s', false);
@@ -676,6 +681,11 @@ export class MySceneGraph {
         return material;
     }
 
+    /**
+     * Parses the <material> block of a component. 
+     * @param {materials block element} nodes
+     * @param {string} componentID
+     */
     parseComponentMaterials(nodes, componentID) {
         if (nodes.length === 0)
             return "There must be one or more material tag (conflict: ID = " + componentID + ")";
@@ -741,6 +751,11 @@ export class MySceneGraph {
         return null;
     }
 
+    /**
+     * Parses the <transformation> element.
+     * @param {transformation element} nodes
+     * @param {string} transformationID
+     */
     parseTransformation(nodes, transformationID) {
         var transfMatrix = mat4.create();
         var error = null;
@@ -784,6 +799,11 @@ export class MySceneGraph {
         return null;
     }
 
+   /**
+     * Parses the <transformation> block of a component.
+     * @param {transformation block element} nodes
+     * @param {string} transformationID
+     */
     parseComponentTransformations(nodes, componentID) {
         if (nodes.length == 1) {
             const nodeName = nodes[0].nodeName;
@@ -873,9 +893,9 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <rectangle> block.
-     * @param {rectangle block element} rectangle 
-     * @param {primitive id} primitiveId 
+     * Parses a <rectangle> element.
+     * @param {rectangle element} rectangle 
+     * @param {string} primitiveId 
 
      */
     parseRectangle(rectangle, primitiveId) {
@@ -904,9 +924,9 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <triangle> block.
-     * @param {triangle block element} triangle 
-     * @param {primitive id} primitiveId 
+     * Parses a <triangle> element.
+     * @param {triangle element} triangle 
+     * @param {string} primitiveId 
      */
     parseTriangle(triangle, primitiveId) {
         // x1, y1, z1
@@ -953,9 +973,9 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <cylinder> block.
-     * @param {cylinder block element} cylinder 
-     * @param {primitive id} primitiveId 
+     * Parses a <cylinder> element.
+     * @param {cylinder element} cylinder 
+     * @param {string} primitiveId 
      */
     parseCylinder(cylinder, primitiveId) {
         // base
@@ -988,9 +1008,9 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <sphere> block.
-     * @param {sphere block element} sphere 
-     * @param {primitive id} primitiveId 
+     * Parses a <sphere> element.
+     * @param {sphere element} sphere 
+     * @param {string} primitiveId 
      */
     parseSphere(sphere, primitiveId) {
         // radius
@@ -1013,9 +1033,9 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <torus> block.
-     * @param {torus block element} sphere 
-     * @param {primitive id} primitiveId 
+     * Parses a <torus> element.
+     * @param {torus element} torus 
+     * @param {string} primitiveId 
      */
     parseTorus(torus, primitiveId) {
         // inner
@@ -1154,6 +1174,11 @@ export class MySceneGraph {
         return null;
     }
 
+    /**
+     * Parses the <children> element.
+     * @param {children element} node
+     * @param {string} componentID
+     */
     parseChild(node, componentID) {
         const nodeName = node.nodeName;
         const id = this.reader.getString(node, 'id');
@@ -1287,7 +1312,11 @@ export class MySceneGraph {
         return color;
     }
 
-
+    /**
+     * Parse the attenuation components from a node
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
     parseAttenuation(node, messageError) {
         // constant
         var constant = this.reader.getFloat(node, 'constant');
@@ -1311,6 +1340,10 @@ export class MySceneGraph {
         return [constant, linear, quadratic];
     }
 
+    /**
+     * Verify if node components exists in graph
+     * @param {graph node} node
+     */
     validateGraphComponents(node) {
         var index = node.components.length;
         var component;
@@ -1326,6 +1359,10 @@ export class MySceneGraph {
 
     }
 
+    /**
+     * Verify if graph is acyclic
+     * @param {graph node} node
+     */
     isAcyclic(node) {
         var component;
         var index = node.components.length;
@@ -1347,6 +1384,10 @@ export class MySceneGraph {
         node.visited = false;
     }
 
+    /**
+     * Verify if file exists
+     * @param {string} file
+     */
     fileExists(file) {
         var http = new XMLHttpRequest();
         http.open('HEAD', file, false);
@@ -1388,6 +1429,12 @@ export class MySceneGraph {
             this.processNode(this.rootNode, null, null);
     }
 
+    /**
+     * Applies transformations and displays primitives
+     * @param {graph node} node
+     * @param {string} prevMaterial
+     * @param {array} prevTexture
+     */
     processNode(node, prevMaterial, prevTexture) {
 
         this.scene.pushMatrix();
@@ -1415,6 +1462,12 @@ export class MySceneGraph {
         this.scene.popMatrix();
     }
 
+    /**
+     * Applies textures and materials
+     * @param {graph node} node
+     * @param {string} prevMaterial
+     * @param {array} prevTexture
+     */
     applyMaterial(node, prevMaterial, prevTexture) {
         if (node.texture === null) return;
 
@@ -1445,11 +1498,19 @@ export class MySceneGraph {
         return [materialId, textureInfo];
     }
 
+    /**
+     * Changes material index upon key handler
+     * @param {graph node} node
+     */
     updateMaterials(node) {
         node.nextMaterialIndex();
         node.components.forEach(child => this.updateMaterials(this.components[child]));
     }
 
+    /**
+     * Updates scene view
+     * @param {string} id
+     */
     updateCamera(id) {
         this.camera = id;
         return this.views[id];
