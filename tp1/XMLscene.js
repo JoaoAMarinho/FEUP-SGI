@@ -68,6 +68,10 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+                
+                this.lights[i].setConstantAttenuation(light[6][0]);
+                this.lights[i].setLinearAttenuation(light[6][1]);
+                this.lights[i].setQuadraticAttenuation(light[6][2]);
 
                 if (light[1] == "spot") {
                     this.lights[i].setSpotCutOff(light[6]);
