@@ -183,6 +183,10 @@
         <primitive id="roundCylinder">
             <torus inner="0.1" outer="1" slices="30" loops="30" />
         </primitive>
+
+        <primitive id="torustrial">
+            <torus inner="1" outer="2" slices="6" loops="4" />
+        </primitive>
     </primitives>
 
     <components>
@@ -196,10 +200,11 @@
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
-                <componentref id="stars" />
+                <!--<componentref id="stars" />
                 <componentref id="sun" />
                 <componentref id="planets" />
-                <componentref id="satellite" />
+                <componentref id="satellite" />-->
+                <primitiveref id="torustrial" />
             </children>
         </component>
 

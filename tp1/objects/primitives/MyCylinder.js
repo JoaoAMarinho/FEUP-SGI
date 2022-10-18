@@ -53,7 +53,7 @@ export class MyCylinder extends CGFobject {
             radius += incrementRadius;
             height += incrementHeight;
 		}
-		//Indices
+
 		for(var stack = 0; stack < this.stacks; stack++){
 			for(var slice = 0; slice < this.slices; slice++){
 				var ind1 = slice + stack * (this.slices+1);

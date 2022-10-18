@@ -31,17 +31,17 @@ export class MyTorus extends CGFobject {
         this.texCoords = [];
 
         var phi = 0;
-        var phiInc = (2 * Math.PI) / this.slices;
+        var phiInc = (2 * Math.PI) / this.loops;
 
         var theta = 0;
-        var thetaInc = (2 * Math.PI) / this.loops;
+        var thetaInc = (2 * Math.PI) / this.slices;
 
-        for (var loop = 0; loop <= this.loops; loop++) {
+        for (var slice = 0; slice <= this.slices; slice++) {
             var sinTheta = Math.sin(theta);
             var cosTheta = Math.cos(theta);
 
             phi = 0;
-            for (var slice = 0; slice <= this.slices; slice++) {
+            for (var loop = 0; loop <= this.loops; loop++) {
                 var sinPhi = Math.sin(phi);
                 var cosPhi = Math.cos(phi);
 
@@ -51,8 +51,8 @@ export class MyTorus extends CGFobject {
                 var x = (this.outer + (this.inner * cosTheta)) * cosPhi;
                 var y = (this.outer + (this.inner * cosTheta)) * sinPhi
                 var z = this.inner * sinTheta;
-                var s = 1 - (loop / this.loops);
-                var t = 1 - (slice / this.slices);
+                var s = 1 - (slice / this.slices);
+                var t = 1 - (loop / this.loops);
 
                 this.vertices.push(x, y, z);
                 this.normals.push(
@@ -67,10 +67,10 @@ export class MyTorus extends CGFobject {
             theta += thetaInc;
         }
 
-        for (var loop = 0; loop < this.loops; loop++) {
-            for (var slice = 0; slice < this.slices; slice++) {
-                var first = (loop * (this.slices + 1)) + slice;
-                var second = first + this.slices + 1;
+        for (var slice = 0; slice < this.slices; slice++) {
+            for (var loop = 0; loop < this.loops; loop++) {
+                var first = (slice * (this.loops + 1)) + loop;
+                var second = first + this.loops + 1;
     
                 this.indices.push(first, second + 1, second);
                 this.indices.push(first, first + 1, second + 1);
