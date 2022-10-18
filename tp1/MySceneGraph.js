@@ -1364,7 +1364,60 @@ export class MySceneGraph {
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
         if (this.rootNode !== null)
-            this.processNode(this.rootNode, null);
+            this.newprocessNode(this.rootNode, null, null);
+    }
+
+    newprocessNode(node, prevMaterial, prevTexture) {
+
+        this.scene.pushMatrix();
+
+        // Apply transformations
+        if (node.transformation !== null) {
+            var matrix = node.transformation.isExplicit ? node.transformation.matrix
+                : this.transformations[node.transformation.matrix];
+            this.scene.multMatrix(matrix);
+        }
+
+        // Apply material and texture
+        [prevMaterial, prevTexture] = this.newapplyMaterial(node, prevMaterial, prevTexture);
+
+        for (var i = 0; i < node.primitives.length; i++) {
+            var primitive = this.primitives[node.primitives[i]];
+            primitive.updateTexCoords(node.texture.length_s, node.texture.length_t);
+            primitive.display();
+        }
+
+        for (var i = 0; i < node.components.length; i++) {
+            this.newprocessNode(this.components[node.components[i]], prevMaterial, prevTexture);
+        }
+
+        this.scene.popMatrix();
+    }
+
+    newapplyMaterial(node, prevMaterial, prevTexture) {
+        if (node.texture === null) return;
+
+        let materialId;
+        let textureId = node.texture.id;
+
+        if ((materialId = node.getMaterial()) == 'inherit') {
+            materialId = prevMaterial;
+        }
+
+        var material = this.materials[materialId];
+
+        if (node.texture.id != 'none') {
+            if ((textureId = node.texture.id) == 'inherit')
+                textureId = prevTexture;
+
+            material.setTexture(this.textures[textureId]);
+        }
+
+        material.apply();
+
+        // Reset material texture
+        material.setTexture(null);
+        return [materialId, textureId];
     }
 
     processNode(node, prevNode) {
