@@ -29,6 +29,15 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="0.0" linear="0.0" quadratic="1.0" />  
         </omni>
+
+        <spot id="mercury" enabled="1" angle="0.3" exponent="0">
+            <location x="150" y="0.0" z="-300" w="1.0" />
+            <target x="60" y="0.0" z="-104.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="0.0" linear="1.0" quadratic="0.0" />
+        </spot>
     </lights>
 
     <textures>
@@ -75,9 +84,9 @@
 
         <material id="planetMaterial" shininess="10">
             <emission r="0.7" g="0.7" b="0.7" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
-            <specular r="0.6" g="0.6" b="0.6" a="1.0" />
+            <specular r="0.6" g="0.6" b="0.6" a="0.4" />
         </material>
 
         <material id="ringMaterial" shininess="10">
@@ -124,10 +133,8 @@
     </materials>
 
     <transformations>
-        <transformation id="demoTransform">
-            <scale x="1" y="1" z="1" />
-            <rotate axis="x" angle="-45" />
-            <translate x="0" y="0" z="1" />
+        <transformation id="rotationZ90">
+            <rotate axis="z" angle="90" />
         </transformation>
     </transformations>
 
@@ -183,10 +190,6 @@
         <primitive id="roundCylinder">
             <torus inner="0.1" outer="1" slices="30" loops="30" />
         </primitive>
-
-        <primitive id="torustrial">
-            <torus inner="1" outer="2" slices="6" loops="4" />
-        </primitive>
     </primitives>
 
     <components>
@@ -200,11 +203,10 @@
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
-                <!--<componentref id="stars" />
+                <componentref id="stars" />
                 <componentref id="sun" />
                 <componentref id="planets" />
-                <componentref id="satellite" />-->
-                <primitiveref id="torustrial" />
+                <componentref id="satellite" />
             </children>
         </component>
 
@@ -242,11 +244,12 @@
         <component id="planets">
             <transformation>
                 <rotate axis="x" angle="-90" />
+                <scale x="4" y="4" z="4" />
             </transformation>
             <materials>
                 <material id="planetMaterial" />
             </materials>
-                <texture id="none" length_s="1.0" length_t="1.0" />
+                <texture id="none" />
             <children>
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -262,8 +265,8 @@
         <!-- Mercury -->
         <component id="mercury">
             <transformation>
-                <rotate axis="z" angle="110" />
-                <translate x="20" y="0" z="0" />
+                <rotate axis="z" angle="60" />
+                <translate x="120" y="0" z="0" />
                 <scale x="0.4" y="0.4" z="0.4" />
             </transformation>
             <materials>
@@ -279,7 +282,7 @@
         <component id="venus">
             <transformation>
                 <rotate axis="z" angle="-70" />
-                <translate x="31.4" y="0" z="0" />
+                <translate x="131.4" y="0" z="0" />
                 <scale x="0.9" y="0.9" z="0.9" />
             </transformation>
             <materials>
@@ -294,9 +297,8 @@
         <!-- Earth planet & Moon -->
         <component id="earth">
             <transformation>
+                <translate x="139.8" y="0" z="0" />
                 <rotate axis="z" angle="30" />
-                <translate x="39.8" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -310,7 +312,7 @@
         <component id="earthMoon">
             <transformation>
                 <scale x="0.25" y="0.25" z="0.25" />
-                <translate x="4" y="0" z="4" />
+                <translate x="4" y="0" z="54" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -325,7 +327,7 @@
         <component id="mars">
             <transformation>
                 <rotate axis="z" angle="45" />
-                <translate x="53.8" y="0" z="0" />
+                <translate x="153.8" y="0" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
             <materials>
@@ -341,7 +343,7 @@
         <component id="jupiter">
             <transformation>
                 <rotate axis="z" angle="-90" />
-                <translate x="158.2" y="0" z="0" />
+                <translate x="258.2" y="0" z="0" />
                 <scale x="8" y="8" z="8" />
             </transformation>
             <materials>
@@ -357,7 +359,7 @@
         <component id="saturn">
             <transformation>
                 <rotate axis="z" angle="-10" />
-                <translate x="304.8" y="0" z="0" />
+                <translate x="404.8" y="0" z="0" />
                 <scale x="7.4" y="7.4" z="7.4" />
             </transformation>
             <materials>
@@ -410,7 +412,7 @@
         <!-- Uranus -->
         <component id="uranus">
             <transformation>
-                <translate x="598" y="0" z="0" />
+                <translate x="698" y="0" z="0" />
                 <scale x="4" y="4" z="4" />
             </transformation>
             <materials>
@@ -426,7 +428,7 @@
         <component id="neptune">
             <transformation>
                 <rotate axis="z" angle="45" />
-                <translate x="905" y="0" z="0" />
+                <translate x="1005" y="0" z="0" />
                 <scale x="3.9" y="3.9" z="3.9" />
             </transformation>
             <materials>
@@ -504,7 +506,7 @@
         </component>
         <component id="satelliteAntennaBodyConnectorBarTube2">
             <transformation>
-                <rotate axis="z" angle="90" /> 
+                <transformationref id="rotationZ90" />
             </transformation>
             <materials>
                 <material id="darkMetalMaterial" />
@@ -516,7 +518,7 @@
         </component>
         <component id="satelliteAntennaBodyConnectorBarTube3">
             <transformation>
-                <rotate axis="z" angle="90" /> 
+                <transformationref id="rotationZ90" />
             </transformation>
             <materials>
                 <material id="darkMetalMaterial" />
@@ -528,7 +530,7 @@
         </component>
         <component id="satelliteAntennaBodyConnectorBarTube4">
             <transformation>
-                <rotate axis="z" angle="90" /> 
+                <transformationref id="rotationZ90" />
             </transformation>
             <materials>
                 <material id="darkMetalMaterial" />
