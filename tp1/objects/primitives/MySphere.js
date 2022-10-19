@@ -2,9 +2,9 @@ import { CGFobject } from '../../../lib/CGF.js';
 
 /**
   * @method constructor
-  * @param  {CGFscene} scene - MyScene object
-  * @param  {integer} slices - number of slices around Y axis
-  * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
+  * @param {CGFscene} scene - MyScene object
+  * @param {integer} slices - number of slices around Y axis
+  * @param {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
   */
 export class MySphere extends CGFobject {
     constructor(scene, id, radius, slices, stacks) {

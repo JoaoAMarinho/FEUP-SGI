@@ -3,10 +3,10 @@ import { CGFobject } from '../../../lib/CGF.js';
 /**
  * MyRectangle
  * @constructor
- * @param scene - Reference to MyScene object
- * @param id - Object identifier
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param {CGFscene} scene - Reference to MyScene object
+ * @param {String} id - Object identifier
+ * @param {Array} x - Array of X coordinates
+ * @param {Array} y - Array of Y coordinates
  */
 export class MyRectangle extends CGFobject {
 	constructor(scene, id, x, y) {
@@ -54,13 +54,14 @@ export class MyRectangle extends CGFobject {
 	/**
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
+	 * @param {float} lenght_s - Horizontal texture length
+	 * @param {float} length_t - Vertical texture length
 	 */
 	updateTexCoords(lenght_s, length_t) {
 		this.texCoords = [
-			0,															(this.y2 - this.y1) / length_t,
+			0, (this.y2 - this.y1) / length_t,
 			(this.x2 - this.x1) / lenght_s, (this.y2 - this.y1) / length_t,
-			0,															0,
+			0, 0,
 			(this.x2 - this.x1) / lenght_s, 0,
 		];
 		this.updateTexCoordsGLBuffers();
