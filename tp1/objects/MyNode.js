@@ -1,8 +1,8 @@
 /**
- * MyRectangle
+ * MyNode
  * @constructor
- * @param scene - Reference to MyScene object
- * @param id - Object identifier
+ * @param {CGFscene} scene - Reference to XMLscene object
+ * @param {String} id - Object identifier
  */
 export class MyNode {
     constructor(scene, id) {
@@ -14,7 +14,7 @@ export class MyNode {
         this.components = [];
 
         // node attributes
-        this.materials = [];
+        this.materials = [];         // [id]
         this.texture = null;         // { id, [length_s, length_t] }
         this.transformation = null;  // {matrix, isExplicit} 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
@@ -23,34 +23,63 @@ export class MyNode {
         this.visited = false;
     }
 
+    /**
+     * @method addComponent
+     * Appends a new child component to the components array
+     * @param {String} component - Component identifier
+     */
     addComponent(component) {
         this.components.push(component);
     }
 
+    /**
+     * @method addPrimitive
+     * Appends a new child primitive to the primitives array
+     * @param {String} primitive - Primitive identifier
+     */
     addPrimitive(primitive) {
         this.primitives.push(primitive);
     }
 
+    /**
+     * @method setMaterials
+     * Updates the materials array
+     * @param {Array} materials - Array of material ids
+     */
     setMaterials(materials) {
         this.materials = materials;
     }
 
+    /**
+     * @method setTransformation
+     * Updates the transformation attribute
+     * @param {Object} transformation - Transformation matrix and explicit flag object
+     */
     setTransformation(transformation) {
         this.transformation = transformation;
     }
 
+    /**
+     * @method setTexture
+     * Updates the texture attribute
+     * @param {Object} texture - Texture id and (length_s, lenght_t) values object
+     */
     setTexture(texture) {
         this.texture = texture;
     }
 
-    setCurrentMaterial(material) {
-        this.materials[this.materialIndex] = material;
-    }
-
+    /**
+     * @method getMaterial
+     * @return Current material id
+     */
     getMaterial() {
         return this.materials[this.materialIndex];
     }
 
+    /**
+     * @method nextMaterialIndex
+     * Updates the materialIndex attribute
+     */
     nextMaterialIndex() {
         this.materialIndex = (this.materialIndex + 1) % this.materials.length;
     }
