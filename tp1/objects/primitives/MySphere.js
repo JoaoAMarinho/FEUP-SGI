@@ -1,10 +1,13 @@
 import { CGFobject } from '../../../lib/CGF.js';
 
 /**
+  * MySphere
   * @method constructor
-  * @param {CGFscene} scene - MyScene object
-  * @param {integer} slices - number of slices around Y axis
-  * @param {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
+  * @param {CGFscene} scene - Reference to XMLscene object
+  * @param {String} id - Object identifier
+  * @param {float} radius - Sphere radius
+  * @param {integer} slices - Number of slices around Y axis
+  * @param {integer} stacks - Number of stacks along Y axis, from the center to the poles (half of sphere)
   */
 export class MySphere extends CGFobject {
     constructor(scene, id, radius, slices, stacks) {
@@ -77,10 +80,10 @@ export class MySphere extends CGFobject {
     }
 
     /**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-	}
+     * @method updateTexCoords
+     * Updates the list of texture coordinates of the sphere
+     * @param {Array} coords - Array of texture coordinates
+     */
+    updateTexCoords(coords) {
+    }
 }

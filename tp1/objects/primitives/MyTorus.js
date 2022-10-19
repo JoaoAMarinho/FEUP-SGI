@@ -1,15 +1,14 @@
 import { CGFobject } from '../../../lib/CGF.js';
 
-//TODO complete slices and loops
 /**
  * MyTorus
  * @constructor
- * @param scene - Reference to MyScene object
- * @param id - Object identifier
- * @param inner - The "tube" radius
- * @param outer - The circular axis radius
- * @param slices - 
- * @param loops - 
+ * @param {CGFscene} scene - Reference to XMLscene object
+ * @param {String} id - Object identifier
+ * @param {float} inner - The "tube" radius
+ * @param {float} outer - The circular axis radius
+ * @param {integer} slices - Number of divisions around the "tube" axis
+ * @param {integer} loops - Number of divisions around the object
  */
 export class MyTorus extends CGFobject {
     constructor(scene, id, inner, outer, slices, loops) {
@@ -24,6 +23,10 @@ export class MyTorus extends CGFobject {
         this.initBuffers();
     }
 
+    /**
+     * @method initBuffers
+     * Initializes the torus buffers
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
@@ -71,7 +74,7 @@ export class MyTorus extends CGFobject {
             for (var loop = 0; loop < this.loops; loop++) {
                 var first = (slice * (this.loops + 1)) + loop;
                 var second = first + this.loops + 1;
-    
+
                 this.indices.push(first, second + 1, second);
                 this.indices.push(first, first + 1, second + 1);
             }

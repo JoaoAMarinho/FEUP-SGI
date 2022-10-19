@@ -3,7 +3,7 @@ import { CGFobject } from '../../../lib/CGF.js';
 /**
  * MyTriangle
  * @constructor
- * @param {CGFscene} scene - Reference to MyScene object
+ * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id -  Object identifier
  * @param {Array} x - Array of X coordinates
  * @param {Array} y - Array of Y coordinates
@@ -28,6 +28,10 @@ export class MyTriangle extends CGFobject {
         this.initBuffers();
     }
 
+    /**
+     * @method initBuffers
+     * Initializes the triangle buffers
+     */
     initBuffers() {
         this.vertices = [
             this.x1, this.y1, this.z1,	  //0
