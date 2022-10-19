@@ -58,6 +58,7 @@ export class XMLscene extends CGFscene {
 
         // Reads the lights from the scene graph.
         for (var key in this.graph.lights) {
+
             if (i >= 8)
                 break;              // Only eight lights allowed by WebGL.
 
@@ -81,8 +82,10 @@ export class XMLscene extends CGFscene {
                 }
 
                 this.lights[i].setVisible(true);
-                if (light[0])
+                if (light[0]){
                     this.lights[i].enable();
+                    console.log(light);
+                }
                 else
                     this.lights[i].disable();
 
@@ -110,7 +113,7 @@ export class XMLscene extends CGFscene {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
-
+        
         if ((this.selectedCamera = this.graph.camera) != undefined) {
             this.cameraIds = {};
             Object.keys(this.graph.views).forEach(key => {
@@ -149,7 +152,6 @@ export class XMLscene extends CGFscene {
             this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
             this.lights[i].enable();
         }
 
@@ -177,7 +179,6 @@ export class XMLscene extends CGFscene {
     checkKeys() {
         if (this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym")) {
             this.graph.updateMaterials(this.graph.rootNode);
-            console.log('ola');
         }
     }
 }

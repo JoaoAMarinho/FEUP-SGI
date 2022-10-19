@@ -451,12 +451,10 @@ export class MySceneGraph {
             }
 
             // Light enable/disable
-            var enableLight = true;
+            var enableLight;
             var aux = this.reader.getBoolean(children[i], 'enabled');
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-
-            enableLight = aux || 1;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -1369,7 +1367,6 @@ export class MySceneGraph {
     parseAttenuation(node, messageError) {
         // constant
         var constant = this.reader.getFloat(node, 'constant');
-        console.log(!(constant != "null" && !isNaN(constant)));
         if (!(constant != "null" && !isNaN(constant)) && (constant != 0 && constant != 1.0))
             return "unable to parse constant component of the " + messageError;
 

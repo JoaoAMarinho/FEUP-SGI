@@ -49,7 +49,7 @@ export class MyInterface extends CGFinterface {
     };
 
     isKeyPressed(keyCode) {
-        return this.activeKeys[keyCode] || false;
+        return this.activeKeys[keyCode];
     }
 
     addCameraControls() {
@@ -64,5 +64,6 @@ export class MyInterface extends CGFinterface {
 
             lightsFolder.add(light, 'enabled').name(light.name).onChange(() => light.update());
         }
+
     }
 }
