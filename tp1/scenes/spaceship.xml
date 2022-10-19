@@ -76,6 +76,18 @@
             <diffuse r="0" g="0" b="0" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
+        <material id="redMaterial" shininess="50">
+            <emission r="0.0" g="0.0" b="0" a="1.0" />
+            <ambient r="0.61" g="0.14" b="0.14" a="1.0" />
+            <diffuse r="0.61" g="0.14" b="0.14" a="1.0" />
+            <specular r="0.61" g="0.14" b="0.14" a="1.0" />
+        </material>
+        <material id="blueMaterial" shininess="50">
+            <emission r="0.0" g="0.0" b="0" a="1.0" />
+            <ambient r="0.14" g="0.45" b="0.61" a="1.0" />
+            <diffuse r="0.14" g="0.45" b="0.61" a="1.0" />
+            <specular r="0.14" g="0.45" b="0.61" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -148,7 +160,8 @@
                 <scale x="2" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="metalMaterial" />
+                <material id="redMaterial" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -163,7 +176,8 @@
                 <scale x="2.6" y="2.2" z="0" /> 
             </transformation>
             <materials>
-                <material id="metalMaterial" />
+                <material id="redMaterial" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -177,6 +191,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -190,6 +205,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -202,7 +218,8 @@
                 <rotate axis="y" angle="180" />
             </transformation>
             <materials>
-                <material id="metalMaterial" />
+                <material id="redMaterial" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -216,7 +233,8 @@
                 <translate x="0" y="0" z="5" />
             </transformation>
             <materials>
-                <material id="darkMaterial" />
+                <material id="redMaterial" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
@@ -231,7 +249,7 @@
                 <translate x="0" y="7.5" z="2.75" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="metalMaterial" />
             </materials>
                 <texture id="glassTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -244,7 +262,8 @@
                 <translate x="0" y="0" z="5" />
             </transformation>
             <materials>
-                <material id="darkMetalMaterial" />
+                <material id="redMaterial" />
+                <material id="blueMaterial" />
             </materials>
                 <texture id="none" length_s="1.0" length_t="1.0" />
             <children>
