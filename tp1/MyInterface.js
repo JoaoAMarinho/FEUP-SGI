@@ -1,19 +1,18 @@
 import { CGFinterface, CGFapplication, dat } from '../lib/CGF.js';
 
-/**
-* MyInterface class, creating a GUI interface.
-*/
 
+/**
+ * MyInterface
+ * @constructor
+ */
 export class MyInterface extends CGFinterface {
-    /**
-     * @constructor
-     */
     constructor() {
         super();
     }
 
     /**
-     * Initializes the interface.
+     * @method init
+     * Initializes the interface
      * @param {CGFapplication} application
      */
     init(application) {
@@ -32,7 +31,8 @@ export class MyInterface extends CGFinterface {
     }
 
     /**
-     * initKeys
+     * @method initKeys
+     * Creates keyboard processor
      */
     initKeys() {
         this.scene.gui=this;
@@ -40,23 +40,48 @@ export class MyInterface extends CGFinterface {
         this.activeKeys={};
     }
 
+    /**
+     * @method processKeyDown
+     * Processes a press event
+     * @param event
+     */
     processKeyDown(event) {
         this.activeKeys[event.code]=true;
     };
 
+    /**
+     * @method processKeyUp
+     * Processes a release event
+     * @param event
+     */
     processKeyUp(event) {
         this.activeKeys[event.code]=false;
     };
 
+    /**
+     * @method isKeyPressed
+     * Checks if a certain key is pressed
+     * @param {String} keyCode
+     * @return true if key is pressed, otherwise false
+     */
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
 
+    /**
+     * @method addCameraControls
+     * Adds cameras folder
+     * 
+     */
     addCameraControls() {
         var camerasFolder = this.gui.addFolder('Cameras');
         camerasFolder.add(this.scene, 'selectedCamera', this.scene.cameraIds).name('Camera').onChange(() => this.scene.updateCamera());
     }
 
+    /**
+     * @method addLightsControls
+     * Adds lights folder
+     */
     addLightsControls() {
         var lightsFolder = this.gui.addFolder('Lights');
         for (const light of this.scene.lights) {
