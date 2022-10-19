@@ -20,12 +20,12 @@ var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
 /**
- * MySceneGraph class, representing the scene graph.
+ * MySceneGraph
+ * @constructor
+ * @param {String} filename - XML filename to be parsed
+ * @param {CGFscene} scene - Reference to XMLscene object
  */
 export class MySceneGraph {
-    /**
-     * @constructor
-     */
     constructor(filename, scene) {
         this.loadedOk = null;
 
@@ -61,7 +61,8 @@ export class MySceneGraph {
         this.reader.open('scenes/' + filename, this);
     }
 
-    /*
+    /**
+     * @method onXMLReady
      * Callback to be executed after successful reading
      */
     onXMLReady() {
@@ -77,7 +78,7 @@ export class MySceneGraph {
         }
 
         // Remove graph cycles
-        this.isAcyclic(this.rootNode);
+        this.removeCycles(this.rootNode);
 
         // Remove undefined child components
         this.validateGraphComponents(this.rootNode);
@@ -89,6 +90,7 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseXMLFile
      * Parses the XML file, processing each block.
      * @param {XML root element} rootElement
      */
@@ -201,12 +203,14 @@ export class MySceneGraph {
         if ((error = this.parseComponents(nodes[index])) != null)
             return error;
 
-        this.log("all parsed");
+        this.log("All parsed");
     }
 
     /**
-     * Parses the <scene> block. 
+     * @method parseScene
+     * Parses the <scene> block
      * @param {scene block element} sceneNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseScene(sceneNode) {
 
@@ -229,8 +233,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <views> block.
+     * @method parseViews
+     * Parses the <views> block
      * @param {views block element} viewsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseViews(viewsNode) {
         var defaultCamera = this.reader.getString(viewsNode, 'default')
@@ -365,8 +371,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <ambient> node.
+     * @method parseAmbient
+     * Parses the <ambient> node
      * @param {ambient block element} ambientsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseAmbient(ambientsNode) {
 
@@ -398,8 +406,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <light> node.
+     * @method parseLights
+     * Parses the <light> node
      * @param {lights block element} lightsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseLights(lightsNode) {
         var children = lightsNode.children;
@@ -503,7 +513,7 @@ export class MySceneGraph {
                 }
                 else
                     return "light target undefined for ID = " + lightId;
-                
+
                 global.push(...[angle, exponent, targetLight])
             }
 
@@ -521,8 +531,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <textures> block. 
+     * @method parseTextures
+     * Parses the <textures> block
      * @param {textures block element} texturesNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseTextures(texturesNode) {
         var children = texturesNode.children;
@@ -564,11 +576,12 @@ export class MySceneGraph {
         return null;
     }
 
-
     /**
-     * Parses the <textures> block of a component. 
+     * @method parseComponentTexture
+     * Parses the <textures> block of a component
      * @param {textures block element} texturesNode
      * @param {string} componentID
+     * @return null on error, otherwise texture object with id and respective (length_s, length_t) attributes
      */
     parseComponentTexture(node, componentID) {
         var textureID = this.reader.getString(node, 'id');
@@ -587,8 +600,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <materials> node.
+     * @method parseMaterials
+     * Parses the <materials> node
      * @param {materials block element} materialsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseMaterials(materialsNode) {
         var children = materialsNode.children;
@@ -641,10 +656,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parse a <material> block.
-     * @param {block element} nodes
+     * @method parseMaterial
+     * Parse a <material> block
+     * @param {material block child elements} nodes
      * @param {string} materialID 
-     * @param {}
+     * @return null on error, otherwise material object with respective attribute values
      */
     parseMaterial(nodes, materialID) {
         var nodeNames = [];
@@ -682,9 +698,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <material> block of a component. 
+     * @method parseComponentMaterials
+     * Parses the <material> block of a component
      * @param {materials block element} nodes
      * @param {string} componentID
+     * @return string on error, otherwise material ids array
      */
     parseComponentMaterials(nodes, componentID) {
         if (nodes.length === 0)
@@ -708,8 +726,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <transformations> block.
+     * @method parseTransformations
+     * Parses the <transformations> block
      * @param {transformations block element} transformationsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseTransformations(transformationsNode) {
         var children = transformationsNode.children;
@@ -752,9 +772,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <transformation> element.
+     * @method parseTransformation
+     * Parses the <transformation> element
      * @param {transformation element} nodes
      * @param {string} transformationID
+     * @return null on error, otherwise transformation matrix (mat4)
      */
     parseTransformation(nodes, transformationID) {
         var transfMatrix = mat4.create();
@@ -799,11 +821,13 @@ export class MySceneGraph {
         return null;
     }
 
-   /**
-     * Parses the <transformation> block of a component.
-     * @param {transformation block element} nodes
-     * @param {string} transformationID
-     */
+    /**
+      * @method parseComponentTransformations
+      * Parses the <transformation> block of a component
+      * @param {transformation block element} nodes
+      * @param {string} transformationID
+      * @return null on error, otherwise transformation object with matrix and explicit flag
+      */
     parseComponentTransformations(nodes, componentID) {
         if (nodes.length == 1) {
             const nodeName = nodes[0].nodeName;
@@ -819,8 +843,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <primitives> block.
+     * @method parsePrimitives
+     * Parses the <primitives> block
      * @param {primitives block element} primitivesNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parsePrimitives(primitivesNode) {
         var children = primitivesNode.children;
@@ -893,10 +919,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <rectangle> element.
+     * @method parseRectangle
+     * Parses a <rectangle> element
      * @param {rectangle element} rectangle 
      * @param {string} primitiveId 
-
+     * @return null on success (no major errors), otherwise an error message
      */
     parseRectangle(rectangle, primitiveId) {
         // x1
@@ -924,9 +951,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses a <triangle> element.
+     * @method parseTriangle
+     * Parses a <triangle> element
      * @param {triangle element} triangle 
-     * @param {string} primitiveId 
+     * @param {string} primitiveId
+     * @return null on success (no major errors), otherwise an error message
      */
     parseTriangle(triangle, primitiveId) {
         // x1, y1, z1
@@ -973,9 +1002,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseCylinder
      * Parses a <cylinder> element.
      * @param {cylinder element} cylinder 
      * @param {string} primitiveId 
+     * @return null on success (no major errors), otherwise an error message
      */
     parseCylinder(cylinder, primitiveId) {
         // base
@@ -1008,9 +1039,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseSphere
      * Parses a <sphere> element.
      * @param {sphere element} sphere 
      * @param {string} primitiveId 
+     * @return null on success (no major errors), otherwise an error message
      */
     parseSphere(sphere, primitiveId) {
         // radius
@@ -1033,9 +1066,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseTorus
      * Parses a <torus> element.
      * @param {torus element} torus 
      * @param {string} primitiveId 
+     * @return null on success (no major errors), otherwise an error message
      */
     parseTorus(torus, primitiveId) {
         // inner
@@ -1057,14 +1092,16 @@ export class MySceneGraph {
         var loops = this.reader.getInteger(torus, 'loops');
         if (!(loops != null && !isNaN(loops)))
             return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
-        //TODO review torus normals
+
         this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
         return null;
     }
 
     /**
-     * Parses the <components> block.
+     * @method parseComponents
+     * Parses the <components> block
      * @param {components block element} componentsNode
+     * @return null on success (no major errors), otherwise an error message
      */
     parseComponents(componentsNode) {
         var children = componentsNode.children;
@@ -1175,9 +1212,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <children> element.
-     * @param {children element} node
+     * @method parseChild
+     * Parses the <children> element
+     * @param {children block child element} node
      * @param {string} componentID
+     * @return child object with node id and type of node flag (primitive or component)
      */
     parseChild(node, componentID) {
         const nodeName = node.nodeName;
@@ -1206,9 +1245,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseCoordinates3D
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @return array on success (no major errors), otherwise an error message
      */
     parseCoordinates3D(node, messageError) {
         var position = [];
@@ -1234,9 +1275,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseCoordinates4D
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @return array on success (no major errors), otherwise an error message
      */
     parseCoordinates4D(node, messageError) {
         var position = [];
@@ -1257,9 +1300,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseRotationParameters
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @return array on success (no major errors), otherwise an error message
      */
     parseRotationParameters(node, messageError) {
         var parameters = [];
@@ -1280,9 +1325,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseColor
      * Parse the color components from a node
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @return array on success (no major errors), otherwise an error message
      */
     parseColor(node, messageError) {
         var color = [];
@@ -1313,9 +1360,11 @@ export class MySceneGraph {
     }
 
     /**
+     * @method parseAttenuation
      * Parse the attenuation components from a node
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @return array on success (no major errors), otherwise an error message
      */
     parseAttenuation(node, messageError) {
         // constant
@@ -1338,7 +1387,8 @@ export class MySceneGraph {
     }
 
     /**
-     * Verify if node components exists in graph
+     * @method validateGraphComponents
+     * Verify if node components exists in graph and remove from respective node children arrays
      * @param {graph node} node
      */
     validateGraphComponents(node) {
@@ -1357,10 +1407,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Verify if graph is acyclic
+     * @method removeCycles
+     * Verify if graph is acyclic and remove respective 'back edges'
      * @param {graph node} node
      */
-    isAcyclic(node) {
+    removeCycles(node) {
         var component;
         var index = node.components.length;
         node.visited = true;
@@ -1375,15 +1426,17 @@ export class MySceneGraph {
                 continue;
             }
 
-            this.isAcyclic(component);
+            this.removeCycles(component);
         }
 
         node.visited = false;
     }
 
     /**
+     * @method fileExists
      * Verify if file exists
-     * @param {string} file
+     * @param {String} file
+     * @return boolean on file existence
      */
     fileExists(file) {
         var http = new XMLHttpRequest();
@@ -1392,9 +1445,10 @@ export class MySceneGraph {
         return http.status != 404;
     }
 
-    /*
-     * Callback to be executed on any read error, showing an error on the console.
-     * @param {string} message
+    /**
+     * @method onXMLError
+     * Callback to be executed on any read error, showing an error on the console
+     * @param {String} message
      */
     onXMLError(message) {
         console.error("XML Loading Error: " + message);
@@ -1402,23 +1456,26 @@ export class MySceneGraph {
     }
 
     /**
-     * Callback to be executed on any minor error, showing a warning on the console.
-     * @param {string} message
+     * @method onXMLMinorError
+     * Callback to be executed on any minor error, showing a warning on the console
+     * @param {String} message
      */
     onXMLMinorError(message) {
         console.warn("Warning: " + message);
     }
 
     /**
-     * Callback to be executed on any message.
-     * @param {string} message
+     * @method log
+     * Callback to be executed on any message
+     * @param {String} message
      */
     log(message) {
         console.log("   " + message);
     }
 
     /**
-     * Displays the scene, processing each node, starting in the root node.
+     * @method displayScene
+     * Displays the scene, processing each node, starting in the root node
      */
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
@@ -1427,10 +1484,11 @@ export class MySceneGraph {
     }
 
     /**
-     * Applies transformations and displays primitives
+     * @method processNode
+     * Applies transformations, textural/material changes, and displays primitives while processing child components of the given node
      * @param {graph node} node
-     * @param {string} prevMaterial
-     * @param {array} prevTexture
+     * @param {String} prevMaterial
+     * @param {Array} prevTexture
      */
     processNode(node, prevMaterial, prevTexture) {
 
@@ -1460,10 +1518,12 @@ export class MySceneGraph {
     }
 
     /**
+     * @method applyMaterial
      * Applies textures and materials
      * @param {graph node} node
-     * @param {string} prevMaterial
-     * @param {array} prevTexture
+     * @param {String} prevMaterial
+     * @param {Array} prevTexture
+     * @return applied material and texture values
      */
     applyMaterial(node, prevMaterial, prevTexture) {
         if (node.texture === null) return;
@@ -1496,7 +1556,8 @@ export class MySceneGraph {
     }
 
     /**
-     * Changes material index upon key handler
+     * @method updateMaterials
+     * Changes material index of the given node and following children upon key handler
      * @param {graph node} node
      */
     updateMaterials(node) {
@@ -1505,8 +1566,10 @@ export class MySceneGraph {
     }
 
     /**
-     * Updates scene view
+     * @method updateCamera
+     * Updates the current camera
      * @param {string} id
+     * @return camera object with the respective id
      */
     updateCamera(id) {
         this.camera = id;
