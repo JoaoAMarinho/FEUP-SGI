@@ -3,12 +3,13 @@ import { CGFobject, CGFappearance } from '../../../lib/CGF.js';
 /**
  * MyCylinder
  * @constructor
- * @param scene - Reference to MyScene object
- * @param id - Object identifier
- * @param baseRadius - Cylinder base radius 
- * @param topRadius - Cylinder top radius
- * @param slices - Rotation divisions
- * @param stacks - Height divisions
+ * @param {CGFscene} scene - Reference to XMLscene object
+ * @param {String} id - Object identifier
+ * @param {float} baseRadius - Cylinder base radius 
+ * @param {float} topRadius - Cylinder top radius
+ * @param {float} height - Cylinder height
+ * @param {integer} slices - Rotation divisions
+ * @param {integer} stacks - Height divisions
  */
 export class MyCylinder extends CGFobject {
     constructor(scene, id, baseRadius, topRadius, height, slices, stacks) {
@@ -24,6 +25,10 @@ export class MyCylinder extends CGFobject {
         this.initBuffers();
     }
 
+    /**
+     * @method initBuffers
+     * Initializes the cylinder buffers
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
@@ -38,32 +43,32 @@ export class MyCylinder extends CGFobject {
         var radius = this.baseRadius;
         var height = 0;
 
-		for(var stack = 0; stack <= this.stacks; stack++){
-			for(var slice = 0; slice <= this.slices; slice++){
-				var xAng = Math.cos(alphaAng*slice) * radius;
-				var yAng = Math.sin(alphaAng*slice) * radius;
-                var vSize = Math.sqrt(xAng*xAng+yAng*xAng+normalZ*normalZ);
+        for (var stack = 0; stack <= this.stacks; stack++) {
+            for (var slice = 0; slice <= this.slices; slice++) {
+                var xAng = Math.cos(alphaAng * slice) * radius;
+                var yAng = Math.sin(alphaAng * slice) * radius;
+                var vSize = Math.sqrt(xAng * xAng + yAng * xAng + normalZ * normalZ);
 
-				this.vertices.push(xAng, yAng, height);
+                this.vertices.push(xAng, yAng, height);
 
-				this.normals.push(xAng/vSize, yAng/vSize, normalZ/vSize);
+                this.normals.push(xAng / vSize, yAng / vSize, normalZ / vSize);
 
-				this.texCoords.push(slice / this.slices, 1 - (stack / this.stacks));
-			}
+                this.texCoords.push(slice / this.slices, 1 - (stack / this.stacks));
+            }
             radius += incrementRadius;
             height += incrementHeight;
-		}
+        }
 
-		for(var stack = 0; stack < this.stacks; stack++){
-			for(var slice = 0; slice < this.slices; slice++){
-				var ind1 = slice + stack * (this.slices+1);
-				var ind2 = slice + stack *(this.slices+1)+1;
-				var ind3 = slice + (stack+1)*(this.slices+1);
-				var ind4 = slice + (stack+1)*(this.slices+1)+1;
-				this.indices.push(ind4, ind3, ind1);
-				this.indices.push(ind1,ind2,ind4);
-			}
-		}
+        for (var stack = 0; stack < this.stacks; stack++) {
+            for (var slice = 0; slice < this.slices; slice++) {
+                var ind1 = slice + stack * (this.slices + 1);
+                var ind2 = slice + stack * (this.slices + 1) + 1;
+                var ind3 = slice + (stack + 1) * (this.slices + 1);
+                var ind4 = slice + (stack + 1) * (this.slices + 1) + 1;
+                this.indices.push(ind4, ind3, ind1);
+                this.indices.push(ind1, ind2, ind4);
+            }
+        }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -71,7 +76,7 @@ export class MyCylinder extends CGFobject {
 
     /**
      * @method updateTexCoords
-     * Updates the list of texture coordinates of the rectangle
+     * Updates the list of texture coordinates of the cylinder
      * @param {Array} coords - Array of texture coordinates
      */
     updateTexCoords(coords) {
