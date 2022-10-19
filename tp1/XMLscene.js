@@ -2,16 +2,12 @@ import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 
 
-var DEGREE_TO_RAD = Math.PI / 180;
-
 /**
- * XMLscene class, representing the scene that is to be rendered.
+ * XMLscene
+ * @constructor
+ * @param {MyInterface} myinterface  - Reference to MyInterface object
  */
 export class XMLscene extends CGFscene {
-    /**
-     * @constructor
-     * @param {MyInterface} myinterface 
-     */
     constructor(myinterface) {
         super();
 
@@ -19,7 +15,8 @@ export class XMLscene extends CGFscene {
     }
 
     /**
-     * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
+     * @method init
+     * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis
      * @param {CGFApplication} application
      */
     init(application) {
@@ -44,13 +41,16 @@ export class XMLscene extends CGFscene {
     }
 
     /**
-     * Initializes the scene cameras.
+     * @method initCameras
+     * Initializes the scene cameras
      */
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
+
     /**
-     * Initializes the scene lights with the values read from the XML file.
+     * @method initLights
+     * Initializes the scene lights with the values read from the XML file
      */
     initLights() {
         var i = 0;
@@ -98,13 +98,18 @@ export class XMLscene extends CGFscene {
         this.interface.addLightsControls();
     }
 
+    /**
+     * @method setDefaultAppearance
+     */
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
-    /** Handler called when the graph is finally loaded. 
+    /**
+     * @method onGraphLoaded
+     * Handler called when the graph is finally loaded.
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
@@ -130,7 +135,8 @@ export class XMLscene extends CGFscene {
     }
 
     /**
-     * Displays the scene.
+     * @method display
+     * Displays the scene
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
@@ -167,15 +173,27 @@ export class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
+    /**
+     * @method update
+     * Verify checked keys
+     */
     update(t) {
         this.checkKeys();
     }
 
+    /**
+     * @method updateCamera
+     * Update scene camera according to SceneGraph camera
+     */
     updateCamera() {
         this.camera = this.graph.updateCamera(this.selectedCamera);
         this.interface.setActiveCamera(this.camera);
     }
 
+    /**
+     * @method checkKeys
+     * Checked if either 'M' or 'm' keys have been pressed, and update node materials
+     */
     checkKeys() {
         if (this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym")) {
             this.graph.updateMaterials(this.graph.rootNode);
