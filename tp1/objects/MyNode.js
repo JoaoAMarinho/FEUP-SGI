@@ -15,7 +15,7 @@ export class MyNode {
 
         // node attributes
         this.materials = [];         // [id]
-        this.texture = null;         // { id, [length_s, length_t] }
+        this.texture = null;         // { id, length_s, length_t, isDefined }
         this.transformation = null;  // {matrix, isExplicit} 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
 
@@ -62,7 +62,7 @@ export class MyNode {
     /**
      * @method setTexture
      * Updates the texture attribute
-     * @param {Object} texture - Texture id and (length_s, lenght_t) values object
+     * @param {Object} texture - Object with texture id, length_s, lenght_t and isDefined values
      */
     setTexture(texture) {
         this.texture = texture;

@@ -584,16 +584,19 @@ export class MySceneGraph {
         var textureID = this.reader.getString(node, 'id');
         var length_s = this.reader.getFloat(node, 'length_s', false);
         var length_t = this.reader.getFloat(node, 'length_t', false);
+        var isDefined = true;
 
-        if (textureID == 'inherit' || textureID == 'none')
-            return { id: textureID, length_s: 1.0, length_t: 1.0 };
+        if (length_s == null || length_t == null) {
+            length_s = length_t = 1.0;
+            isDefined = false;
+        }
 
-        if (length_s == null || length_t == null || this.textures[textureID] == null) {
+        if (textureID != 'inherit' && textureID != 'none' && this.textures[textureID] == null) {
             this.onXMLMinorError("invalid texture tag definition (conflict: ID = " + componentID + ")");
             return null;
         }
 
-        return { id: textureID, length_s, length_t };
+        return { id: textureID, length_s, length_t, isDefined };
     }
 
     /**
@@ -1525,11 +1528,7 @@ export class MySceneGraph {
         if (node.texture === null) return;
 
         let materialId;
-        let textureInfo = {
-            id: node.texture.id,
-            length_s: node.texture.length_s,
-            length_t: node.texture.length_t
-        };
+        let textureInfo = node.texture;
 
         if ((materialId = node.getMaterial()) == 'inherit') {
             materialId = prevMaterial;
@@ -1538,8 +1537,13 @@ export class MySceneGraph {
         var material = this.materials[materialId];
 
         if (node.texture.id != 'none') {
-            if ((textureInfo.id = node.texture.id) == 'inherit')
-                textureInfo = prevTexture;
+            if (node.texture.id == 'inherit') {
+                if (!node.texture.isDefined) {
+                    textureInfo.length_s = prevTexture.length_s;
+                    textureInfo.length_t = prevTexture.length_t;
+                }
+                textureInfo.id = prevTexture.id;
+            }
 
             material.setTexture(this.textures[textureInfo.id]);
         }
