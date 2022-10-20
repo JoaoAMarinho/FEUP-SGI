@@ -84,7 +84,6 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setVisible(true);
                 if (light[0]){
                     this.lights[i].enable();
-                    console.log(light);
                 }
                 else
                     this.lights[i].disable();
@@ -158,7 +157,8 @@ export class XMLscene extends CGFscene {
             this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].enable();
+            this.lights[i].setVisible(true);
+            this.lights[i].update();
         }
 
         if (this.sceneInited) {
