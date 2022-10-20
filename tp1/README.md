@@ -24,8 +24,8 @@ Scene:
 
 Most relevant problems and how they were solved:
 
-- **Problem**: An early implementation of the file parsing did not allow for child components to be defined after the parent component, as a consequence of the order in which the components were traversed
-**Solution**: To face the above challenge and have a well-implemented solution we decided to verify the component existence only after traversing all nodes, but with the caveat of doing it before displaying the latter
+- **Problem**: An early implementation of the file parsing did not allow for child components to be defined after the parent component, as a consequence of the order in which the components were traversed.
+**Solution**: To face the above challenge and have a well-implemented solution we decided to verify the component existence only after traversing all nodes, but with the caveat of doing it before displaying the latter.
 
-- **Problem**: The use of the lights was one of our main issues, mainly because of the colossal size of the planets and the astronomical distance in between them. Only constant attenuation lighting had some effect on our elements (in both spot and omni), both linear and quadratic had little to no effect in the scene. This led to either having a bright scene, in which planets seemed to radiate, or a dark scene, where everything but the sun (emissive) was black-ish.
-**Solution**: Even tough we were advised to only accept attenuations with values 0 or 1, we decided to accept real numbers in between these values to actually have the light attenuation effect. For example, the sun is 8000+ units away from the planets and in order for the light to reach neptune, the linear attenuation has to have a value of 0.0004.
+- **Problem**: The use of the lights was one of our main issues, mainly because of the colossal size of the planets and the astronomical distance between them. Only constant attenuation lighting had some effect on our elements (in both spot and omni), both linear and quadratic had little to no effect in the scene. This led to either having a bright scene, in which planets seemed to radiate, or a dark scene, where everything but the sun (emissive) was blackish.
+**Solution**: Even though we were advised to only accept attenuations with values 0 or 1, we decided to accept real numbers in between these values to obtain the light attenuation effect. For example, the sun is 8000+ units away from the planets and for the light to reach Neptune, the linear attenuation has to have a value of 0.0004.
