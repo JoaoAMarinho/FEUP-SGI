@@ -1,6 +1,6 @@
 # SGI 2022/2023
 
-## Group T0xG0y
+## Group T04G11
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
 | Beatriz Aguiar   | 201906230 | up201906230@fe.up.pt |
