@@ -19,6 +19,7 @@ Main implementation points:
 Scene:
 - Can be described as a recreation of the Solar System. Contains all of it's planets, the sun, a realistic sattelite, and a spaceship.  
 - [Scene link](./scenes/space.xml)
+- [Screenshots folder](./screenshots/)
 ----
 ## Issues/Problems
 
