@@ -4,6 +4,7 @@ import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
 import { MySphere } from './objects/primitives/MySphere.js';
 import { MyTorus } from './objects/primitives/MyTorus.js';
+import { MyPatch } from './objects/primitives/MyPatch.js';
 import { MyNode } from './objects/MyNode.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -879,7 +880,7 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch')) {
                 this.onXMLMinorError("There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)");
                 continue;
             }
@@ -903,6 +904,9 @@ export class MySceneGraph {
             }
             else if (primitiveType == 'torus') {
                 error = this.parseTorus(grandChildren[0], primitiveId);
+            }
+            else if (primitiveType == 'patch') {
+                error = this.parsePatch(grandChildren[0], primitiveId);
             }
             else {
                 error = "non existing primitive '" + primitiveType + "'";
@@ -1095,6 +1099,78 @@ export class MySceneGraph {
 
         this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
         return null;
+    }
+
+    /**
+     * @method parsePatch
+     * Parses a <patch> block element
+     * @param {patch block element} patch 
+     * @param {string} primitiveId 
+     * @return null on success (no major errors), otherwise an error message
+     */
+     parsePatch(patch, primitiveId) {
+        // degreeU
+        var degreeU = this.reader.getInteger(patch, 'degree_u');
+        if (!(degreeU != null && !isNaN(degreeU) && degreeU >= 1 && degreeU <= 3))
+            return "unable to parse degree_u of the primitive with ID = " + primitiveId;
+
+        // degreeV
+        var degreeV = this.reader.getInteger(patch, 'degree_v');
+        if (!(degreeV != null && !isNaN(degreeV) && degreeV >= 1 && degreeV <= 3))
+            return "unable to parse degree_v of the primitive with ID = " + primitiveId;
+
+        // partsU
+        var partsU = this.reader.getInteger(patch, 'parts_u');
+        if (!(partsU != null && !isNaN(partsU)))
+            return "unable to parse parts_u of the primitive with ID = " + primitiveId;
+
+        // partsV
+        var partsV = this.reader.getInteger(patch, 'parts_v');
+        if (!(partsV != null && !isNaN(partsV)))
+            return "unable to parse parts_v of the primitive with ID = " + primitiveId;
+
+        // controlPoints
+        var controlPointsAux = this.parseControlPoints(patch.children, primitiveId);
+        if (!Array.isArray(controlPointsAux))
+            return controlPointsAux;
+
+        if (controlPointsAux.length != ((degreeU+1)*(degreeV+1)))
+            return "invalid number of control points for 'patch' primitive with ID = " + primitiveId;
+
+        var controlPoints = [];
+        for (var u=0; u < degreeU+1; u++) {
+            var aux = [];
+            for (var v=0; v < degreeV+1; v++) {
+                var index = u + (degreeU+1) * v;
+                aux.push(controlPointsAux[index]);
+            }
+            console.log(aux);
+            controlPoints.push(aux);
+        }
+
+        this.primitives[primitiveId] = new MyPatch(this.scene, primitiveId, degreeU, degreeV, partsU, partsV, controlPoints);
+        return null;
+    }
+
+    /**
+     * @method parseControlPoints
+     * Parses the <controlpoint> block
+     * @param {controlpoint block element} nodes
+     * @param {string} primitiveId 
+     * @return array of control points
+     */
+    parseControlPoints(nodes, primitiveId) {
+        var controlPoints = [];
+        
+        for (var i=0; i<nodes.length; i++) {
+            var aux = this.parseCoordinates3D(nodes[i], "control point for ID " + primitiveId);
+            if (!Array.isArray(aux))
+                continue;
+
+            aux.push(1);
+            controlPoints.push(aux);
+        }
+        return controlPoints;
     }
 
     /**

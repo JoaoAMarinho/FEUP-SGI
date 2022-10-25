@@ -282,6 +282,23 @@
         <primitive id="ringTorus">
             <torus inner="0.1" outer="1.0" slices="30" loops="30" />
         </primitive>
+
+        <primitive id="patchTest">
+            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20">
+                <controlpoint x="0.0" y="0.0" z="0.0" />
+                <controlpoint x="1.0" y="0.0" z="0.0" />
+                <controlpoint x="2.0" y="0.0" z="0.0" />
+                <controlpoint x="0.0" y="1.0" z="0.0" />
+                <controlpoint x="1.0" y="1.0" z="0.0" />
+                <controlpoint x="2.0" y="1.0" z="0.0" />
+                <controlpoint x="0.0" y="2.0" z="0.0" />
+                <controlpoint x="1.0" y="2.0" z="0.0" />
+                <controlpoint x="2.0" y="2.0" z="0.0" />
+                <controlpoint x="0.0" y="3.0" z="0.0" />
+                <controlpoint x="1.0" y="3.0" z="0.0" />
+                <controlpoint x="2.0" y="3.0" z="0.0" />
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
