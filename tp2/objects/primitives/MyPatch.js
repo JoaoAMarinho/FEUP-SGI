@@ -21,10 +21,19 @@ export class MyPatch {
         // generate a 3D object with uDivsxvDivs vertexes based on a surface representation
         this.obj = new CGFnurbsObject(scene, uDivs, vDivs, nurbsSurface); 
         
-        //this.initBuffers();
+        this.obj.initBuffers();
     }
 
     display() {
         this.obj.display();
+    }
+
+    /**
+     * @method updateTexCoords
+     * Updates the list of texture coordinates of the sphere
+     * @param {Array} coords - Array of texture coordinates
+     */
+     updateTexCoords(coords) {
+        //this.obj.updateTexCoords();
     }
 }

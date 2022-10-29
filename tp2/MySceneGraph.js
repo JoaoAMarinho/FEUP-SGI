@@ -927,7 +927,7 @@ export class MySceneGraph {
      * Parses a <rectangle> element
      * @param {rectangle element} rectangle 
      * @param {string} primitiveId 
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
     parseRectangle(rectangle, primitiveId) {
         // x1
@@ -959,7 +959,7 @@ export class MySceneGraph {
      * Parses a <triangle> element
      * @param {triangle element} triangle 
      * @param {string} primitiveId
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
     parseTriangle(triangle, primitiveId) {
         // x1, y1, z1
@@ -1010,7 +1010,7 @@ export class MySceneGraph {
      * Parses a <cylinder> element.
      * @param {cylinder element} cylinder 
      * @param {string} primitiveId 
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
     parseCylinder(cylinder, primitiveId) {
         // base
@@ -1047,7 +1047,7 @@ export class MySceneGraph {
      * Parses a <sphere> element.
      * @param {sphere element} sphere 
      * @param {string} primitiveId 
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
     parseSphere(sphere, primitiveId) {
         // radius
@@ -1074,7 +1074,7 @@ export class MySceneGraph {
      * Parses a <torus> element.
      * @param {torus element} torus 
      * @param {string} primitiveId 
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
     parseTorus(torus, primitiveId) {
         // inner
@@ -1106,7 +1106,7 @@ export class MySceneGraph {
      * Parses a <patch> block element
      * @param {patch block element} patch 
      * @param {string} primitiveId 
-     * @return null on success (no major errors), otherwise an error message
+     * @return null on success, otherwise an error message
      */
      parsePatch(patch, primitiveId) {
         // degreeU
@@ -1131,6 +1131,7 @@ export class MySceneGraph {
 
         // controlPoints
         var controlPointsAux = this.parseControlPoints(patch.children, primitiveId);
+
         if (!Array.isArray(controlPointsAux))
             return controlPointsAux;
 
@@ -1138,13 +1139,14 @@ export class MySceneGraph {
             return "invalid number of control points for 'patch' primitive with ID = " + primitiveId;
 
         var controlPoints = [];
-        for (var u=0; u < degreeU+1; u++) {
+        var orderU = degreeU+1;
+        var orderV = degreeV+1;
+
+        for (var u=0; u < orderU*orderV; u+=orderV) {
             var aux = [];
-            for (var v=0; v < degreeV+1; v++) {
-                var index = u + (degreeU+1) * v;
-                aux.push(controlPointsAux[index]);
+            for (var v=0; v < orderV; v++) {
+                aux.push(controlPointsAux[v+u]);
             }
-            console.log(aux);
             controlPoints.push(aux);
         }
 
