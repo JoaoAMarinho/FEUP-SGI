@@ -30,10 +30,9 @@ export class MyPatch {
 
     /**
      * @method updateTexCoords
-     * Updates the list of texture coordinates of the sphere
+     * Updates the list of texture coordinates of the MyPatch's object
      * @param {Array} coords - Array of texture coordinates
      */
      updateTexCoords(coords) {
-        //this.obj.updateTexCoords();
     }
 }

@@ -17,8 +17,9 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 /**
  * MySceneGraph
@@ -43,6 +44,7 @@ export class MySceneGraph {
         this.textures = {};                   // CGFtexture dictionary.
         this.materials = {};                  // CGFappearance dictionary.
         this.transformations = {};            // Mat4 transformation dictionary.
+        this.animations = {};                 // TODO to be decided dictionary.
         this.primitives = {};                 // CFGObject dictionary.
         this.components = {};                 // MyNode dictionary.
 
@@ -182,6 +184,16 @@ export class MySceneGraph {
 
         //Parse transformations block
         if ((error = this.parseTransformations(nodes[index])) != null)
+            return error;
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        if (index != ANIMATIONS_INDEX)
+            this.onXMLMinorError("tag <animations> out of order");
+
+        //Parse animations block
+        if ((error = this.parseAnimations(nodes[index])) != null)
             return error;
 
         // <primitives>
@@ -803,7 +815,7 @@ export class MySceneGraph {
                 transfMatrix = mat4.scale(transfMatrix, transfMatrix, values);
             } else if (nodes[j].nodeName == 'rotate') {
                 var axis, angle;
-                var values = this.parseRotationParameters(nodes[j], "scale transformation for ID " + transformationID);
+                var values = this.parseRotationParameters(nodes[j], "rotate transformation for ID " + transformationID);
                 if (!Array.isArray(values)) {
                     error = values;
                     break;
@@ -841,6 +853,191 @@ export class MySceneGraph {
         var matrix = this.parseTransformation(nodes, "of component " + componentID);
 
         return matrix != null ? { isExplicit: true, matrix } : null;
+    }
+
+    /**
+     * @method parseAnimations
+     * Parses the <animations> block
+     * @param {animations block element} animationsNode
+     * @return null on success (no major errors), otherwise an error message
+     */
+    parseAnimations(animationsNode) {
+        var children = animationsNode.children;
+        var grandChildren = [];
+        var keyframeAnim;
+
+        // Any number of animations.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current animation.
+            var animationID = this.reader.getString(children[i], 'id');
+            if (animationID == null) {
+                this.onXMLMinorError("no ID defined for animation");
+                continue;
+            }
+
+            // Checks for repeated IDs.
+            if (this.animations[animationID] != null) {
+                this.onXMLMinorError("ID must be unique for each animation (conflict: ID = " + animationID + ")");
+                continue;
+            }
+
+            // Specifications for the current transformation.
+            grandChildren = children[i].children;
+
+            if ((keyframeAnim = this.parseKeyframeAnim(grandChildren, animationID)) == null)
+                continue;
+
+            this.animations[animationID] = keyframeAnim;
+        }
+
+        this.log("Parsed animations");
+        return null;
+    }
+
+    /**
+     * @method parseKeyframeAnim
+     * Parses the <keyframeanim> block element
+     * @param {keyframeanim block element} nodes
+     * @param {string} animationID
+     * @return null on error, otherwise // TODO decide the return
+     */
+     parseKeyframeAnim(nodes, animationID) {
+        var keyframes = [];
+        var currentInstant = 0;
+        var children = [];
+        var keyframeInfo;
+
+        for (var i = 0; i < nodes.length; i++) {
+            const keyframe = nodes[i];
+
+            if (keyframe.nodeName != 'keyframe') {
+                this.onXMLMinorError("invalid tag name '" + keyframe.nodeName + "' in keyframeanim with ID " + animationID);
+                continue;
+            }
+
+            var instant = this.reader.getFloat(keyframe, 'instant');
+            if (!(instant != null && !isNaN(instant) && instant > currentInstant)) {
+                this.onXMLMinorError("invalid instant attribute inside <keyframe> for ID = " + animationID);
+                continue;
+            }
+
+            children = keyframe.children;
+
+            if (children.length != 5) {
+                this.onXMLMinorError("invalid tag name '" + keyframe.nodeName + "' in keyframeanim with ID " + animationID);
+                continue;
+            }
+
+            if ((keyframeInfo = this.parseKeyframe(children, animationID)) == null)
+                continue;
+
+            keyframes.push({ instant, matrix: keyframeInfo});
+
+            currentInstant = instant;
+        }
+
+        if (keyframes.length == 0) {
+            this.onXMLMinorError("There must be at least one valid <keyframe> block inside keyframeanim (conflict: ID = " + animationID + ")");
+            return null;
+        }
+
+        return keyframes;
+    }
+
+    /**
+     * @method parseKeyframe
+     * Parses the <keyframe> block element
+     * @param {keyframe block element} nodes
+     * @param {string} animationID
+     * @return null on error, otherwise transformation matrix (mat4)
+     */
+    parseKeyframe(nodes, animationID) {
+        var attributeNames = ['translation', 'rotation', 'rotation', 'rotation', 'scale'];
+        
+        var transfMatrix = mat4.create();
+        var values;
+        var axis, angle;
+        var error = null;
+
+        var parsedXRotation = false;
+        var parsedYRotation = false;
+        var parsedZRotation = false;
+
+        for (var i = 0; i < nodes.length; i++) {
+            const transformation = nodes[i];
+            var attributeIndex = attributeNames.indexOf(transformation.nodeName);
+
+            if (attributeIndex == -1) {
+                error = "unknown tag inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                break;
+            } else if (transformation.nodeName != attributeNames[i]) {
+                error = "transformation out of order inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                break;
+            }
+
+            if (transformation.nodeName == "translation") {
+                values = this.parseCoordinates3D(transformation, "keyframe translation attribute for ID " + animationID);
+                if (!Array.isArray(values)) {
+                    error = values;
+                    break;
+                }
+
+                transfMatrix = mat4.translate(transfMatrix, transfMatrix, values);
+            } else if (attributeNames[i] == "rotation") {
+                values = this.parseRotationParameters(transformation, "keyframe rotation attribute for ID " + animationID);
+                if (!Array.isArray(values)) {
+                    error = values;
+                    break;
+                }
+
+                [axis, angle] = values;
+                if (axis[0]) {
+                    if (parsedXRotation) {
+                        error = "X rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        break;
+                    }
+
+                    parsedXRotation = true;
+                } else if (axis[1]) {
+                    if (parsedYRotation) {
+                        error = "Y rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        break;
+                    }
+
+                    parsedYRotation = true;
+                } else {
+                    if (parsedZRotation) {
+                        error = "Z rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        break;
+                    }
+
+                    parsedZRotation = true;
+                }
+
+                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
+            } else {
+                var values = this.parseScaleCoordinates(transformation, "keyframe scale transformation for ID " + animationID);
+                if (!Array.isArray(values)) {
+                    error = values;
+                    break;
+                }
+
+                transfMatrix = mat4.scale(transfMatrix, transfMatrix, values);
+            }
+        }
+
+        if (error != null) {
+            this.onXMLMinorError(error);
+            return null;
+        }
+
+        return transfMatrix;
     }
 
     /**
@@ -1327,7 +1524,7 @@ export class MySceneGraph {
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
-     * @return array on success (no major errors), otherwise an error message
+     * @return array on success, otherwise an error message
      */
     parseCoordinates3D(node, messageError) {
         var position = [];
@@ -1344,6 +1541,36 @@ export class MySceneGraph {
 
         // z
         var z = this.reader.getFloat(node, 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z-coordinate of the " + messageError;
+
+        position.push(...[x, y, z]);
+
+        return position;
+    }
+    
+    /**
+     * @method parseScaleCoordinates
+     * Parse the scale coordinates from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     * @return array on success, otherwise an error message
+     */
+    parseScaleCoordinates(node, messageError) {
+        var position = [];
+
+        // x
+        var x = this.reader.getFloat(node, 'sx');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x-coordinate of the " + messageError;
+
+        // y
+        var y = this.reader.getFloat(node, 'sy');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y-coordinate of the " + messageError;
+
+        // z
+        var z = this.reader.getFloat(node, 'sz');
         if (!(z != null && !isNaN(z)))
             return "unable to parse z-coordinate of the " + messageError;
 
