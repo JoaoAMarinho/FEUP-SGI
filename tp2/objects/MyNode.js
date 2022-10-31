@@ -18,6 +18,7 @@ export class MyNode {
         this.texture = null;         // { id, length_s, length_t, isDefined }
         this.transformation = null;  // {matrix, isExplicit} 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
+        this.animation = null;       // id
 
         this.materialIndex = 0;
         this.visited = false;
@@ -57,6 +58,15 @@ export class MyNode {
      */
     setTransformation(transformation) {
         this.transformation = transformation;
+    }
+
+    /**
+    * @method setAnimation
+    * Updates the animation attribute
+    * @param {String} animation - Animation ID
+    */
+     setAnimation(animation) {
+        this.animation = animation;
     }
 
     /**

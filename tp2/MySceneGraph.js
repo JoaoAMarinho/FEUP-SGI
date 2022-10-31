@@ -907,7 +907,7 @@ export class MySceneGraph {
      * @param {string} animationID
      * @return null on error, otherwise // TODO decide the return
      */
-     parseKeyframeAnim(nodes, animationID) {
+    parseKeyframeAnim(nodes, animationID) {
         var keyframes = [];
         var currentInstant = 0;
         var children = [];
@@ -930,14 +930,14 @@ export class MySceneGraph {
             children = keyframe.children;
 
             if (children.length != 5) {
-                this.onXMLMinorError("invalid tag name '" + keyframe.nodeName + "' in keyframeanim with ID " + animationID);
+                this.onXMLMinorError("wrong number of children in keyframe inside keyframeanim with ID " + animationID);
                 continue;
             }
 
             if ((keyframeInfo = this.parseKeyframe(children, animationID)) == null)
                 continue;
 
-            keyframes.push({ instant, matrix: keyframeInfo});
+            keyframes.push({ instant, matrix: keyframeInfo });
 
             currentInstant = instant;
         }
@@ -959,7 +959,7 @@ export class MySceneGraph {
      */
     parseKeyframe(nodes, animationID) {
         var attributeNames = ['translation', 'rotation', 'rotation', 'rotation', 'scale'];
-        
+
         var transfMatrix = mat4.create();
         var values;
         var axis, angle;
@@ -974,10 +974,10 @@ export class MySceneGraph {
             var attributeIndex = attributeNames.indexOf(transformation.nodeName);
 
             if (attributeIndex == -1) {
-                error = "unknown tag inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                error = "unknown tag inside <keyframe> block (conflict: ID = " + animationID + ")";
                 break;
             } else if (transformation.nodeName != attributeNames[i]) {
-                error = "transformation out of order inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                error = "transformation out of order inside <keyframe> block (conflict: ID = " + animationID + ")";
                 break;
             }
 
@@ -999,21 +999,21 @@ export class MySceneGraph {
                 [axis, angle] = values;
                 if (axis[0]) {
                     if (parsedXRotation) {
-                        error = "X rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        error = "X rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
                     parsedXRotation = true;
                 } else if (axis[1]) {
                     if (parsedYRotation) {
-                        error = "Y rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        error = "Y rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
                     parsedYRotation = true;
                 } else {
                     if (parsedZRotation) {
-                        error = "Z rotation axis already parsed inside <keyframe> block (conflict: ID = "+ animationID + ")";
+                        error = "Z rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
@@ -1305,7 +1305,7 @@ export class MySceneGraph {
      * @param {string} primitiveId 
      * @return null on success, otherwise an error message
      */
-     parsePatch(patch, primitiveId) {
+    parsePatch(patch, primitiveId) {
         // degreeU
         var degreeU = this.reader.getInteger(patch, 'degree_u');
         if (!(degreeU != null && !isNaN(degreeU) && degreeU >= 1 && degreeU <= 3))
@@ -1332,17 +1332,17 @@ export class MySceneGraph {
         if (!Array.isArray(controlPointsAux))
             return controlPointsAux;
 
-        if (controlPointsAux.length != ((degreeU+1)*(degreeV+1)))
+        if (controlPointsAux.length != ((degreeU + 1) * (degreeV + 1)))
             return "invalid number of control points for 'patch' primitive with ID = " + primitiveId;
 
         var controlPoints = [];
-        var orderU = degreeU+1;
-        var orderV = degreeV+1;
+        var orderU = degreeU + 1;
+        var orderV = degreeV + 1;
 
-        for (var u=0; u < orderU*orderV; u+=orderV) {
+        for (var u = 0; u < orderU * orderV; u += orderV) {
             var aux = [];
-            for (var v=0; v < orderV; v++) {
-                aux.push(controlPointsAux[v+u]);
+            for (var v = 0; v < orderV; v++) {
+                aux.push(controlPointsAux[v + u]);
             }
             controlPoints.push(aux);
         }
@@ -1360,8 +1360,8 @@ export class MySceneGraph {
      */
     parseControlPoints(nodes, primitiveId) {
         var controlPoints = [];
-        
-        for (var i=0; i<nodes.length; i++) {
+
+        for (var i = 0; i < nodes.length; i++) {
             var aux = this.parseCoordinates3D(nodes[i], "control point for ID " + primitiveId);
             if (!Array.isArray(aux))
                 continue;
@@ -1414,6 +1414,7 @@ export class MySceneGraph {
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
+            var animationIndex = nodeNames.indexOf("animation");
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
@@ -1434,6 +1435,17 @@ export class MySceneGraph {
                     continue;
 
                 component.setTransformation(transformation);
+            }
+
+            // Animation
+            if (animationIndex !== -1) {
+                var animation = this.reader.getString(grandChildren[animationIndex], 'id');
+
+                if (this.animations[animation] == null) {
+                    this.onXMLMinorError("animation ID does not exist (conflict: ID = " + componentID + ")");
+                    continue;
+                }
+                component.setAnimation(animation);
             }
 
             // Materials
@@ -1548,7 +1560,7 @@ export class MySceneGraph {
 
         return position;
     }
-    
+
     /**
      * @method parseScaleCoordinates
      * Parse the scale coordinates from a node with ID = id
