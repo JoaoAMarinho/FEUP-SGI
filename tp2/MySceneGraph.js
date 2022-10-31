@@ -6,6 +6,7 @@ import { MySphere } from './objects/primitives/MySphere.js';
 import { MyTorus } from './objects/primitives/MyTorus.js';
 import { MyPatch } from './objects/primitives/MyPatch.js';
 import { MyNode } from './objects/MyNode.js';
+import { MyKeyframeAnimation } from './objects/MykeyFrameAnimation.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -908,7 +909,7 @@ export class MySceneGraph {
      * @return null on error, otherwise // TODO decide the return
      */
     parseKeyframeAnim(nodes, animationID) {
-        var keyframes = [];
+        var keyframeAnimation = new MyKeyframeAnimation();
         var currentInstant = 0;
         var children = [];
         var keyframeInfo;
@@ -937,17 +938,17 @@ export class MySceneGraph {
             if ((keyframeInfo = this.parseKeyframe(children, animationID)) == null)
                 continue;
 
-            keyframes.push({ instant, matrix: keyframeInfo });
+            keyframeAnimation.addKeyframe({ instant, matrix: keyframeInfo });
 
             currentInstant = instant;
         }
 
-        if (keyframes.length == 0) {
+        if (keyframeAnimation.keyframes.length == 0) {
             this.onXMLMinorError("There must be at least one valid <keyframe> block inside keyframeanim (conflict: ID = " + animationID + ")");
             return null;
         }
 
-        return keyframes;
+        return keyframeAnimation;
     }
 
     /**
@@ -1817,6 +1818,11 @@ export class MySceneGraph {
             this.scene.multMatrix(matrix);
         }
 
+        if (node.animation !== null) {
+            var animation = this.animations[node.animation];
+
+        }
+
         // Apply material and texture
         [prevMaterial, prevTexture] = this.applyMaterial(node, prevMaterial, prevTexture);
 
@@ -1891,5 +1897,14 @@ export class MySceneGraph {
     updateCamera(id) {
         this.camera = id;
         return this.views[id];
+    }
+
+    /**
+    * @method updateAnimations
+    */
+    updateAnimations(t) {
+        for (var animation of this.animations) {
+            this.animations[animation].update(t);
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 
 /**
@@ -70,7 +70,7 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
-                
+
                 this.lights[i].setConstantAttenuation(light[6][0]);
                 this.lights[i].setLinearAttenuation(light[6][1]);
                 this.lights[i].setQuadraticAttenuation(light[6][2]);
@@ -78,11 +78,11 @@ export class XMLscene extends CGFscene {
                 if (light[1] == "spot") {
                     this.lights[i].setSpotCutOff(light[7]);
                     this.lights[i].setSpotExponent(light[8]);
-                    this.lights[i].setSpotDirection(light[9][0]-light[2][0], light[9][1]-light[2][1], light[9][2]-light[2][2]);
+                    this.lights[i].setSpotDirection(light[9][0] - light[2][0], light[9][1] - light[2][1], light[9][2] - light[2][2]);
                 }
 
                 this.lights[i].setVisible(true);
-                if (light[0]){
+                if (light[0]) {
                     this.lights[i].enable();
                 }
                 else
@@ -117,7 +117,7 @@ export class XMLscene extends CGFscene {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
-        
+
         if ((this.selectedCamera = this.graph.camera) != undefined) {
             this.cameraIds = {};
             Object.keys(this.graph.views).forEach(key => {
@@ -178,6 +178,7 @@ export class XMLscene extends CGFscene {
      * Verify checked keys
      */
     update(t) {
+        this.graph.updateAnimations(t);
         this.checkKeys();
     }
 

@@ -5,18 +5,13 @@ import { MyAnimation } from "./MyAnimation";
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  */
- export class MyKeyframeAnimation extends MyAnimation{
-  constructor(scene) {
-      this.scene = scene;
-  }
+export class MyKeyframeAnimation extends MyAnimation {
+    constructor() {
+        this.keyframes = [];
+    }
 
+    addKeyframe(keyframe) {
+        this.keyframes.push(keyframe);
+    }
 
-  update(t) {
-      this.components.push(component);
-  }
-
-
-  apply() {
-      this.components.push(component);
-  }
 }
