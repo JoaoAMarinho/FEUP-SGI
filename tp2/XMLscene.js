@@ -178,8 +178,12 @@ export class XMLscene extends CGFscene {
      * Verify checked keys
      */
     update(t) {
-        this.graph.updateAnimations(t);
         this.checkKeys();
+
+        var elapsedTime = this.time == undefined ? 0 : t - this.time;
+        this.time = t;
+
+        this.graph.updateAnimations(elapsedTime);
     }
 
     /**

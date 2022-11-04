@@ -6,7 +6,7 @@ import { MySphere } from './objects/primitives/MySphere.js';
 import { MyTorus } from './objects/primitives/MyTorus.js';
 import { MyPatch } from './objects/primitives/MyPatch.js';
 import { MyNode } from './objects/MyNode.js';
-import { MyKeyframeAnimation } from './objects/MykeyFrameAnimation.js';
+import { MyKeyframeAnimation } from './objects/animations/MykeyFrameAnimation.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -938,6 +938,7 @@ export class MySceneGraph {
             if ((keyframeInfo = this.parseKeyframe(children, animationID)) == null)
                 continue;
 
+            instant *= 1000;
             keyframeAnimation.addKeyframe({ instant, matrix: keyframeInfo });
 
             currentInstant = instant;
@@ -948,6 +949,7 @@ export class MySceneGraph {
             return null;
         }
 
+        keyframeAnimation.updateTimes();
         return keyframeAnimation;
     }
 

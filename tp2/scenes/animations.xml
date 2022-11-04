@@ -51,6 +51,13 @@
                 <rotation axis="x" angle="10" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
+            <keyframe instant="10.0">
+                <translation x="2.0" y="2.0" z="2.0" />
+                <rotation axis="z" angle="10" />
+                <rotation axis="y" angle="10" />
+                <rotation axis="x" angle="10" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
         </keyframeanim>
     </animations>
 
