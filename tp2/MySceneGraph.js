@@ -1424,6 +1424,7 @@ export class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var animationIndex = nodeNames.indexOf("animation");
+            var shaderIndex = nodeNames.indexOf("highlighted");
             var childrenIndex = nodeNames.indexOf("children");
 
             if ([transformationIndex, materialsIndex, textureIndex, childrenIndex].some((i) => i == -1)) {
@@ -1453,6 +1454,17 @@ export class MySceneGraph {
                     continue;
                 }
                 component.setAnimation(animation);
+            }
+
+            // Shaders
+            if (shaderIndex !== -1) {
+                var shaderInfo = this.parseShader(grandChildren[shaderIndex], "shader block in component (conflict: ID = " + componentID + ")");
+                if (!Array.isArray(shaderInfo)) {
+                    this.onXMLMinorError(shaderInfo);
+                    continue;
+                }
+
+                component.setShader(shaderInfo);
             }
 
             // Materials
@@ -1536,6 +1548,35 @@ export class MySceneGraph {
         }
 
         return child;
+    }
+
+    // TODO
+    parseShader(node, messageError) {
+        var shaderInfo = [];
+
+        // R
+        var r = this.reader.getFloat(node, 'r');
+        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+            return "unable to parse R component of the " + messageError;
+
+        // G
+        var g = this.reader.getFloat(node, 'g');
+        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+            return "unable to parse G component of the " + messageError;
+
+        // B
+        var b = this.reader.getFloat(node, 'b');
+        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+            return "unable to parse B component of the " + messageError;
+
+        // Scale
+        var scale_h = this.reader.getFloat(node, 'scale_h');
+        if (!(scale_h != null && !isNaN(scale_h)))
+            return "unable to parse scale_h component of the " + messageError;
+
+        shaderInfo.push(...[r, g, b, scale_h]);
+
+        return shaderInfo;
     }
 
     /**
@@ -1838,7 +1879,7 @@ export class MySceneGraph {
                 var primitive = this.primitives[node.primitives[i]];
                 primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
                 primitive.display();
-            }  
+            }
         }
 
         for (var i = 0; i < node.components.length; i++) {
