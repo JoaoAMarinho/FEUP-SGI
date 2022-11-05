@@ -24,7 +24,11 @@ export class MyAnimation {
     apply() {
         if (!this.active)
             return;
-        
+
         this.scene.multMatrix(this.currentTransformation);
+    }
+
+    isActive() {
+        return this.active;
     }
 }

@@ -45,7 +45,7 @@ export class MySceneGraph {
         this.textures = {};                   // CGFtexture dictionary.
         this.materials = {};                  // CGFappearance dictionary.
         this.transformations = {};            // Mat4 transformation dictionary.
-        this.animations = {};                 // TODO to be decided dictionary.
+        this.animations = {};                 // MyAnimation dictionary.
         this.primitives = {};                 // CFGObject dictionary.
         this.components = {};                 // MyNode dictionary.
 
@@ -906,10 +906,10 @@ export class MySceneGraph {
      * Parses the <keyframeanim> block element
      * @param {keyframeanim block element} nodes
      * @param {string} animationID
-     * @return null on error, otherwise // TODO decide the return
+     * @return null on error, otherwise MyKeyframeAnimation object
      */
     parseKeyframeAnim(nodes, animationID) {
-        var keyframeAnimation = new MyKeyframeAnimation();
+        var keyframeAnimation = new MyKeyframeAnimation(this.scene);
         var currentInstant = 0;
         var children = [];
         var keyframeInfo;
@@ -938,8 +938,7 @@ export class MySceneGraph {
             if ((keyframeInfo = this.parseKeyframe(children, animationID)) == null)
                 continue;
 
-            instant *= 1000;
-            keyframeAnimation.addKeyframe({ instant, matrix: keyframeInfo });
+            keyframeAnimation.addKeyframe({ instant: instant * 1000, transformation: keyframeInfo });
 
             currentInstant = instant;
         }
@@ -958,12 +957,16 @@ export class MySceneGraph {
      * Parses the <keyframe> block element
      * @param {keyframe block element} nodes
      * @param {string} animationID
-     * @return null on error, otherwise transformation matrix (mat4)
+     * @return null on error, otherwise transformation object
      */
     parseKeyframe(nodes, animationID) {
         var attributeNames = ['translation', 'rotation', 'rotation', 'rotation', 'scale'];
 
-        var transfMatrix = mat4.create();
+        var transfInfo = {
+            translate: [],
+            scale: [],
+            rotate: vec3.create(),
+        };
         var values;
         var axis, angle;
         var error = null;
@@ -991,7 +994,7 @@ export class MySceneGraph {
                     break;
                 }
 
-                transfMatrix = mat4.translate(transfMatrix, transfMatrix, values);
+                transfInfo.translate = values;
             } else if (attributeNames[i] == "rotation") {
                 values = this.parseRotationParameters(transformation, "keyframe rotation attribute for ID " + animationID);
                 if (!Array.isArray(values)) {
@@ -1006,6 +1009,7 @@ export class MySceneGraph {
                         break;
                     }
 
+                    transfInfo.rotate[0] = angle;
                     parsedXRotation = true;
                 } else if (axis[1]) {
                     if (parsedYRotation) {
@@ -1013,6 +1017,7 @@ export class MySceneGraph {
                         break;
                     }
 
+                    transfInfo.rotate[1] = angle;
                     parsedYRotation = true;
                 } else {
                     if (parsedZRotation) {
@@ -1020,10 +1025,9 @@ export class MySceneGraph {
                         break;
                     }
 
+                    transfInfo.rotate[2] = angle;
                     parsedZRotation = true;
                 }
-
-                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
             } else {
                 var values = this.parseScaleCoordinates(transformation, "keyframe scale transformation for ID " + animationID);
                 if (!Array.isArray(values)) {
@@ -1031,7 +1035,7 @@ export class MySceneGraph {
                     break;
                 }
 
-                transfMatrix = mat4.scale(transfMatrix, transfMatrix, values);
+                transfInfo.scale = values;
             }
         }
 
@@ -1040,7 +1044,7 @@ export class MySceneGraph {
             return null;
         }
 
-        return transfMatrix;
+        return transfInfo;
     }
 
     /**
@@ -1417,9 +1421,9 @@ export class MySceneGraph {
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
-            var animationIndex = nodeNames.indexOf("animation");
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
+            var animationIndex = nodeNames.indexOf("animation");
             var childrenIndex = nodeNames.indexOf("children");
 
             if ([transformationIndex, materialsIndex, textureIndex, childrenIndex].some((i) => i == -1)) {
@@ -1810,7 +1814,6 @@ export class MySceneGraph {
      * @param {Array} prevTexture
      */
     processNode(node, prevMaterial, prevTexture) {
-
         this.scene.pushMatrix();
 
         // Apply transformations
@@ -1820,18 +1823,22 @@ export class MySceneGraph {
             this.scene.multMatrix(matrix);
         }
 
-        if (node.animation !== null) {
-            var animation = this.animations[node.animation];
-
-        }
-
         // Apply material and texture
         [prevMaterial, prevTexture] = this.applyMaterial(node, prevMaterial, prevTexture);
 
-        for (var i = 0; i < node.primitives.length; i++) {
-            var primitive = this.primitives[node.primitives[i]];
-            primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
-            primitive.display();
+        var active = true;
+        if (node.animation !== null) {
+            const animation = this.animations[node.animation];
+            animation.apply();
+            active = animation.isActive();
+        }
+
+        if (active) {
+            for (var i = 0; i < node.primitives.length; i++) {
+                var primitive = this.primitives[node.primitives[i]];
+                primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
+                primitive.display();
+            }  
         }
 
         for (var i = 0; i < node.components.length; i++) {
@@ -1905,7 +1912,7 @@ export class MySceneGraph {
     * @method updateAnimations
     */
     updateAnimations(t) {
-        for (var animation of this.animations) {
+        for (var animation in this.animations) {
             this.animations[animation].update(t);
         }
     }
