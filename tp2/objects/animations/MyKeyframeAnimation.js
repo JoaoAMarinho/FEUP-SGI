@@ -18,11 +18,6 @@ export class MyKeyframeAnimation extends MyAnimation {
         this.keyframes.push(keyframe);
     }
 
-    updateTimes() {
-        this.startTime = this.keyframes[0].instant;
-        this.endTime = this.keyframes[this.keyframes.length - 1].instant;
-    }
-
     update(t) {
         this.totalTime += t;
 

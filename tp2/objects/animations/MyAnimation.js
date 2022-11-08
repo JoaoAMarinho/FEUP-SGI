@@ -16,6 +16,10 @@ export class MyAnimation {
         this.currentTransformation = mat4.create();
     }
 
+    updateTimes() {
+        this.startTime = this.keyframes[0].instant;
+        this.endTime = this.keyframes[this.keyframes.length - 1].instant;
+    }
 
     update(t) {
     }

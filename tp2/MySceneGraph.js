@@ -1880,10 +1880,10 @@ export class MySceneGraph {
                 primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
                 primitive.display();
             }
-        }
 
-        for (var i = 0; i < node.components.length; i++) {
-            this.processNode(this.components[node.components[i]], prevMaterial, prevTexture);
+            for (var i = 0; i < node.components.length; i++) {
+                this.processNode(this.components[node.components[i]], prevMaterial, prevTexture);
+            }
         }
 
         this.scene.popMatrix();
