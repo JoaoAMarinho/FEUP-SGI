@@ -313,7 +313,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="stars" />
                 <componentref id="sun" />
@@ -332,7 +332,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="starsTexture" length_s="1.0" length_t="1.0" />
+            <texture id="starsTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -347,7 +347,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="sunTexture" length_s="1.0" length_t="1.0" />
+            <texture id="sunTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -362,7 +362,7 @@
             <materials>
                 <material id="planetMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -385,7 +385,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="mercuryTexture" length_s="1.0" length_t="1.0" />
+            <texture id="mercuryTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -401,7 +401,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="venusTexture" length_s="1.0" length_t="1.0" />
+            <texture id="venusTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -416,7 +416,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="earthTexture" length_s="1.0" length_t="1.0" />
+            <texture id="earthTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="earthMoon" />
                 <primitiveref id="planet" />
@@ -430,7 +430,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="moonTexture" length_s="1.0" length_t="1.0" />
+            <texture id="moonTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -446,7 +446,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="marsTexture" length_s="1.0" length_t="1.0" />
+            <texture id="marsTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -462,7 +462,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="jupiterTexture" length_s="1.0" length_t="1.0" />
+            <texture id="jupiterTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -478,7 +478,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="saturnTexture" length_s="1.0" length_t="1.0" />
+            <texture id="saturnTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
                 <componentref id="saturnRings" />
@@ -493,7 +493,7 @@
                 <material id="ringMaterial" />
                 <material id="ringMaterial2" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="saturnRing" />
                 <componentref id="saturnRing2" />
@@ -505,7 +505,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -517,7 +517,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <componentref id="saturnRing" />
             </children>
@@ -532,7 +532,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="uranusTexture" length_s="1.0" length_t="1.0" />
+            <texture id="uranusTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -548,7 +548,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="neptuneTexture" length_s="1.0" length_t="1.0" />
+            <texture id="neptuneTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -561,7 +561,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteMainBody" />
                 <componentref id="satelliteWings" />
@@ -577,7 +577,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntenna" />
                 <componentref id="satelliteAntennaBodyTopConnector" />
@@ -597,7 +597,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteBowlShape" />
                 <componentref id="satelliteAntennaBar" />
@@ -616,7 +616,7 @@
                 <material id="inherit" />
                 <material id="bronzeMaterial" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="antenna1" />
                 <componentref id="satelliteBowlShape2" />
@@ -630,7 +630,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="antenna2" />
                 <componentref id="satelliteBowlShape3" />
@@ -643,7 +643,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="antenna3" />
             </children>
@@ -656,7 +656,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="innerAntenna" />
             </children>
@@ -670,7 +670,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBarTube1" />
                 <componentref id="satelliteAntennaBarTube2" />
@@ -683,7 +683,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBar" />
             </children>
@@ -695,7 +695,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBar" />
             </children>
@@ -709,7 +709,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="normalCylinder" />
             </children>
@@ -723,7 +723,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="normalCylinder" />
             </children>
@@ -738,7 +738,7 @@
             <materials>
                 <material id="metalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="normalCylinder" />
                 <componentref id="satelliteAntennaUnionBase" />
@@ -752,7 +752,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -765,7 +765,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -780,7 +780,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="normalCylinder" />
                 <componentref id="satelliteAntennaUnionTipBase" />
@@ -794,7 +794,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -807,7 +807,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteAntennaBodyConnectorBarTube1" />
                 <componentref id="satelliteAntennaBodyConnectorBarTube2" />
@@ -824,7 +824,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="normalCylinder" />
             </children>
@@ -836,7 +836,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBodyConnectorBarTube1" />
             </children>
@@ -848,7 +848,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBodyConnectorBarTube2" />
             </children>
@@ -860,7 +860,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteAntennaBodyConnectorBarTube3" />
             </children>
@@ -873,7 +873,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteAntennaBodyTopConnectorRing" />
                 <componentref id="satelliteAntennaBodyTopConnectorRingBase" />
@@ -887,7 +887,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="ringTorus" />
             </children>
@@ -899,7 +899,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>                
                 <primitiveref id="planet" />
             </children>
@@ -912,7 +912,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteAntennaBodyBottomConnectorRing" />
                 <componentref id="satelliteAntennaBodyBottomConnectorRingBase" />
@@ -927,7 +927,7 @@
                 <material id="defaultMaterial" />
                 <material id="bronzeMaterial" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="ringTorus" />
             </children>
@@ -941,7 +941,7 @@
                 <material id="inherit" />
                 <material id="bronzeMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>                
                 <primitiveref id="planet" />
             </children>
@@ -956,7 +956,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="bronzeTexture" length_s="0.25" length_t="0.25" />
+            <texture id="bronzeTexture" length_s="0.25" length_t="0.25" />
             <children>                
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -969,7 +969,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
+            <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
             <children>                
                 <componentref id="satelliteBaseTop" />
                 <componentref id="satelliteBaseBottom" />
@@ -982,7 +982,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>                
                 <primitiveref id="squareUnit" />
             </children>
@@ -995,7 +995,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>                
                 <primitiveref id="squareUnit" />
             </children>
@@ -1010,7 +1010,7 @@
             <materials>
                 <material id="darkMaterial" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="irregularSphere" />
             </children>
@@ -1023,7 +1023,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteThruster" />
                 <componentref id="satelliteThruster2" />
@@ -1038,7 +1038,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteThrusterShape" />
                 <componentref id="satelliteThrusterBox" />
@@ -1051,7 +1051,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteThruster" />
                 <componentref id="satelliteThruster3" />
@@ -1064,7 +1064,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteThruster" />
                 <componentref id="satelliteThruster4" />
@@ -1077,7 +1077,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteThruster" />
             </children>
@@ -1090,7 +1090,7 @@
             <materials>
                 <material id="metalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cubicCylinder" />
                 <componentref id="satelliteThrusterBase" />
@@ -1105,7 +1105,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="inherit" />
+            <texture id="inherit" />
             <children>                
                 <primitiveref id="squareUnit" />
             </children>
@@ -1119,7 +1119,7 @@
             <materials>
                 <material id="yellowMaterial" />
             </materials>
-                <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
+            <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <componentref id="satelliteBowlShape" />
             </children>
@@ -1132,7 +1132,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWing" />
                 <componentref id="satelliteWing1" />
@@ -1147,7 +1147,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanels" />
                 <componentref id="satellitePanelConnectors" />
@@ -1160,7 +1160,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWing" />
                 <componentref id="satelliteWing2" />
@@ -1173,7 +1173,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWing" />
                 <componentref id="satelliteWing3" />
@@ -1186,7 +1186,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWing" />
             </children>
@@ -1201,7 +1201,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteSolarPanel" />
                 <componentref id="satelliteSolarPanel2" />
@@ -1218,7 +1218,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteSolarPanel" />
             </children>
@@ -1230,7 +1230,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteSolarPanel" />
             </children>
@@ -1244,7 +1244,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteSolarPanel" />
             </children>
@@ -1258,7 +1258,7 @@
             <materials>
                 <material id="metalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cubicCylinder" />
                 <componentref id="satellitePanelTop" />
@@ -1273,7 +1273,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="solarPanelTexture" length_s="1.0" length_t="1.0" />
+            <texture id="solarPanelTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="squareUnit" />
                 <componentref id="satellitePanelBottom" />
@@ -1287,7 +1287,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="squareUnit" />
             </children>
@@ -1303,7 +1303,7 @@
             <materials>
                 <material id="darkMetalMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnectorHorizontal" />
                 <componentref id="satellitePanelConnectorInclined" />
@@ -1315,7 +1315,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="metalPiece" />
                 <componentref id="satellitePanelConnectorSide" />
@@ -1330,7 +1330,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -1343,7 +1343,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnectorHorizontal" />
             </children>
@@ -1356,7 +1356,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
                 <componentref id="satellitePanelConnector1" />
@@ -1369,7 +1369,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
                 <componentref id="satellitePanelConnector2" />
@@ -1383,7 +1383,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
                 <componentref id="satellitePanelConnector4" />
@@ -1396,7 +1396,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
                 <componentref id="satellitePanelConnector5" />
@@ -1409,7 +1409,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
             </children>
@@ -1421,7 +1421,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
             </children>
@@ -1434,7 +1434,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWingConnector" />
                 <componentref id="satelliteWingConnector1" />
@@ -1447,7 +1447,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWingConnector" />
                 <componentref id="satelliteWingConnector2" />
@@ -1460,7 +1460,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWingConnector" />
                 <componentref id="satelliteWingConnector3" />
@@ -1473,7 +1473,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="satelliteWingConnector" />
             </children>
@@ -1488,7 +1488,7 @@
             <materials>
                 <material id="metalMaterial" />
             </materials>
-                <texture id="metalTexture" length_s="1.0" length_t="1.0" />
+            <texture id="metalTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="metalPieceRound" />
                 <componentref id="satelliteWingConnectorCylinderLeft" />
@@ -1504,7 +1504,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -1533,7 +1533,6 @@
                 <material id="inherit" />
             </materials>
             <texture id="none" />
-            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
             <children>
                 <componentref id="spaceshipBody" />
                 <componentref id="spaceshipWings" />
@@ -1553,7 +1552,8 @@
                 <material id="redMaterial" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
+            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
             <children>
                 <primitiveref id="cylinder0" />
                 <componentref id="spaceshipCabine" /> 
@@ -1569,7 +1569,7 @@
                 <material id="redMaterial" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipBase1" />
                 <componentref id="spaceshipBase2" />
@@ -1583,7 +1583,7 @@
                 <material id="inherit" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="triangle" />
             </children>
@@ -1597,7 +1597,7 @@
                 <material id="inherit" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="triangle" />
             </children>
@@ -1611,7 +1611,7 @@
                 <material id="redMaterial" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -1626,7 +1626,8 @@
                 <material id="redMaterial" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
+            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
             <children>
                 <primitiveref id="cylinder1" />
                 <componentref id="spaceshipCabineTop" />
@@ -1641,7 +1642,7 @@
             <materials>
                 <material id="metalMaterial" />
             </materials>
-                <texture id="glassTexture" length_s="1.0" length_t="1.0" />
+            <texture id="glassTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="sphere" />
             </children>
@@ -1656,7 +1657,7 @@
                 <material id="redMaterial" />
                 <material id="blueMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cylinder2" />
             </children>
@@ -1669,7 +1670,7 @@
             <materials>
                 <material id="darkMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cylinder3" />
                 <componentref id="spaceshipWingLid" />
@@ -1684,7 +1685,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -1697,7 +1698,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipWing1" />
                 <componentref id="spaceshipWing2" />
@@ -1717,7 +1718,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipWing" />
             </children>
@@ -1734,7 +1735,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipWing" />
             </children>
@@ -1751,7 +1752,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipWing" />
             </children>
@@ -1768,7 +1769,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipWing" />
             </children>
@@ -1782,7 +1783,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none"  />
+            <texture id="none"  />
             <children>
                 <componentref id="spaceshipPropulserUpLeft" />
                 <componentref id="spaceshipPropulserUpRight" />
@@ -1797,7 +1798,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipPropulser" />
             </children>
@@ -1809,7 +1810,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipPropulser" />
             </children>
@@ -1821,7 +1822,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipPropulser" />
             </children>
@@ -1833,7 +1834,7 @@
             <materials>
                 <material id="sunMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <componentref id="spaceshipPropulser" />
             </children>
@@ -1848,7 +1849,7 @@
             <materials>
                 <material id="darkMaterial" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="pentaCylinder" />
                 <componentref id="smallerPentaCylinder" />
@@ -1864,7 +1865,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="pentaCylinder" />
             </children>
@@ -1877,7 +1878,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="irregularTorus" />
             </children>
@@ -1889,7 +1890,7 @@
             <materials>
                 <material id="defaultMaterial" />
             </materials>
-                <texture id="sunTexture" length_s="1.0" length_t="1.0" />
+            <texture id="sunTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="sphere" />
             </children>
