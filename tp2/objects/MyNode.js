@@ -16,10 +16,10 @@ export class MyNode {
         // node attributes
         this.materials = [];         // [id]
         this.texture = null;         // { id, length_s, length_t, isDefined }
-        this.transformation = null;  // {matrix, isExplicit} 
+        this.transformation = null;  // { matrix, isExplicit } 
         // (If 'isExplicit' the matrix is a mat4 object, otherwise it is an id)
         this.animation = null;       // id
-        this.shader = null;          // [r, g, b, scale_h]
+        this.shader = null;          // { shader, enabled }
 
         this.materialIndex = 0;
         this.visited = false;
@@ -72,7 +72,7 @@ export class MyNode {
 
     //TODO
     setShader(shader) {
-        this.shader = shader;
+        this.shader = { shader, enabled: false };
     }
 
     /**

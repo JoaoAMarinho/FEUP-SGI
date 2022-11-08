@@ -36,8 +36,6 @@ export class MySceneGraph {
         this.scene = scene;
         scene.graph = this;
 
-        this.rootNode = null;
-
         this.idRoot = null;                   // The id of the root element.
 
         this.views = {};                     // CGFcamera or CGFcameraOrtho dictionary.
@@ -48,6 +46,9 @@ export class MySceneGraph {
         this.animations = {};                 // MyAnimation dictionary.
         this.primitives = {};                 // CFGObject dictionary.
         this.components = {};                 // MyNode dictionary.
+        this.shaders = {};                    // CFGShader dictionary.
+
+        this.scene.shaderComponents = [];           // Component Ids array.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -82,10 +83,10 @@ export class MySceneGraph {
         }
 
         // Remove graph cycles
-        this.removeCycles(this.rootNode);
+        this.removeCycles(this.components[this.idRoot]);
 
         // Remove undefined child components
-        this.validateGraphComponents(this.rootNode);
+        this.validateGraphComponents(this.components[this.idRoot]);
 
         this.loadedOk = true;
 
@@ -1463,7 +1464,6 @@ export class MySceneGraph {
                     this.onXMLMinorError(shaderInfo);
                     continue;
                 }
-
                 component.setShader(shaderInfo);
             }
 
@@ -1499,18 +1499,16 @@ export class MySceneGraph {
                 child.isPrimitive ? component.addPrimitive(child.node) : component.addComponent(child.node);
             }
 
-            if (this.rootNode == null && componentID == this.idRoot) {
+            if (this.components[this.idRoot] == null && componentID == this.idRoot) {
                 if (component.texture.id == 'inherit')
                     return "root component must not 'inherit' texture (conflict: ID = " + componentID + ")";
 
                 if (component.materials.some((x) => x == 'inherit'))
                     return "root component must not 'inherit' material (conflict: ID = " + componentID + ")";
-
-                this.rootNode = component;
-                continue;
             }
 
             this.components[componentID] = component;
+            this.scene.shaderComponents.push(componentID);
         }
 
         this.log("Parsed components");
@@ -1843,8 +1841,9 @@ export class MySceneGraph {
      */
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
-        if (this.rootNode !== null)
-            this.processNode(this.rootNode, null, null);
+        var rootNode = this.components[this.idRoot];
+        if (rootNode !== null)
+            this.processNode(rootNode, null, null);
     }
 
     /**
