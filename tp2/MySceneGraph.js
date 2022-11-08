@@ -1,4 +1,4 @@
-import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFshader, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './objects/primitives/MyRectangle.js';
 import { MyTriangle } from './objects/primitives/MyTriangle.js';
 import { MyCylinder } from './objects/primitives/MyCylinder.js';
@@ -9,6 +9,8 @@ import { MyNode } from './objects/MyNode.js';
 import { MyKeyframeAnimation } from './objects/animations/MykeyFrameAnimation.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
+var DEFAULT_VERT_PATH = './shaders/defaultVertShader.vert'
+var DEFAULT_FRAG_PATH = './shaders/defaultFragShader.frag'
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -1459,12 +1461,11 @@ export class MySceneGraph {
 
             // Shaders
             if (shaderIndex !== -1) {
-                var shaderInfo = this.parseShader(grandChildren[shaderIndex], "shader block in component (conflict: ID = " + componentID + ")");
-                if (!Array.isArray(shaderInfo)) {
-                    this.onXMLMinorError(shaderInfo);
+                var shaderObject;
+                if ((shaderObject = this.parseShader(grandChildren[shaderIndex], "shader block in component (conflict: ID = " + componentID + ")")) == null)
                     continue;
-                }
-                component.setShader(shaderInfo);
+                
+                component.setShader(shaderObject);
             }
 
             // Materials
@@ -1508,7 +1509,9 @@ export class MySceneGraph {
             }
 
             this.components[componentID] = component;
-            this.scene.shaderComponents.push(componentID);
+
+            if (component.shader !== null)
+                this.scene.shaderComponents.push(componentID);
         }
 
         this.log("Parsed components");
@@ -1550,31 +1553,37 @@ export class MySceneGraph {
 
     // TODO
     parseShader(node, messageError) {
-        var shaderInfo = [];
+        var error = null;
 
         // R
         var r = this.reader.getFloat(node, 'r');
         if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
-            return "unable to parse R component of the " + messageError;
+            error = "unable to parse R component of the " + messageError;
 
         // G
         var g = this.reader.getFloat(node, 'g');
         if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
-            return "unable to parse G component of the " + messageError;
+            error = "unable to parse G component of the " + messageError;
 
         // B
         var b = this.reader.getFloat(node, 'b');
         if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
-            return "unable to parse B component of the " + messageError;
+            error = "unable to parse B component of the " + messageError;
 
         // Scale
         var scale_h = this.reader.getFloat(node, 'scale_h');
         if (!(scale_h != null && !isNaN(scale_h)))
-            return "unable to parse scale_h component of the " + messageError;
+            error = "unable to parse scale_h component of the " + messageError;
 
-        shaderInfo.push(...[r, g, b, scale_h]);
+        if (error != null) {
+            this.onXMLMinorError(error);
+            return null;
+        }
 
-        return shaderInfo;
+        var shader = new CGFshader(this.scene.gl, DEFAULT_VERT_PATH, DEFAULT_FRAG_PATH);
+        shader.setUniformsValues({scale: scale_h, timeFactor: 0});
+
+        return shader;
     }
 
     /**
@@ -1874,11 +1883,18 @@ export class MySceneGraph {
         }
 
         if (active) {
+
+            if (node.shader != null && node.shader.enabled) {
+                this.scene.setActiveShader(node.shader.object);
+            }
+
             for (var i = 0; i < node.primitives.length; i++) {
                 var primitive = this.primitives[node.primitives[i]];
                 primitive.updateTexCoords(prevTexture.length_s, prevTexture.length_t);
                 primitive.display();
             }
+
+            this.scene.setActiveShader(this.scene.defaultShader);
 
             for (var i = 0; i < node.components.length; i++) {
                 this.processNode(this.components[node.components[i]], prevMaterial, prevTexture);
@@ -1954,6 +1970,15 @@ export class MySceneGraph {
     updateAnimations(t) {
         for (var animation in this.animations) {
             this.animations[animation].update(t);
+        }
+    }
+
+    updateShaderTimeFactor(t) {
+        for (var component of this.scene.shaderComponents) {
+            var shader = this.components[component].shader;
+            if (shader.enabled) {
+                shader.object.setUniformsValues({ timeFactor: t / 100 % 100 });
+            }
         }
     }
 }

@@ -52,8 +52,8 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
             
-            <keyframe instant="10.0">
-                <translation x="0.0" y="0.0" z="0.0" />
+            <keyframe instant="1.0">
+                <translation x="1.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
@@ -78,7 +78,7 @@
                 <material id="demoMaterial" />
             </materials>
             <texture id="none" />
-            <highlighted r="1.0" g="0.4" b="0.3" scale_h="1.1" />
+            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
             <animation id="testAnim" />
             <children>
               <primitiveref id="squareUnit" />

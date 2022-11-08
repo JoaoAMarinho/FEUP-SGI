@@ -71,8 +71,8 @@ export class MyNode {
     }
 
     //TODO
-    setShader(shader) {
-        this.shader = { shader, enabled: false };
+    setShader(object) {
+        this.shader = { object, enabled: false };
     }
 
     /**

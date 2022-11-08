@@ -185,6 +185,7 @@ export class XMLscene extends CGFscene {
         this.time = t;
 
         this.graph.updateAnimations(elapsedTime);
+        this.graph.updateShaderTimeFactor(t);
     }
 
     /**

@@ -186,6 +186,9 @@
         </transformation>
     </transformations>
 
+    <animations>
+    </animations>
+
     <primitives>
         <primitive id="squareUnit">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
@@ -1515,7 +1518,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -1529,7 +1532,8 @@
             <materials>
                 <material id="inherit" />
             </materials>
-                <texture id="none" />
+            <texture id="none" />
+            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
             <children>
                 <componentref id="spaceshipBody" />
                 <componentref id="spaceshipWings" />

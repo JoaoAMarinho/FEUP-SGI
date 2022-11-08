@@ -97,7 +97,6 @@ export class MyInterface extends CGFinterface {
      * Adds shaders folder
      */
     addShadersControls() {
-        console.log(this.scene.shaderComponents);
         var shadersFolder = this.gui.addFolder('Shaders');
         for (const component of this.scene.shaderComponents) {
             shadersFolder.add(this.scene.graph.components[component].shader, 'enabled').name(component);
