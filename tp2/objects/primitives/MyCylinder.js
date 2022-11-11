@@ -47,7 +47,7 @@ export class MyCylinder extends CGFobject {
             for (var slice = 0; slice <= this.slices; slice++) {
                 var xAng = Math.cos(alphaAng * slice) * radius;
                 var yAng = Math.sin(alphaAng * slice) * radius;
-                var vSize = Math.sqrt(xAng * xAng + yAng * xAng + normalZ * normalZ);
+                var vSize = Math.sqrt(xAng * xAng + yAng * yAng + normalZ * normalZ);
 
                 this.vertices.push(xAng, yAng, height);
 
@@ -81,4 +81,5 @@ export class MyCylinder extends CGFobject {
      */
     updateTexCoords(coords) {
     }
+
 }
