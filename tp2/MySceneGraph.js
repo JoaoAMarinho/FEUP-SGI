@@ -1581,7 +1581,7 @@ export class MySceneGraph {
         }
 
         var shader = new CGFshader(this.scene.gl, DEFAULT_VERT_PATH, DEFAULT_FRAG_PATH);
-        shader.setUniformsValues({scale: scale_h, timeFactor: 0});
+        shader.setUniformsValues({scale: scale_h, timeFactor: 0, pulseColor: [r, g, b, 1.0]});
 
         return shader;
     }
