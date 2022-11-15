@@ -1553,7 +1553,7 @@
                 <material id="blueMaterial" />
             </materials>
             <texture id="none" />
-            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
+            <highlighted r="0.0" g="0.4" b="1.0" scale_h="2" />
             <children>
                 <primitiveref id="cylinder0" />
                 <componentref id="spaceshipCabine" /> 
@@ -1627,7 +1627,7 @@
                 <material id="blueMaterial" />
             </materials>
             <texture id="none" />
-            <highlighted r="1.0" g="0.4" b="0.3" scale_h="2" />
+            <highlighted r="1.0" g="1.0" b="1.0" scale_h="2" />
             <children>
                 <primitiveref id="cylinder1" />
                 <componentref id="spaceshipCabineTop" />

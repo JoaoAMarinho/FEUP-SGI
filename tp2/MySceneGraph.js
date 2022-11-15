@@ -1581,7 +1581,7 @@ export class MySceneGraph {
         }
 
         var shader = new CGFshader(this.scene.gl, DEFAULT_VERT_PATH, DEFAULT_FRAG_PATH);
-        shader.setUniformsValues({scale: scale_h, timeFactor: 0, pulseColor: [r, g, b, 1.0]});
+        shader.setUniformsValues({scale: scale_h, timeFactor: 0, pulseColor: [r, g, b, 1.0], hasTexture: true});
 
         return shader;
     }
@@ -1885,6 +1885,10 @@ export class MySceneGraph {
         if (active) {
 
             if (node.shader != null && node.shader.enabled) {
+                if (prevTexture == null || prevTexture.id == 'none') {
+                    node.shader.object.setUniformsValues({hasTexture: false, originalColor: this.materials[prevMaterial].diffuse});
+                }
+
                 this.scene.setActiveShader(node.shader.object);
             }
 
