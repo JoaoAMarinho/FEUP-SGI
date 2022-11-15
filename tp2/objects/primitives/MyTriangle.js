@@ -45,21 +45,36 @@ export class MyTriangle extends CGFobject {
         ];
 
         this.normals = [];
+        
+        var normalVec = [];
+        vec3.cross(normalVec, [this.x2-this.x1, this.y2-this.y1, this.z2-this.z1],[this.x3-this.x1, this.y3-this.y1, this.z3-this.z1]);
+        
+        var vSize = Math.sqrt(normalVec[0] * normalVec[0] + normalVec[1] * normalVec[1] + normalVec[2] * normalVec[2]);
+
+        normalVec = normalVec.map(x => x/vSize)
+
         for (var i = 0; i < 3; i++) {
-            this.normals.push(0, 0, 1);
-        }
-        for (var i = 0; i < 3; i++) {
-            this.normals.push(0, 0, -1);
+            this.normals.push(...normalVec);
         }
 
-        this.texCoords = [
+
+       /*  this.normals = [];
+        
+        var normalVec = [];
+        vec3.cross(normalVec, [this.x2-this.x1, this.y2-this.y1, this.z2-this.z1],[this.x3-this.x1, this.y3-this.y1, this.z3-this.z1]);
+        console.log(normalVec)
+        this.normals.push(normalVec);
+        this.normals.push(normalVec);
+        this.normals.push(normalVec); */
+
+        /* this.texCoords = [
             0, 0,
             0, 1,
             1, 1,
             0, 0,
             0, 1,
             1, 1
-        ];
+        ]; */
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
@@ -78,5 +93,10 @@ export class MyTriangle extends CGFobject {
             this.v3_v1 * this.cosv1_v2 / lenght_s, 1 - this.v3_v1 * this.sinv1_v2 / length_t,
         ];
         this.updateTexCoordsGLBuffers();
+    }
+
+    display() {
+        this.enableNormalViz();
+        super.display();
     }
 }
