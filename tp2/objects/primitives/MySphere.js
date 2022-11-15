@@ -36,7 +36,7 @@ export class MySphere extends CGFobject {
         var thetaInc = (2 * Math.PI) / this.longDivs;
         var latVertices = this.longDivs + 1;
         var longInc = 1 / this.longDivs;
-        var latInc = 1 / (this.latDivs);
+        var latInc = 1 / this.latDivs;
 
         // build an all-around stack at a time, starting on "north pole" and proceeding "south"
         for (let latitude = 0; latitude <= this.latDivs; latitude++) {
@@ -69,7 +69,7 @@ export class MySphere extends CGFobject {
                 theta += thetaInc;
 
                 //--- Texture Coordinates 
-                this.texCoords.push(longitude * longInc, latitude * latInc);
+                this.texCoords.push(-longitude * longInc, latitude * latInc);
             }
             phi += phiInc;
         }
