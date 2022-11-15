@@ -1509,9 +1509,6 @@ export class MySceneGraph {
             }
 
             this.components[componentID] = component;
-
-            if (component.shader !== null)
-                this.scene.shaderComponents.push(componentID);
         }
 
         this.log("Parsed components");
@@ -1766,6 +1763,9 @@ export class MySceneGraph {
         var index = node.components.length;
         var component;
 
+        if (node.shader !== null)
+            this.scene.shaderComponents.push(node.id);
+
         while (index--) {
             if ((component = this.components[node.components[index]]) == null) {
                 this.onXMLMinorError("child component '" + node.components[index] + "' is not defined. (conflict: ID = " + node.id + ")");
@@ -1774,7 +1774,6 @@ export class MySceneGraph {
             else
                 this.validateGraphComponents(component);
         }
-
     }
 
     /**
