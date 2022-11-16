@@ -187,6 +187,94 @@
     </transformations>
 
     <animations>
+        <keyframeanim id="selfRotate">
+            <keyframe instant="0.1">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="50.0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="360" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="spaceshipAnimation">
+            <keyframe instant="0.1">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+          <keyframe instant="3.0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="5.0">
+                <translation x="-5.0" y="0.0" z="10.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="50" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="10.0">
+                <translation x="-10.0" y="0.0" z="20.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="90" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="30.0">
+                <translation x="100.0" y="0.0" z="20.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="90" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="50.0">
+                <translation x="100.0" y="0.0" z="-70.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="180" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="70.0">
+                <translation x="100.0" y="0.0" z="-150.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="270" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="propulsersOn">
+            <keyframe instant="2.5">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="3.5">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+        </keyframeanim>
     </animations>
 
     <primitives>
@@ -386,6 +474,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="mercuryTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -402,6 +491,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="venusTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -417,6 +507,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="earthTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <componentref id="earthMoon" />
                 <primitiveref id="planet" />
@@ -431,6 +522,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="moonTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -447,6 +539,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="marsTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -463,6 +556,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="jupiterTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -479,6 +573,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="saturnTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
                 <componentref id="saturnRings" />
@@ -506,6 +601,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
+            <highlighted r="1.0" g="1.0" b="1.0" scale_h="2" />
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -518,6 +614,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
+            <highlighted r="1.0" g="1.0" b="1.0" scale_h="2" />
             <children>
                 <componentref id="saturnRing" />
             </children>
@@ -533,6 +630,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="uranusTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -549,6 +647,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="neptuneTexture" length_s="1.0" length_t="1.0" />
+            <highlighted r="0.0" g="0.0" b="0.0" scale_h="2" />
             <children>
                 <primitiveref id="planet" />
             </children>
@@ -562,6 +661,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <animation id="selfRotate" />
             <children>
                 <componentref id="satelliteMainBody" />
                 <componentref id="satelliteWings" />
@@ -1533,6 +1633,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <animation id="spaceshipAnimation" />
             <children>
                 <componentref id="spaceshipBody" />
                 <componentref id="spaceshipWings" />
@@ -1553,7 +1654,6 @@
                 <material id="blueMaterial" />
             </materials>
             <texture id="none" />
-            <highlighted r="0.0" g="0.4" b="1.0" scale_h="2" />
             <children>
                 <primitiveref id="cylinder0" />
                 <componentref id="spaceshipCabine" /> 
@@ -1627,7 +1727,6 @@
                 <material id="blueMaterial" />
             </materials>
             <texture id="none" />
-            <highlighted r="1.0" g="1.0" b="1.0" scale_h="2" />
             <children>
                 <primitiveref id="cylinder1" />
                 <componentref id="spaceshipCabineTop" />
@@ -1891,6 +1990,7 @@
                 <material id="defaultMaterial" />
             </materials>
             <texture id="sunTexture" length_s="1.0" length_t="1.0" />
+            <animation id="propulsersOn" />
             <children>
                 <primitiveref id="sphere" />
             </children>
