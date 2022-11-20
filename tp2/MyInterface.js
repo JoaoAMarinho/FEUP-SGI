@@ -35,9 +35,9 @@ export class MyInterface extends CGFinterface {
      * Creates keyboard processor
      */
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
     }
 
     /**
@@ -46,7 +46,7 @@ export class MyInterface extends CGFinterface {
      * @param event
      */
     processKeyDown(event) {
-        this.activeKeys[event.code]=true;
+        this.activeKeys[event.code] = true;
     };
 
     /**
@@ -55,7 +55,7 @@ export class MyInterface extends CGFinterface {
      * @param event
      */
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
     /**
@@ -71,7 +71,6 @@ export class MyInterface extends CGFinterface {
     /**
      * @method addCameraControls
      * Adds cameras folder
-     * 
      */
     addCameraControls() {
         var camerasFolder = this.gui.addFolder('Cameras');
