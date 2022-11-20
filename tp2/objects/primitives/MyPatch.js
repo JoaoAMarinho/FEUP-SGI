@@ -17,13 +17,17 @@ export class MyPatch {
 
         // an object holding the surface representation and having a function getPoint(u, v)
         var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlPoints);
-        
+
         // generate a 3D object with uDivsxvDivs vertexes based on a surface representation
-        this.obj = new CGFnurbsObject(scene, uDivs, vDivs, nurbsSurface); 
-        
+        this.obj = new CGFnurbsObject(scene, uDivs, vDivs, nurbsSurface);
+
         this.obj.initBuffers();
     }
 
+    /**
+     * @method display
+     * Display nurb object
+     */
     display() {
         this.obj.display();
     }
@@ -33,6 +37,6 @@ export class MyPatch {
      * Updates the list of texture coordinates of the MyPatch's object
      * @param {Array} coords - Array of texture coordinates
      */
-     updateTexCoords(coords) {
+    updateTexCoords(coords) {
     }
 }

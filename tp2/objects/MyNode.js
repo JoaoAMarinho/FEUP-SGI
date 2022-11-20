@@ -62,15 +62,19 @@ export class MyNode {
     }
 
     /**
-    * @method setAnimation
-    * Updates the animation attribute
-    * @param {String} animation - Animation ID
-    */
+     * @method setAnimation
+     * Updates the animation attribute
+     * @param {String} animation - Animation ID
+     */
     setAnimation(animation) {
         this.animation = animation;
     }
 
-    //TODO
+    /**
+     * @method setShader
+     * Update the shader attribute
+     * @param {CGFshader} object 
+     */
     setShader(object) {
         this.shader = { object, enabled: false };
     }

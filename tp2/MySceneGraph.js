@@ -50,7 +50,7 @@ export class MySceneGraph {
         this.components = {};                 // MyNode dictionary.
         this.shaders = {};                    // CFGShader dictionary.
 
-        this.scene.shaderComponents = [];           // Component Ids array.
+        this.scene.shaderComponents = [];     // Component Ids array.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -594,7 +594,7 @@ export class MySceneGraph {
      * @method parseComponentTexture
      * Parses the <textures> block of a component
      * @param {textures block element} texturesNode
-     * @param {string} componentID
+     * @param {String} componentID
      * @return null on error, otherwise texture object with id and respective (length_s, length_t) attributes
      */
     parseComponentTexture(node, componentID) {
@@ -676,7 +676,7 @@ export class MySceneGraph {
      * @method parseMaterial
      * Parse a <material> block
      * @param {material block child elements} nodes
-     * @param {string} materialID 
+     * @param {String} materialID 
      * @return null on error, otherwise material object with respective attribute values
      */
     parseMaterial(nodes, materialID) {
@@ -718,7 +718,7 @@ export class MySceneGraph {
      * @method parseComponentMaterials
      * Parses the <material> block of a component
      * @param {materials block element} nodes
-     * @param {string} componentID
+     * @param {String} componentID
      * @return string on error, otherwise material ids array
      */
     parseComponentMaterials(nodes, componentID) {
@@ -792,7 +792,7 @@ export class MySceneGraph {
      * @method parseTransformation
      * Parses the <transformation> element
      * @param {transformation element} nodes
-     * @param {string} transformationID
+     * @param {String} transformationID
      * @return null on error, otherwise transformation matrix (mat4)
      */
     parseTransformation(nodes, transformationID) {
@@ -842,7 +842,7 @@ export class MySceneGraph {
       * @method parseComponentTransformations
       * Parses the <transformation> block of a component
       * @param {transformation block element} nodes
-      * @param {string} transformationID
+      * @param {String} transformationID
       * @return null on error, otherwise transformation object with matrix and explicit flag
       */
     parseComponentTransformations(nodes, componentID) {
@@ -908,7 +908,7 @@ export class MySceneGraph {
      * @method parseKeyframeAnim
      * Parses the <keyframeanim> block element
      * @param {keyframeanim block element} nodes
-     * @param {string} animationID
+     * @param {String} animationID
      * @return null on error, otherwise MyKeyframeAnimation object
      */
     parseKeyframeAnim(nodes, animationID) {
@@ -959,7 +959,7 @@ export class MySceneGraph {
      * @method parseKeyframe
      * Parses the <keyframe> block element
      * @param {keyframe block element} nodes
-     * @param {string} animationID
+     * @param {String} animationID
      * @return null on error, otherwise transformation object
      */
     parseKeyframe(nodes, animationID) {
@@ -1133,7 +1133,7 @@ export class MySceneGraph {
      * @method parseRectangle
      * Parses a <rectangle> element
      * @param {rectangle element} rectangle 
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return null on success, otherwise an error message
      */
     parseRectangle(rectangle, primitiveId) {
@@ -1165,7 +1165,7 @@ export class MySceneGraph {
      * @method parseTriangle
      * Parses a <triangle> element
      * @param {triangle element} triangle 
-     * @param {string} primitiveId
+     * @param {String} primitiveId
      * @return null on success, otherwise an error message
      */
     parseTriangle(triangle, primitiveId) {
@@ -1216,7 +1216,7 @@ export class MySceneGraph {
      * @method parseCylinder
      * Parses a <cylinder> element.
      * @param {cylinder element} cylinder 
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return null on success, otherwise an error message
      */
     parseCylinder(cylinder, primitiveId) {
@@ -1253,7 +1253,7 @@ export class MySceneGraph {
      * @method parseSphere
      * Parses a <sphere> element.
      * @param {sphere element} sphere 
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return null on success, otherwise an error message
      */
     parseSphere(sphere, primitiveId) {
@@ -1280,7 +1280,7 @@ export class MySceneGraph {
      * @method parseTorus
      * Parses a <torus> element.
      * @param {torus element} torus 
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return null on success, otherwise an error message
      */
     parseTorus(torus, primitiveId) {
@@ -1312,7 +1312,7 @@ export class MySceneGraph {
      * @method parsePatch
      * Parses a <patch> block element
      * @param {patch block element} patch 
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return null on success, otherwise an error message
      */
     parsePatch(patch, primitiveId) {
@@ -1365,7 +1365,7 @@ export class MySceneGraph {
      * @method parseControlPoints
      * Parses the <controlpoint> block
      * @param {controlpoint block element} nodes
-     * @param {string} primitiveId 
+     * @param {String} primitiveId 
      * @return array of control points
      */
     parseControlPoints(nodes, primitiveId) {
@@ -1464,7 +1464,7 @@ export class MySceneGraph {
                 var shaderObject;
                 if ((shaderObject = this.parseShader(grandChildren[shaderIndex], "shader block in component (conflict: ID = " + componentID + ")")) == null)
                     continue;
-                
+
                 component.setShader(shaderObject);
             }
 
@@ -1519,7 +1519,7 @@ export class MySceneGraph {
      * @method parseChild
      * Parses the <children> element
      * @param {children block child element} node
-     * @param {string} componentID
+     * @param {String} componentID
      * @return child object with node id and type of node flag (primitive or component)
      */
     parseChild(node, componentID) {
@@ -1548,7 +1548,13 @@ export class MySceneGraph {
         return child;
     }
 
-    // TODO
+    /**
+     * @method parseShader
+     * Parse the shader info from a node with ID = id
+     * @param {block element} node 
+     * @param {message to be displayed in case of error} messageError 
+     * @returns CFGshader on success, otherwise null
+     */
     parseShader(node, messageError) {
         var error = null;
 
@@ -1578,7 +1584,7 @@ export class MySceneGraph {
         }
 
         var shader = new CGFshader(this.scene.gl, DEFAULT_VERT_PATH, DEFAULT_FRAG_PATH);
-        shader.setUniformsValues({scale: scale_h, timeFactor: 0, pulseColor: [r, g, b, 1.0], hasTexture: true});
+        shader.setUniformsValues({ scale: scale_h, timeFactor: 0, pulseColor: [r, g, b, 1.0], hasTexture: true });
 
         return shader;
     }
@@ -1885,7 +1891,7 @@ export class MySceneGraph {
 
             if (node.shader != null && node.shader.enabled) {
                 if (prevTexture == null || prevTexture.id == 'none') {
-                    node.shader.object.setUniformsValues({hasTexture: false, originalColor: this.materials[prevMaterial].diffuse});
+                    node.shader.object.setUniformsValues({ hasTexture: false, originalColor: this.materials[prevMaterial].diffuse });
                 }
 
                 this.scene.setActiveShader(node.shader.object);
@@ -1959,7 +1965,7 @@ export class MySceneGraph {
     /**
      * @method updateCamera
      * Updates the current camera
-     * @param {string} id
+     * @param {String} id
      * @return camera object with the respective id
      */
     updateCamera(id) {
@@ -1968,14 +1974,21 @@ export class MySceneGraph {
     }
 
     /**
-    * @method updateAnimations
-    */
+     * @method updateAnimations
+     * Updates all scene animations
+     * @param {integer} t - Time since last updateAnimations call
+     */
     updateAnimations(t) {
         for (var animation in this.animations) {
             this.animations[animation].update(t);
         }
     }
 
+    /**
+     * @method updateShaderTimeFactor
+     * Update time uniform value from enabled scene shaders
+     * @param {integer} t - time value 
+     */
     updateShaderTimeFactor(t) {
         for (var component of this.scene.shaderComponents) {
             var shader = this.components[component].shader;
