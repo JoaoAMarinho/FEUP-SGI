@@ -16,15 +16,30 @@ export class MyAnimation {
         this.currentTransformation = mat4.create();
     }
 
-    updateTimes() {
-        this.startTime = this.keyframes[0].instant;
-        this.endTime = this.keyframes[this.keyframes.length - 1].instant;
+    /**
+     * @method updateTimes
+     * Updates the initial and final animation instants
+     * @param {float} startTime - Animation start instant
+     * @param {float} endTime - Animation end instant
+     */
+    updateTimes(startTime, endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
+    /**
+     * @method update
+     * Abstract funtion that updates the currentTransformation attribute
+     * @param {integer} t - Time since last update call
+     */
     update(t) {
     }
 
-
+    /**
+     * @method apply
+     * Applies the animation (transformation matrix) to the scene object if it active
+     * @returns none
+     */
     apply() {
         if (!this.active)
             return;
@@ -32,6 +47,10 @@ export class MyAnimation {
         this.scene.multMatrix(this.currentTransformation);
     }
 
+    /**
+     * @method isActive
+     * @returns active attribute
+     */
     isActive() {
         return this.active;
     }
