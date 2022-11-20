@@ -221,21 +221,14 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
 
-            <keyframe instant="5.0">
-                <translation x="-5.0" y="0.0" z="10.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="50" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
             <keyframe instant="10.0">
-                <translation x="-10.0" y="0.0" z="20.0" />
+                <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="90" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
+
             <keyframe instant="30.0">
                 <translation x="100.0" y="0.0" z="20.0" />
                 <rotation axis="z" angle="0" />
@@ -243,6 +236,7 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
+
             <keyframe instant="50.0">
                 <translation x="100.0" y="0.0" z="-70.0" />
                 <rotation axis="z" angle="0" />
@@ -254,6 +248,43 @@
                 <translation x="100.0" y="0.0" z="-150.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="270" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="80.0">
+                <translation x="100.0" y="0.0" z="-150.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="360" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="110.0">
+                <translation x="100.0" y="0.0" z="-70.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="360" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="130.0">
+                <translation x="100.0" y="0.0" z="20.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="270" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            
+            <keyframe instant="150.0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="270" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+            <keyframe instant="153.0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="360" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
@@ -274,6 +305,8 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
+
+
         </keyframeanim>
     </animations>
 
@@ -287,7 +320,49 @@
         </primitive>
 
         <primitive id="rectangle">
-            <rectangle x1="-1.0" y1="0.0" x2="1.0" y2="1.0" />
+            <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20">
+                <controlpoint x="-1.0" y="0.0" z="0.0" />
+                <controlpoint x="-1.0" y="1.0" z="0.0" />
+
+                <controlpoint x="1.0" y="0.0" z="0.0" />
+                <controlpoint x="1.0" y="1.0" z="0.0" />
+            </patch>
+        </primitive>
+
+        <primitive id="barrelNurbHalf">
+            <patch degree_u="3" parts_u="20" degree_v="2" parts_v="20">
+                <controlpoint x="1.0" y="0.0" z="0.0" />
+                <controlpoint x="1.5" y="0.0" z="0.5" />
+                <controlpoint x="1.0" y="0.0" z="1.0" />
+
+                <controlpoint x="1.0" y="1.4" z="0.0" />
+                <controlpoint x="1.7" y="1.4" z="0.5" />
+                <controlpoint x="1.0" y="1.4" z="1.0" />
+                
+                <controlpoint x="-1.0" y="1.4" z="0.0" />
+                <controlpoint x="-1.7" y="1.4" z="0.5" />
+                <controlpoint x="-1.0" y="1.4" z="1.0" />
+                
+                <controlpoint x="-1.0" y="0.0" z="0.0" />
+                <controlpoint x="-1.5" y="0.0" z="0.5" />
+                <controlpoint x="-1.0" y="0.0" z="1.0" />
+            </patch>
+        </primitive>
+        <primitive id="barrelNurbBaseHalf">
+            <patch degree_u="3" parts_u="20" degree_v="1" parts_v="20">
+                <controlpoint x="-1.0" y="0.0" z="1.0"  />
+                <controlpoint x="-1.0" y="0.0" z="1.0"  />
+
+                <controlpoint x="-1.0" y="0.0" z="1.0"  />
+                <controlpoint x="-1.0" y="1.4" z="1.0"  />
+
+                <controlpoint x="1.0" y="0.0" z="1.0"   />
+                <controlpoint x="1.0" y="1.4" z="1.0"   />
+                
+                <controlpoint x="1.0" y="0.0" z="1.0"   />
+                <controlpoint x="1.0" y="0.0" z="1.0"   />
+
+            </patch>
         </primitive>
 
         <primitive id="triangle">
@@ -393,6 +468,61 @@
     </primitives>
 
     <components>
+
+        <!-- Barrel -->
+        <component id="barrel">
+            <transformation>
+                <scale x="0.15" y="0.15" z="0.15" />
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <componentref id="barrelHalf1" />
+                <componentref id="barrelHalf2" />
+            </children>
+        </component>
+        <!-- Barrel Top Half -->
+        <component id="barrelTopHalf">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="0.0" y="0.0" z="-1.0" />
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <primitiveref id="barrelNurbBaseHalf" />
+            </children>
+        </component>
+        <!-- Barrel Halfs -->
+        <component id="barrelHalf1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <primitiveref id="barrelNurbHalf" />
+                <primitiveref id="barrelNurbBaseHalf" />
+                <componentref id="barrelTopHalf" />
+            </children>
+        </component>
+        <component id="barrelHalf2">
+            <transformation>
+                <rotate axis="z" angle="180" />
+            </transformation>
+            <materials>
+                <material id="metalMaterial" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <componentref id="barrelHalf1" />
+            </children>
+        </component>
 
         <!-- Space scene -->
         <component id="space">
@@ -1141,7 +1271,7 @@
             <texture id="none" />
             <children>
                 <componentref id="satelliteThrusterShape" />
-                <componentref id="satelliteThrusterBox" />
+                <componentref id="barrel" />
             </children>
         </component>
         <component id="satelliteThruster2">

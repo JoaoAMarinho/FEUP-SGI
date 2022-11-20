@@ -45,9 +45,7 @@
     <animations>
     </animations>
 
-    <primitives>
-        <primitive id="rectangleNurb">
-            <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20">
+    <pri     <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20">
                 <controlpoint x="0.0" y="0.0" z="0.0" />
                 <controlpoint x="0.0" y="1.0" z="0.0" />
 
@@ -65,7 +63,9 @@
                 <controlpoint x="1.0" y="0.5" z="1.0" />
                 <controlpoint x="1.0" y="1.0" z="0.0" />
             </patch>
-        </primitive>
+        </primitive>mitives>
+        <primitive id="rectangleNurb">
+       
         <primitive id="barrelNurbHalf">
             <patch degree_u="3" parts_u="20" degree_v="2" parts_v="20">
                 <controlpoint x="1.0" y="0.0" z="0.0" />
