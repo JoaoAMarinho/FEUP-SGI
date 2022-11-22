@@ -44,7 +44,7 @@
     </ambient>
 
     <lights>
-        <omni id="Sun Light" enabled="0">
+        <omni id="Sun Light" enabled="1">
             <location x="-8000.0" y="0.0" z="2.0" w="1.0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -213,7 +213,7 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
 
-          <keyframe instant="3.0">
+            <keyframe instant="3.0">
                 <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -298,7 +298,7 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
 
-            <keyframe instant="3.5">
+            <keyframe instant="9.8">
                 <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -306,7 +306,29 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
 
+            <keyframe instant="10.5">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.7" />
+            </keyframe>
 
+            <keyframe instant="150.0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1.0" sy="1.0" sz="1.0" />
+            </keyframe>
+
+            <keyframe instant="152.7">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.0" sy="0.0" sz="0.0" />
+            </keyframe>
         </keyframeanim>
     </animations>
 
@@ -362,6 +384,18 @@
                 <controlpoint x="1.0" y="0.0" z="1.0"   />
                 <controlpoint x="1.0" y="0.0" z="1.0"   />
 
+            </patch>
+        </primitive>
+
+        <primitive id="tentNurb">
+            <patch degree_u="1" parts_u="20" degree_v="2" parts_v="20">
+                <controlpoint x="0.0" y="0.0" z="0.0" />
+                <controlpoint x="0.0" y="0.5" z="1.0" />
+                <controlpoint x="0.0" y="1.0" z="0.0" />
+å
+                <controlpoint x="1.0" y="0.0" z="0.0" />
+                <controlpoint x="1.0" y="0.5" z="1.0" />
+                <controlpoint x="1.0" y="1.0" z="0.0" />
             </patch>
         </primitive>
 
@@ -1766,6 +1800,7 @@
             <animation id="spaceshipAnimation" />
             <children>
                 <componentref id="spaceshipBody" />
+                <componentref id="star" /> 
                 <componentref id="spaceshipWings" />
                 <componentref id="spaceshipBases" />
                 <componentref id="spaceshipBasesRectangle" />
@@ -2123,6 +2158,106 @@
             <animation id="propulsersOn" />
             <children>
                 <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <!-- Star Logo -->
+        <component id="star">
+            <transformation>
+                <rotate axis="z" angle="90" />
+                <translate x="2.2" y="0.0" z="2.8" />
+            </transformation>
+            <materials>
+                <material id="darkMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="starArm" />
+                <componentref id="starArmLeft" />
+                <componentref id="starArmRight" />
+                <componentref id="starArmDownRight" />
+                <componentref id="starArmDownLeft" />
+
+            </children>
+        </component>
+        <!-- Star Components -->
+        <component id="starArm">
+            <transformation>
+                <scale x="0.1" y="0.5" z="1.0" />
+                <translate x="-0.5" y="-0.5" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="tentNurb" />
+                <componentref id="reverseStarArm" />
+            </children>
+        </component>
+        <component id="reverseStarArm">
+            <transformation>
+                <scale x="-1.0" y="1.0" z="1.0" />
+                <translate x="-1.0" y="0.0" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+                <texture id="none" />
+            <children>
+                <primitiveref id="tentNurb" />
+            </children>
+        </component>
+        <component id="starArmLeft">
+            <transformation>
+                <rotate axis="x" angle="72" />
+                <translate x="0.0" y="-0.32" z="0.24" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="starArm" />
+            </children>
+        </component>
+        <component id="starArmDownLeft">
+            <transformation>
+                <rotate axis="x" angle="72" />
+                <translate x="0.0" y="-0.31" z="0.23" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="starArmLeft" />
+            </children>
+        </component>
+        <component id="starArmRight">
+            <transformation>
+                <rotate axis="x" angle="-72" />
+                <translate x="0.0" y="0.32" z="0.24" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="starArm" />
+            </children>
+        </component>
+        <component id="starArmDownRight">
+            <transformation>
+                <rotate axis="x" angle="-72" />
+                <translate x="0.0" y="0.31" z="0.23" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="starArmRight" />
             </children>
         </component>
     </components>
