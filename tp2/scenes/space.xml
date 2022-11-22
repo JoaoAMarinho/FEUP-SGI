@@ -204,6 +204,7 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
         </keyframeanim>
+
         <keyframeanim id="spaceshipAnimation">
             <keyframe instant="0.1">
                 <translation x="0.0" y="0.0" z="0.0" />
@@ -289,6 +290,7 @@
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
         </keyframeanim>
+
         <keyframeanim id="propulsersOn">
             <keyframe instant="2.5">
                 <translation x="0.0" y="0.0" z="0.0" />
@@ -305,8 +307,6 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1.0" sy="1.0" sz="1.0" />
             </keyframe>
-
-
         </keyframeanim>
     </animations>
 
@@ -361,7 +361,6 @@
                 
                 <controlpoint x="1.0" y="0.0" z="1.0"   />
                 <controlpoint x="1.0" y="0.0" z="1.0"   />
-
             </patch>
         </primitive>
 
