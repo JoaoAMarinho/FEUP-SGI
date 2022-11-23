@@ -974,10 +974,6 @@ export class MySceneGraph {
         var axis, angle;
         var error = null;
 
-        var parsedXRotation = false;
-        var parsedYRotation = false;
-        var parsedZRotation = false;
-
         for (var i = 0; i < nodes.length; i++) {
             const transformation = nodes[i];
             var attributeIndex = attributeNames.indexOf(transformation.nodeName);
@@ -1004,32 +1000,29 @@ export class MySceneGraph {
                     error = values;
                     break;
                 }
-
                 [axis, angle] = values;
+
                 if (axis[0]) {
-                    if (parsedXRotation) {
-                        error = "X rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
+                    if (i != 3) {
+                        error = "X rotation axis misplaced inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
                     transfInfo.rotate[0] = angle;
-                    parsedXRotation = true;
                 } else if (axis[1]) {
-                    if (parsedYRotation) {
-                        error = "Y rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
+                    if (i != 2) {
+                        error = "Y rotation axis misplaced inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
                     transfInfo.rotate[1] = angle;
-                    parsedYRotation = true;
                 } else {
-                    if (parsedZRotation) {
-                        error = "Z rotation axis already parsed inside <keyframe> block (conflict: ID = " + animationID + ")";
+                    if (i != 1) {
+                        error = "Z rotation axis misplaced inside <keyframe> block (conflict: ID = " + animationID + ")";
                         break;
                     }
 
                     transfInfo.rotate[2] = angle;
-                    parsedZRotation = true;
                 }
             } else {
                 var values = this.parseScaleCoordinates(transformation, "keyframe scale transformation for ID " + animationID);
