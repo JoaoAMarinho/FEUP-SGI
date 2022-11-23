@@ -89,9 +89,9 @@ export class MyKeyframeAnimation extends MyAnimation {
         var matrix = mat4.create();
 
         mat4.translate(matrix, matrix, translate);
-        mat4.rotate(matrix, matrix, rotate[0], [1, 0, 0]);
-        mat4.rotate(matrix, matrix, rotate[1], [0, 1, 0]);
         mat4.rotate(matrix, matrix, rotate[2], [0, 0, 1]);
+        mat4.rotate(matrix, matrix, rotate[1], [0, 1, 0]);
+        mat4.rotate(matrix, matrix, rotate[0], [1, 0, 0]);
         mat4.scale(this.currentTransformation, matrix, scale);
     }
 }
