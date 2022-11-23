@@ -779,7 +779,6 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
-            <highlighted r="1.0" g="1.0" b="1.0" scale_h="2" />
             <children>
                 <componentref id="saturnRing" />
             </children>

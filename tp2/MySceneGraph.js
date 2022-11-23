@@ -1762,8 +1762,10 @@ export class MySceneGraph {
         var index = node.components.length;
         var component;
 
-        if (node.shader !== null)
+        if (node.shader !== null && !node.visited) {
+            node.visited = true;
             this.scene.shaderComponents.push(node.id);
+        }
 
         while (index--) {
             if ((component = this.components[node.components[index]]) == null) {
@@ -1882,12 +1884,14 @@ export class MySceneGraph {
 
         if (active) {
 
+            var activateShader = false;
             if (node.shader != null && node.shader.enabled) {
                 if (prevTexture == null || prevTexture.id == 'none') {
                     node.shader.object.setUniformsValues({ hasTexture: false, originalColor: this.materials[prevMaterial].diffuse });
                 }
 
                 this.scene.setActiveShader(node.shader.object);
+                activateShader = true;
             }
 
             for (var i = 0; i < node.primitives.length; i++) {
@@ -1896,7 +1900,8 @@ export class MySceneGraph {
                 primitive.display();
             }
 
-            this.scene.setActiveShader(this.scene.defaultShader);
+            if (activateShader)
+                this.scene.setActiveShader(this.scene.defaultShader);
 
             for (var i = 0; i < node.components.length; i++) {
                 this.processNode(this.components[node.components[i]], prevMaterial, prevTexture);
