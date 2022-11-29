@@ -203,7 +203,7 @@ export class XMLscene extends CGFscene {
      */
     checkKeys() {
         if (this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym")) {
-            this.graph.updateMaterials(this.graph.rootNode);
+            this.graph.updateMaterials(this.graph.components[this.graph.idRoot]);
         }
     }
 }

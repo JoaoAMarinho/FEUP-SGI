@@ -1,0 +1,31 @@
+init() -> enablePicking();
+
+display() -> RegisterForPick(id, object);
+	     clearPickRegistration();
+
+
+Movimentação da peça:
+
+- Linha reta
+  - Caso bata suspende o movimento.
+  - A outra peça vai para a caixa de peças.
+  - Continua o movimento.
+
+- Luz a seguir a peça
+
+Ambientes:
+
+- 2/3 ambientes com cenas diferentes.
+
+Coisas opcionais (obrigatorias):
+
+- Registar jogadas (queue)
+- Desfazer jogada(s)
+- Refazer o conjunto total das jogadas (filme ver moodle)
+
+- Countdown de tempo e score atual
+
+Object hierarchy:
+
+Game controller -> Game 
+		-> Players -> Pieces
