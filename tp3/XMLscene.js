@@ -37,7 +37,7 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(30);
 
         // Objects conneted to MyInterface
-        this.displayAxis = true;
+        this.displayAxis = false;
     }
 
     /**
@@ -179,11 +179,14 @@ export class XMLscene extends CGFscene {
      * Verify checked keys
      */
     update(t) {
+        if (!this.sceneInited)
+            return;
+
         this.checkKeys();
 
         var elapsedTime = this.time == undefined ? 0 : t - this.time;
         this.time = t;
-
+        
         this.graph.updateAnimations(elapsedTime);
         this.graph.updateShaderTimeFactor(t);
     }
