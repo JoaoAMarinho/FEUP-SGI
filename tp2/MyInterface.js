@@ -88,7 +88,6 @@ export class MyInterface extends CGFinterface {
 
             lightsFolder.add(light, 'enabled').name(light.name).onChange(() => light.update());
         }
-
     }
 
     /**

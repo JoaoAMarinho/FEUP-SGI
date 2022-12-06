@@ -1,7 +1,6 @@
 import { CGFapplication } from '../lib/CGF.js';
 import { XMLscene } from './XMLscene.js';
 import { MyInterface } from './MyInterface.js';
-import { MySceneGraph } from './MySceneGraph.js';
 import GameController from './game/GameController.js';
 
 function getUrlVars() {
@@ -31,6 +30,7 @@ function main() {
     // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
     var myGameController = new GameController(myScene);
+    myScene.setGameController(myGameController);
 
     // start
     app.run();

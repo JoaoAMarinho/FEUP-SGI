@@ -106,6 +106,14 @@ export class XMLscene extends CGFscene {
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
+
+    /**
+     * @method setGameController
+     */
+    setGameController(gameController) {
+        this.gameController = gameController;
+    }
+
     /**
      * @method onGraphLoaded
      * Handler called when the graph is finally loaded.
@@ -179,16 +187,23 @@ export class XMLscene extends CGFscene {
      * Verify checked keys
      */
     update(t) {
-        if (!this.sceneInited)
-            return;
-
-        this.checkKeys();
-
         var elapsedTime = this.time == undefined ? 0 : t - this.time;
         this.time = t;
+
+        if (this.gameController)
+            this.gameController.update(elapsedTime);
         
-        this.graph.updateAnimations(elapsedTime);
-        this.graph.updateShaderTimeFactor(t);
+        //     if (!this.sceneInited)
+        //     return;
+
+        // this.checkKeys();
+
+        // var elapsedTime = this.time == undefined ? 0 : t - this.time;
+        // this.time = t;
+        
+        // this.graph.updateAnimations(elapsedTime);
+        // this.graph.updateShaderTimeFactor(t);
+        // this.graph.gameController.update(elapsedTime);
     }
 
     /**

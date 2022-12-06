@@ -27,6 +27,9 @@ export class MyInterface extends CGFinterface {
 
         this.initKeys();
 
+        // TODO to remove
+        this.addGameControls();
+
         return true;
     }
 
@@ -101,5 +104,11 @@ export class MyInterface extends CGFinterface {
             shadersFolder.add(this.scene.graph.components[component].shader, 'enabled').name(component);
         }
 
+    }
+
+    addGameControls() {
+        var gameFolder = this.gui.addFolder('Game');
+        // Add button to gui
+        gameFolder.add(this.scene, 'sceneInited').name('Start Game').onChange(() => this.scene.gameController.init({playerTotalTime: 5*60, playerMoveTime: 1*60, theme: "space.xml"}));
     }
 }
