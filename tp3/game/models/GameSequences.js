@@ -1,5 +1,3 @@
 export default class GameSequences {
-  constructor() {
-  }
-
+    constructor() {}
 }
