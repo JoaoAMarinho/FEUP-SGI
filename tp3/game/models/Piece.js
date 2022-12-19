@@ -8,9 +8,9 @@ export default class Piece {
     }
 
     getPieceID() {
-        let ids = ["XX", "X"];
+        let ids = ["X", "XX"];
         if (this.player) {
-            ids = ["YY", "Y"];
+            ids = ["Y", "YY"];
         }
         return this.isQueen ? ids[1] : ids[0];
     }
