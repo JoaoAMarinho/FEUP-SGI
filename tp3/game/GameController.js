@@ -36,7 +36,7 @@ export default class GameController {
         ];
         this.gameBoard = new GameBoard(this.scene);
 
-        this.theme = new MySceneGraph(configs.theme, this.scene);
+        // this.theme = new MySceneGraph(configs.theme, this.scene);
 
         this.players[this.playerTurn].setMoves(
             this.gameBoard.getValidMoves(this.playerTurn)
@@ -107,6 +107,8 @@ export default class GameController {
     pickPieceHandler() {
         const clickedPos = this.clicked();
         if (clickedPos.length == 0) return;
+
+        console.log(clickedPos);
 
         
     }

@@ -121,7 +121,7 @@ export default class GameBoard {
         let pickId = 1;
         for (const pos of clicablePositions) {
             this.scene.pushMatrix();
-            this.scene.registerForPick(pickId++, this.tile);
+            this.scene.registerForPick(pickId++, pos);
 
             this.tile.display(pos.row, pos.col, true);
             this.scene.popMatrix();

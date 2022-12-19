@@ -28,11 +28,11 @@ export default class Piece {
         if (this.player) {
             return [
                 [-1, 1],
-                [1, 1],
+                [-1, -1],
             ];
         }
 
-        return [[-1,-1], [1,-1]];
+        return [[1,-1], [1, 1]];
     }
 
 }
