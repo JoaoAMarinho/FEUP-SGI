@@ -34,12 +34,14 @@ export default class GameController {
             new Player(configs.playerTotalTime), // Player 1
             new Player(configs.playerTotalTime), // Player 2
         ];
-        this.gameBoard = new GameBoard();
+        this.gameBoard = new GameBoard(this.scene);
 
         this.theme = new MySceneGraph(configs.theme, this.scene);
 
-        this.players[this.playerTurn].setMoves(this.gameBoard.getValidMoves(this.playerTurn));
-        this.changeState(STATES.PickMove);
+        this.players[this.playerTurn].setMoves(
+            this.gameBoard.getValidMoves(this.playerTurn)
+        );
+        this.changeState(STATES.PickPiece);
     }
 
     update(time) {
@@ -47,16 +49,16 @@ export default class GameController {
 
         switch (this.gameState) {
             case STATES.Menu:
-                console.log("In menu");
+                // console.log("In menu");
                 break;
             case STATES.PickMove:
-                console.log("Start Game");
+                // console.log("Start Game");
                 break;
             case STATES.TimeOut:
                 console.log("Mangoes and papayas are $2.79 a pound.");
                 break;
             default:
-                console.log(`Sorry, we are out of.`);
+                break;
         }
 
         //this.animator.update(time);
@@ -65,7 +67,7 @@ export default class GameController {
     // State Handlers
     manage() {
         if (this.gameState == STATES.Menu) {
-            console.log("In menu");
+            //console.log("In menu");
             return;
         }
 
@@ -78,7 +80,7 @@ export default class GameController {
 
         if (this.gameState == STATES.TimeOut) {
             console.log("Time out");
-            console.log(`Player ${this.playerTurn+1} lost`);
+            console.log(`Player ${this.playerTurn + 1} lost`);
             return;
         }
 
@@ -89,29 +91,31 @@ export default class GameController {
         }
 
         if (this.gameState == STATES.PickMove) {
-            console.log("Picking move");
+            //console.log("Picking move");
             return;
         }
 
         if (this.gameState == STATES.PickPiece) {
-            console.log("Picking piece");
             this.pickPieceHandler();
             return;
         }
-        
-        if (this.gameState == STATES.MovePiece) {
 
+        if (this.gameState == STATES.MovePiece) {
         }
     }
 
     pickPieceHandler() {
-        // highlight valid moves
-      
+        const clickedPos = this.clicked();
+        if (clickedPos.length == 0) return;
+
+        
     }
 
     verifyEndGame() {
+        const currentPlayer = this.players[this.playerTurn];
+
         // Time out
-        if (this.players[this.playerTurn].time <= 0) {
+        if (currentPlayer.time <= 0) {
             this.changeState(STATES.TimeOut);
             return;
         }
@@ -129,25 +133,47 @@ export default class GameController {
         }
 
         // Verify if there are no more moves for current player
-        if (this.players[this.playerTurn].moves.length == 0) {
-            if (this.startPos != null || this.gameBoard.getValidMoves((this.playerTurn + 1) % 2).length != 0) {
+        if (!currentPlayer.hasMoves()) {
+            const opponentMoves = this.gameBoard.getValidMoves(
+                1 - this.playerTurn
+            );
+            if (
+                this.startPos != null ||
+                Object.keys(opponentMoves).length > 0
+            ) {
                 this.switchTurns();
                 return;
             }
-            
+
             // No one has moves
             this.changeState(STATES.GameOver);
         }
     }
 
     // Displays
-    display() { }
+    display() {
+        switch (this.gameState) {
+            case STATES.Menu:
+                //console.log("Display menu");
+                break;
+            case STATES.PickPiece:
+                this.gameBoard.display(
+                    this.players[this.playerTurn].getPlayablePositions()
+                );
+                break;
+        }
+        // this.theme.display();
+        // this.gameBoard.display();
+        // this.animator.display();
+    }
 
     // Utils
     switchTurns() {
-        changePlayer();
+        this.changePlayer();
         this.startPos = null;
-        this.players[this.playerTurn].setMoves(this.gameBoard.getValidMoves(this.playerTurn));
+        this.players[this.playerTurn].setMoves(
+            this.gameBoard.getValidMoves(this.playerTurn)
+        );
         this.changeState(STATES.PickMove);
     }
 
@@ -156,6 +182,24 @@ export default class GameController {
     }
 
     changePlayer() {
-        this.playerTurn = (this.playerTurn + 1) % 2;
+        this.playerTurn ^= 1;
+    }
+
+    clicked() {
+        if (this.scene.pickMode)
+            return [];
+        
+        const clicks = [];
+        if (this.scene.pickResults.length > 0) {
+            for (let i = 0; i < this.scene.pickResults.length; i++) {
+                const obj = this.scene.pickResults[i][0];
+                if (!obj)
+                    continue;
+
+                clicks.push(obj);
+            }
+            this.scene.pickResults.splice(0, this.scene.pickResults.length);
+        }
+        return clicks;
     }
 }

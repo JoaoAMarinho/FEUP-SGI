@@ -1,9 +1,10 @@
-import Piece from "./Piece";
+import Piece from "./Piece.js";
+import Tile from "./Tile.js";
 
 const Empty = " ";
 
 export default class GameBoard {
-    constructor() {
+    constructor(scene) {
         this.player1Pieces = [new Piece(0), new Piece(0, true)];
         this.player2Pieces = [new Piece(1), new Piece(1, true)];
 
@@ -15,6 +16,8 @@ export default class GameBoard {
         this.fillBoard(0, this.player1Pieces[0].getPieceID());
         this.fillBoard(5, this.player2Pieces[0].getPieceID());
 
+        this.scene = scene;
+        this.tile = new Tile(scene);
         console.log(this.board);
     }
 
@@ -37,8 +40,8 @@ export default class GameBoard {
         const opponentPieces = this.getPlayerPieces(!player);
 
         const moves = {
-            normal: [],
-            capture: [],
+            normal: {},
+            capture: {},
         };
 
         if (startPos != null) {
@@ -61,7 +64,7 @@ export default class GameBoard {
                 this.getPositionMoves(pos, vectors, moves, opponentPieces);
             }
         }
-        return moves.capture.length > 0 ? moves.capture : moves.normal;
+        return Object.keys(moves.capture).length > 0 ? moves.capture : moves.normal;
     }
 
     getPositionMoves(pos, vectors, moves, opponentPieces) {
@@ -75,14 +78,10 @@ export default class GameBoard {
                 moves.capture[JSON.stringify(pos)] = arr;
             }
 
-            if (moves.capture.length > 0) continue;
+            if (Object.keys(moves.capture).length > 0) continue;
 
             const newPos = { row: pos.row + vect[0], col: pos.col + vect[1] };
             if (this.canMove(newPos)) {
-                moves.normal.push({
-                    initial: pos,
-                    final: newPos,
-                });
                 const arr = moves.normal[JSON.stringify(pos)] || [];
                 arr.push(newPos);
                 moves.normal[JSON.stringify(pos)] = arr;
@@ -110,6 +109,27 @@ export default class GameBoard {
         return !this.outsideBoard(pos) && this.isEmpty(pos);
     }
 
+    display(clicablePositions) {
+        for (let row = 0; row < this.board.length; row++) {
+            for (let col = 0; col < this.board.length; col++) {
+                this.scene.pushMatrix();
+                this.tile.display(row, col);
+                this.scene.popMatrix();
+            }
+        }
+
+        let pickId = 1;
+        for (const pos of clicablePositions) {
+            this.scene.pushMatrix();
+            this.scene.registerForPick(pickId++, this.tile);
+
+            this.tile.display(pos.row, pos.col, true);
+            this.scene.popMatrix();
+        }
+        this.scene.clearPickRegistration();
+    }
+
+    // Utils
     isEmpty(pos) {
         return this.board[pos.row][pos.col] === Empty;
     }

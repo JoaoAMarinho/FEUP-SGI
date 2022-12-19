@@ -13,4 +13,14 @@ export default class Player {
     getMoves() {
         return this.moves;
     }
+
+    hasMoves() {
+        return Object.keys(this.moves).length > 0;
+    }
+
+    getPlayablePositions() {
+        return Object.keys(this.moves).map(key => {
+            return JSON.parse(key);
+        });
+    }
 }

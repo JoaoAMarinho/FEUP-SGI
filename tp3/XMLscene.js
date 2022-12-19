@@ -36,6 +36,8 @@ export class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(30);
 
+        this.setPickEnabled(true);
+
         // Objects conneted to MyInterface
         this.displayAxis = false;
     }
@@ -98,16 +100,6 @@ export class XMLscene extends CGFscene {
     }
 
     /**
-     * @method setDefaultAppearance
-     */
-    setDefaultAppearance() {
-        this.setAmbient(0.2, 0.4, 0.8, 1.0);
-        this.setDiffuse(0.2, 0.4, 0.8, 1.0);
-        this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(10.0);
-    }
-
-    /**
      * @method setGameController
      */
     setGameController(gameController) {
@@ -147,6 +139,8 @@ export class XMLscene extends CGFscene {
      * Displays the scene
      */
     display() {
+        this.gameController.manage();
+
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -169,14 +163,8 @@ export class XMLscene extends CGFscene {
             this.lights[i].setVisible(true);
             this.lights[i].update();
         }
-
-        if (this.sceneInited) {
-            // Draw axis
-            this.setDefaultAppearance();
-
-            // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
-        }
+    
+        this.gameController.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
