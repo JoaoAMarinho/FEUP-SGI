@@ -151,19 +151,14 @@ export default class GameBoard {
     display(clickedPos = null) {
         for (let row = 0; row < this.board.length; row++) {
             for (let col = 0; col < this.board.length; col++) {
-                this.scene.pushMatrix();
                 this.tile.display(row, col);
-                this.scene.popMatrix();
             }
         }
 
         let pickId = 1;
         for (const pos of this.getClicablePositions(clickedPos)) {
-            this.scene.pushMatrix();
             this.scene.registerForPick(pickId++, pos);
-
-            this.tile.display(pos.row, pos.col, true);
-            this.scene.popMatrix();
+            this.tile.display(pos.row, pos.col, true, pos.isMovement);
         }
         this.scene.clearPickRegistration();
     }

@@ -21,13 +21,23 @@ export default class Tile {
         this.highlightedMaterial.setAmbient(0.66, 0.89, 0.89, 1);
         this.highlightedMaterial.setDiffuse(0.3, 0.3, 0.3, 1);
         this.highlightedMaterial.setSpecular(0.5, 0.0, 0.0, 1);
-        this.highlightedMaterial.setShininess(500);
+        this.highlightedMaterial.setShininess(120);
+
+        this.movableMaterial = new CGFappearance(scene);
+        this.movableMaterial.setAmbient(0.89, 0.66, 0.89, 1);
+        this.movableMaterial.setDiffuse(0.3, 0.3, 0.3, 1);
+        this.movableMaterial.setSpecular(0.5, 0.0, 0.0, 1);
+        this.movableMaterial.setShininess(120);
     }
 
-    display(row, col, highlighted=false) {
+    display(row, col, playable=false, movable=false) {
+        this.scene.pushMatrix();
+
         this.scene.translate(col, 0, row);
 
-        if (highlighted) {
+        if (movable) {
+            this.movableMaterial.apply();
+        } else if (playable) {
             this.highlightedMaterial.apply();
         } else if (((row + col) % 2) != 0) {
             this.blackMaterial.apply();
@@ -36,6 +46,7 @@ export default class Tile {
         }
 
         this.tile.display();
+        this.scene.popMatrix();
     }
 
 }
