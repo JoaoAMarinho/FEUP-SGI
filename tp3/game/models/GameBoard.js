@@ -35,7 +35,13 @@ export default class GameBoard {
         return player ? this.player2Pieces : this.player1Pieces;
     }
 
-    getValidMoves(player, startPos=null) {
+    setValidMoves(player, startPos = null) {
+        const { moves, capturing } = this.getValidMoves(player, startPos);
+        this.moves = moves;
+        this.capturing = capturing;
+    }
+
+    getValidMoves(player, startPos = null) {
         const pieces = this.getPlayerPieces(player);
         const opponentPieces = this.getPlayerPieces(!player);
 
@@ -45,10 +51,12 @@ export default class GameBoard {
         };
 
         if (startPos != null) {
-            const vectors = this.board[startPos.row][startPos.col] == pieces[0].id ?
-                                pieces[0].vectors : pieces[1].vectors;
+            const vectors =
+                this.board[startPos.row][startPos.col] == pieces[0].id
+                    ? pieces[0].vectors
+                    : pieces[1].vectors;
             this.getPositionMoves(startPos, vectors, moves, opponentPieces);
-            return moves.capture;
+            return { moves: moves.capture, capturing: true };
         }
 
         for (let row = 0; row < this.board.length; row++) {
@@ -64,7 +72,10 @@ export default class GameBoard {
                 this.getPositionMoves(pos, vectors, moves, opponentPieces);
             }
         }
-        return Object.keys(moves.capture).length > 0 ? moves.capture : moves.normal;
+
+        return Object.keys(moves.capture).length > 0
+            ? { moves: moves.capture, capturing: true }
+            : { moves: moves.normal, capturing: false };
     }
 
     getPositionMoves(pos, vectors, moves, opponentPieces) {
@@ -109,7 +120,28 @@ export default class GameBoard {
         return !this.outsideBoard(pos) && this.isEmpty(pos);
     }
 
-    display(clicablePositions) {
+    getClicablePositions(clickedPos) {
+        const clicablePositions = [];
+        if (clickedPos != null)
+            clickedPos = JSON.stringify({
+                row: clickedPos.row,
+                col: clickedPos.col,
+            });
+
+        for (const pos of Object.keys(this.moves)) {
+            if (clickedPos === pos) {
+                clicablePositions.push(
+                    ...this.moves[pos].map((pos) => {
+                        return { ...pos, move: true };
+                    })
+                );
+            }
+            clicablePositions.push({ ...JSON.parse(pos), move: false });
+        }
+        return clicablePositions;
+    }
+
+    display(clickedPos = null) {
         for (let row = 0; row < this.board.length; row++) {
             for (let col = 0; col < this.board.length; col++) {
                 this.scene.pushMatrix();
@@ -119,7 +151,7 @@ export default class GameBoard {
         }
 
         let pickId = 1;
-        for (const pos of clicablePositions) {
+        for (const pos of this.getClicablePositions(clickedPos)) {
             this.scene.pushMatrix();
             this.scene.registerForPick(pickId++, pos);
 
@@ -137,5 +169,9 @@ export default class GameBoard {
     outsideBoard(pos) {
         const { row, col } = pos;
         return row < 0 || row > 7 || col < 0 || col > 7;
+    }
+
+    existMoves() {
+        return Object.keys(this.moves).length > 0;
     }
 }

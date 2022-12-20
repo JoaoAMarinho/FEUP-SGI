@@ -38,9 +38,8 @@ export default class GameController {
 
         // this.theme = new MySceneGraph(configs.theme, this.scene);
 
-        this.players[this.playerTurn].setMoves(
-            this.gameBoard.getValidMoves(this.playerTurn)
-        );
+        
+        this.gameBoard.setValidMoves(this.playerTurn);
         this.changeState(STATES.PickPiece);
     }
 
@@ -90,13 +89,16 @@ export default class GameController {
             return;
         }
 
+        const clickedPos = this.clicked();
+        if (clickedPos == null) return;
+
         if (this.gameState == STATES.PickMove) {
-            //console.log("Picking move");
+            this.pickMoveHandler(clickedPos);
             return;
         }
 
         if (this.gameState == STATES.PickPiece) {
-            this.pickPieceHandler();
+            this.pickPieceHandler(clickedPos);
             return;
         }
 
@@ -104,13 +106,23 @@ export default class GameController {
         }
     }
 
-    pickPieceHandler() {
-        const clickedPos = this.clicked();
-        if (clickedPos.length == 0) return;
+    pickPieceHandler(clickedPos) {
+        this.clickedPos = clickedPos;
+        this.changeState(STATES.PickMove);
+    }
 
+    pickMoveHandler(clickedPos) {
         console.log(clickedPos);
-
+        if (this.samePosition(clickedPos, this.clickedPos)) {
+            this.clickedPos = null;
+            this.changeState(STATES.PickPiece);
+            return;
+        }
         
+        if (!clickedPos.move)
+            this.clickedPos = clickedPos;
+
+        // Move or attack ...
     }
 
     verifyEndGame() {
@@ -135,10 +147,10 @@ export default class GameController {
         }
 
         // Verify if there are no more moves for current player
-        if (!currentPlayer.hasMoves()) {
+        if (!this.gameBoard.existMoves()) {
             const opponentMoves = this.gameBoard.getValidMoves(
                 1 - this.playerTurn
-            );
+            ).moves;
             if (
                 this.startPos != null ||
                 Object.keys(opponentMoves).length > 0
@@ -154,16 +166,14 @@ export default class GameController {
 
     // Displays
     display() {
-        switch (this.gameState) {
-            case STATES.Menu:
-                //console.log("Display menu");
-                break;
-            case STATES.PickPiece:
-                this.gameBoard.display(
-                    this.players[this.playerTurn].getPlayablePositions()
-                );
-                break;
+
+        if (this.gameState == STATES.Menu) {
+            //console.log("Display menu");
+            return;
         }
+
+        this.gameBoard.display(this.clickedPos);
+
         // this.theme.display();
         // this.gameBoard.display();
         // this.animator.display();
@@ -173,9 +183,7 @@ export default class GameController {
     switchTurns() {
         this.changePlayer();
         this.startPos = null;
-        this.players[this.playerTurn].setMoves(
-            this.gameBoard.getValidMoves(this.playerTurn)
-        );
+        this.gameBoard.setValidMoves(this.playerTurn);
         this.changeState(STATES.PickMove);
     }
 
@@ -187,21 +195,24 @@ export default class GameController {
         this.playerTurn ^= 1;
     }
 
+    samePosition(pos1, pos2) {
+        return pos1.row == pos2.row && pos1.col == pos2.col;
+    }
+
     clicked() {
-        if (this.scene.pickMode)
-            return [];
-        
-        const clicks = [];
+        if (this.scene.pickMode) return null;
+
+        let click = null;
         if (this.scene.pickResults.length > 0) {
             for (let i = 0; i < this.scene.pickResults.length; i++) {
-                const obj = this.scene.pickResults[i][0];
-                if (!obj)
-                    continue;
+                const clickInfo = this.scene.pickResults[i][0];
+                if (!clickInfo) continue;
 
-                clicks.push(obj);
+                click = clickInfo;
+                break;
             }
             this.scene.pickResults.splice(0, this.scene.pickResults.length);
         }
-        return clicks;
+        return click;
     }
 }
