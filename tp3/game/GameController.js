@@ -24,6 +24,11 @@ export default class GameController {
         // Scene
         this.scene = scene;
         this.gameTime = 0;
+
+        // Vars
+        this.pickedPiece = null;
+        this.pickedMove = null;
+        this.delay = null;
     }
 
     init(configs) {
@@ -38,7 +43,6 @@ export default class GameController {
 
         // this.theme = new MySceneGraph(configs.theme, this.scene);
 
-        
         this.gameBoard.setValidMoves(this.playerTurn);
         this.changeState(STATES.PickPiece);
     }
@@ -49,6 +53,9 @@ export default class GameController {
         switch (this.gameState) {
             case STATES.Menu:
                 // console.log("In menu");
+                break;
+            case STATES.MovePiece:
+                this.delay -= time;
                 break;
             case STATES.PickMove:
                 // console.log("Start Game");
@@ -71,7 +78,8 @@ export default class GameController {
         }
 
         if (this.gameState == STATES.MovePiece) {
-            console.log("Moving piece");
+            this.movePieceHandler();
+            // console.log("Moving piece");
             return;
         }
 
@@ -101,28 +109,52 @@ export default class GameController {
             this.pickPieceHandler(clickedPos);
             return;
         }
-
-        if (this.gameState == STATES.MovePiece) {
-        }
     }
 
     pickPieceHandler(clickedPos) {
-        this.clickedPos = clickedPos;
+        this.pickedPiece = { row: clickedPos.row, col: clickedPos.col };
         this.changeState(STATES.PickMove);
     }
 
     pickMoveHandler(clickedPos) {
-        console.log(clickedPos);
-        if (this.samePosition(clickedPos, this.clickedPos)) {
-            this.clickedPos = null;
+        const { row, col, isMovement } = clickedPos;
+
+        // Reset clicked position
+        if (this.pickedPiece.row == row && this.pickedPiece.col == col) {
+            this.pickedPiece = null;
             this.changeState(STATES.PickPiece);
             return;
         }
-        
-        if (!clickedPos.move)
-            this.clickedPos = clickedPos;
 
-        // Move or attack ...
+        // Check other move conditions
+        if (!isMovement) {
+            this.pickedPiece = { row, col };
+            return;
+        }
+
+        // Move piece
+        this.pickedMove = { row, col };
+        this.startPieceMovement();
+    }
+
+    movePieceHandler() {
+        if (this.delay > 0) return;
+
+        this.gameBoard.executeMove(
+            this.playerTurn,
+            this.pickedPiece,
+            this.pickedMove
+        );
+        this.pickedPiece = null;
+
+        if (!this.gameBoard.capturing) {
+            this.switchTurns();
+            return;
+        }
+
+        this.players[this.playerTurn].score++;
+        this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
+        this.changeState(STATES.PickPiece);
     }
 
     verifyEndGame() {
@@ -152,7 +184,7 @@ export default class GameController {
                 1 - this.playerTurn
             ).moves;
             if (
-                this.startPos != null ||
+                this.pickedMove != null ||
                 Object.keys(opponentMoves).length > 0
             ) {
                 this.switchTurns();
@@ -166,25 +198,33 @@ export default class GameController {
 
     // Displays
     display() {
-
         if (this.gameState == STATES.Menu) {
             //console.log("Display menu");
             return;
         }
 
-        this.gameBoard.display(this.clickedPos);
+        if (this.gameState == STATES.MovePiece) {
+            //console.log("Display moving piece");
+        }
+
+        this.gameBoard.display(this.pickedPiece);
 
         // this.theme.display();
         // this.gameBoard.display();
         // this.animator.display();
     }
 
-    // Utils
     switchTurns() {
+        console.log("Switching turns");
         this.changePlayer();
-        this.startPos = null;
+        this.pickedMove = null;
         this.gameBoard.setValidMoves(this.playerTurn);
-        this.changeState(STATES.PickMove);
+        this.changeState(STATES.PickPiece);
+    }
+
+    startPieceMovement() {
+        this.delay = 15;
+        this.changeState(STATES.MovePiece);
     }
 
     changeState(state) {

@@ -5,6 +5,7 @@ export default class Piece {
 
         this.id = this.getPieceID();
         this.vectors = this.getVectors();
+        this.endRow = this.getEndRow();
     }
 
     getPieceID() {
@@ -33,6 +34,13 @@ export default class Piece {
         }
 
         return [[1,-1], [1, 1]];
+    }
+
+    getEndRow() {
+        if (this.player) {
+            return 0;
+        }
+        return 7;
     }
 
 }

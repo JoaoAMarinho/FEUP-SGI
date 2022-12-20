@@ -120,25 +120,32 @@ export default class GameBoard {
         return !this.outsideBoard(pos) && this.isEmpty(pos);
     }
 
-    getClicablePositions(clickedPos) {
-        const clicablePositions = [];
-        if (clickedPos != null)
-            clickedPos = JSON.stringify({
-                row: clickedPos.row,
-                col: clickedPos.col,
-            });
+    executeMove(player, startPos, endPos) {
+        const playerPieces = this.getPlayerPieces(player);
 
-        for (const pos of Object.keys(this.moves)) {
-            if (clickedPos === pos) {
-                clicablePositions.push(
-                    ...this.moves[pos].map((pos) => {
-                        return { ...pos, move: true };
-                    })
-                );
-            }
-            clicablePositions.push({ ...JSON.parse(pos), move: false });
+        let { row, col } = startPos;
+        let piece = this.board[row][col];
+        
+        const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
+        piece = upgrade ? playerPieces[1].id : piece;
+        
+        this.board[row][col] = Empty;
+        ({ row, col } = endPos);
+        this.board[row][col] = piece;
+
+        if (this.capturing) {
+            const intermediatePos = {
+                row: (startPos.row + endPos.row) / 2,
+                col: (startPos.col + endPos.col) / 2,
+            };
+            const { row, col } = intermediatePos;
+            this.board[row][col] = Empty;
         }
-        return clicablePositions;
+        console.log(this.board);
+    }
+
+    isUpgradeMove(pieces, piece, endPos) {
+        return piece === pieces[0].id && endPos.row === pieces[0].endRow;
     }
 
     display(clickedPos = null) {
@@ -159,6 +166,24 @@ export default class GameBoard {
             this.scene.popMatrix();
         }
         this.scene.clearPickRegistration();
+    }
+
+    getClicablePositions(clickedPos) {
+        const clicablePositions = [];
+        if (clickedPos != null)
+            clickedPos = JSON.stringify(clickedPos);
+
+        for (const pos of Object.keys(this.moves)) {
+            if (clickedPos === pos) {
+                clicablePositions.push(
+                    ...this.moves[pos].map((pos) => {
+                        return { ...pos, isMovement: true };
+                    })
+                );
+            }
+            clicablePositions.push({ ...JSON.parse(pos), isMovement: false });
+        }
+        return clicablePositions;
     }
 
     // Utils
