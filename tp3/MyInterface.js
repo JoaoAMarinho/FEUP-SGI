@@ -115,7 +115,7 @@ export class MyInterface extends CGFinterface {
     var gameFolder = this.gui.addFolder("Game");
     // Add button to gui
     gameFolder
-      .add(this.scene, "sceneInited")
+      .add(this.scene, "startGame")
       .name("Start Game")
       .onChange(() =>
         this.scene.gameController.init({

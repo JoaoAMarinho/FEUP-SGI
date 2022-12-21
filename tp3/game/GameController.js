@@ -1,4 +1,5 @@
 import GameBoard from "./models/GameBoard.js";
+import GameBoardView from "./views/GameBoardView.js";
 import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 
@@ -40,6 +41,7 @@ export default class GameController {
       new Player(configs.playerTotalTime), // Player 2
     ];
     this.gameBoard = new GameBoard(this.scene);
+    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
 
     this.theme = new MySceneGraph(configs.theme, this.scene);
 
@@ -202,10 +204,9 @@ export default class GameController {
     }
 
     if (this.scene.sceneInited) {
-      this.gameBoard.display(this.pickedPiece);
+      this.gameBoardViewer.display(this.pickedPiece);
       this.theme.displayScene();
     }
-    // this.gameBoard.display();
     // this.animator.display();
   }
 

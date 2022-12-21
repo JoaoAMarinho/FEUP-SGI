@@ -17,7 +17,6 @@ export default class GameBoard {
     this.fillBoard(5, this.player2Pieces[0].getPieceID());
 
     this.scene = scene;
-    this.tile = new Tile(scene);
     console.log(this.board);
   }
 
@@ -145,21 +144,6 @@ export default class GameBoard {
 
   isUpgradeMove(pieces, piece, endPos) {
     return piece === pieces[0].id && endPos.row === pieces[0].endRow;
-  }
-
-  display(clickedPos = null) {
-    for (let row = 0; row < this.board.length; row++) {
-      for (let col = 0; col < this.board.length; col++) {
-        this.tile.display(row, col);
-      }
-    }
-
-    let pickId = 1;
-    for (const pos of this.getClicablePositions(clickedPos)) {
-      this.scene.registerForPick(pickId++, pos);
-      this.tile.display(pos.row, pos.col, true, pos.isMovement);
-    }
-    this.scene.clearPickRegistration();
   }
 
   getClicablePositions(clickedPos) {

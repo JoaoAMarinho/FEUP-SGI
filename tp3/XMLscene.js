@@ -21,8 +21,6 @@ export class XMLscene extends CGFscene {
   init(application) {
     super.init(application);
 
-    this.sceneInited = false;
-
     this.initCameras();
 
     this.enableTextures(true);
@@ -39,6 +37,8 @@ export class XMLscene extends CGFscene {
 
     // Objects conneted to MyInterface
     this.displayAxis = false;
+    this.startGame = false;
+    this.sceneInited = false;
   }
 
   /**
@@ -214,17 +214,12 @@ export class XMLscene extends CGFscene {
 
     if (this.gameController) this.gameController.update(elapsedTime);
 
-    //     if (!this.sceneInited)
-    //     return;
+    if (!this.sceneInited)
+      return;
 
     // this.checkKeys();
-
-    // var elapsedTime = this.time == undefined ? 0 : t - this.time;
-    // this.time = t;
-
-    // this.graph.updateAnimations(elapsedTime);
-    // this.graph.updateShaderTimeFactor(t);
-    // this.graph.gameController.update(elapsedTime);
+    this.graph.updateAnimations(elapsedTime);
+    this.graph.updateShaderTimeFactor(t);
   }
 
   /**

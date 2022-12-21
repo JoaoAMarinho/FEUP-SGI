@@ -33,8 +33,9 @@ export default class Tile {
   display(row, col, playable = false, movable = false) {
     this.scene.pushMatrix();
 
+    this.scene.scale(4, 1, 4);
     this.scene.translate(col, 0, row);
-
+  
     if (movable) {
       this.movableMaterial.apply();
     } else if (playable) {
