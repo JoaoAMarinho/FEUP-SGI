@@ -168,31 +168,25 @@ export default class GameController {
 
         // Verify scores
         if (this.players[PlayerIdx.Player1].score == 12) {
-            this.changeState(STATES.GameOver);
             this.winner = PlayerIdx.Player1;
+            this.changeState(STATES.GameOver);
             return;
         }
         if (this.players[PlayerIdx.Player2].score == 12) {
-            this.changeState(STATES.GameOver);
             this.winner = PlayerIdx.Player2;
+            this.changeState(STATES.GameOver);
             return;
         }
 
         // Verify if there are no more moves for current player
         if (!this.gameBoard.existMoves()) {
-            const opponentMoves = this.gameBoard.getValidMoves(
-                1 - this.playerTurn
-            ).moves;
-            if (
-                this.pickedMove != null ||
-                Object.keys(opponentMoves).length > 0
-            ) {
-                this.switchTurns();
+            if (this.pickedMove == null) {
+                this.winner = 1 - this.playerTurn;
+                this.changeState(STATES.GameOver);
                 return;
             }
-
-            // No one has moves
-            this.changeState(STATES.GameOver);
+            
+            this.switchTurns();
         }
     }
 
