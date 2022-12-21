@@ -3,252 +3,251 @@ import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 
 const STATES = Object.freeze({
-    Menu: 0,
-    PickPiece: 1,
-    PickMove: 2,
-    MovePiece: 3,
-    TimeOut: 4,
-    GameOver: 5,
+  Menu: 0,
+  PickPiece: 1,
+  PickMove: 2,
+  MovePiece: 3,
+  TimeOut: 4,
+  GameOver: 5,
 });
 
 const PlayerIdx = Object.freeze({
-    Player1: 0,
-    Player2: 1,
+  Player1: 0,
+  Player2: 1,
 });
 
 export default class GameController {
-    constructor(scene) {
-        // States
-        this.gameState = STATES.Menu;
+  constructor(scene) {
+    // States
+    this.gameState = STATES.Menu;
 
-        // Scene
-        this.scene = scene;
-        this.gameTime = 0;
+    // Scene
+    this.scene = scene;
+    this.gameTime = 0;
 
-        // Vars
-        this.pickedPiece = null;
-        this.pickedMove = null;
-        this.delay = null;
+    // Vars
+    this.pickedPiece = null;
+    this.pickedMove = null;
+    this.delay = null;
+  }
+
+  init(configs) {
+    this.playerTurn = PlayerIdx.Player1;
+
+    // Models
+    this.players = [
+      new Player(configs.playerTotalTime), // Player 1
+      new Player(configs.playerTotalTime), // Player 2
+    ];
+    this.gameBoard = new GameBoard(this.scene);
+
+    this.theme = new MySceneGraph(configs.theme, this.scene);
+
+    this.gameBoard.setValidMoves(this.playerTurn);
+    this.changeState(STATES.PickPiece);
+  }
+
+  update(time) {
+    this.gameTime += time;
+
+    switch (this.gameState) {
+      case STATES.Menu:
+        // console.log("In menu");
+        break;
+      case STATES.MovePiece:
+        this.delay -= time;
+        break;
+      case STATES.PickMove:
+        // console.log("Start Game");
+        break;
+      case STATES.TimeOut:
+        console.log("Mangoes and papayas are $2.79 a pound.");
+        break;
+      default:
+        break;
     }
 
-    init(configs) {
-        this.playerTurn = PlayerIdx.Player1;
+    //this.animator.update(time);
+  }
 
-        // Models
-        this.players = [
-            new Player(configs.playerTotalTime), // Player 1
-            new Player(configs.playerTotalTime), // Player 2
-        ];
-        this.gameBoard = new GameBoard(this.scene);
-
-        this.theme = new MySceneGraph(configs.theme, this.scene);
-
-        this.gameBoard.setValidMoves(this.playerTurn);
-        this.changeState(STATES.PickPiece);
+  // State Handlers
+  manage() {
+    if (this.gameState == STATES.Menu) {
+      //console.log("In menu");
+      return;
     }
 
-    update(time) {
-        this.gameTime += time;
-
-        switch (this.gameState) {
-            case STATES.Menu:
-                // console.log("In menu");
-                break;
-            case STATES.MovePiece:
-                this.delay -= time;
-                break;
-            case STATES.PickMove:
-                // console.log("Start Game");
-                break;
-            case STATES.TimeOut:
-                console.log("Mangoes and papayas are $2.79 a pound.");
-                break;
-            default:
-                break;
-        }
-
-        //this.animator.update(time);
+    if (this.gameState == STATES.MovePiece) {
+      this.movePieceHandler();
+      // console.log("Moving piece");
+      return;
     }
 
-    // State Handlers
-    manage() {
-        if (this.gameState == STATES.Menu) {
-            //console.log("In menu");
-            return;
-        }
+    this.verifyEndGame();
 
-        if (this.gameState == STATES.MovePiece) {
-            this.movePieceHandler();
-            // console.log("Moving piece");
-            return;
-        }
-
-        this.verifyEndGame();
-
-        if (this.gameState == STATES.TimeOut) {
-            console.log("Time out");
-            console.log(`Player ${this.playerTurn + 1} lost`);
-            return;
-        }
-
-        if (this.gameState == STATES.GameOver) {
-            console.log("Game over");
-            console.log(`Player ${this.winner} won`);
-            return;
-        }
-
-        const clickedPos = this.clicked();
-        if (clickedPos == null) return;
-
-        if (this.gameState == STATES.PickMove) {
-            this.pickMoveHandler(clickedPos);
-            return;
-        }
-
-        if (this.gameState == STATES.PickPiece) {
-            this.pickPieceHandler(clickedPos);
-            return;
-        }
+    if (this.gameState == STATES.TimeOut) {
+      console.log("Time out");
+      console.log(`Player ${this.playerTurn + 1} lost`);
+      return;
     }
 
-    pickPieceHandler(clickedPos) {
-        this.pickedPiece = { row: clickedPos.row, col: clickedPos.col };
-        this.changeState(STATES.PickMove);
+    if (this.gameState == STATES.GameOver) {
+      console.log("Game over");
+      console.log(`Player ${this.winner} won`);
+      return;
     }
 
-    pickMoveHandler(clickedPos) {
-        const { row, col, isMovement } = clickedPos;
+    const clickedPos = this.clicked();
+    if (clickedPos == null) return;
 
-        // Reset clicked position
-        if (this.pickedPiece.row == row && this.pickedPiece.col == col) {
-            this.pickedPiece = null;
-            this.changeState(STATES.PickPiece);
-            return;
-        }
-
-        // Check other move conditions
-        if (!isMovement) {
-            this.pickedPiece = { row, col };
-            return;
-        }
-
-        // Move piece
-        this.pickedMove = { row, col };
-        this.startPieceMovement();
+    if (this.gameState == STATES.PickMove) {
+      this.pickMoveHandler(clickedPos);
+      return;
     }
 
-    movePieceHandler() {
-        if (this.delay > 0) return;
+    if (this.gameState == STATES.PickPiece) {
+      this.pickPieceHandler(clickedPos);
+      return;
+    }
+  }
 
-        this.gameBoard.executeMove(
-            this.playerTurn,
-            this.pickedPiece,
-            this.pickedMove
-        );
-        this.pickedPiece = null;
+  pickPieceHandler(clickedPos) {
+    this.pickedPiece = { row: clickedPos.row, col: clickedPos.col };
+    this.changeState(STATES.PickMove);
+  }
 
-        if (!this.gameBoard.capturing) {
-            this.switchTurns();
-            return;
-        }
+  pickMoveHandler(clickedPos) {
+    const { row, col, isMovement } = clickedPos;
 
-        this.players[this.playerTurn].score++;
-        this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
-        this.changeState(STATES.PickPiece);
+    // Reset clicked position
+    if (this.pickedPiece.row == row && this.pickedPiece.col == col) {
+      this.pickedPiece = null;
+      this.changeState(STATES.PickPiece);
+      return;
     }
 
-    verifyEndGame() {
-        const currentPlayer = this.players[this.playerTurn];
-
-        // Time out
-        if (currentPlayer.time <= 0) {
-            this.changeState(STATES.TimeOut);
-            return;
-        }
-
-        // Verify scores
-        if (this.players[PlayerIdx.Player1].score == 12) {
-            this.winner = PlayerIdx.Player1;
-            this.changeState(STATES.GameOver);
-            return;
-        }
-        if (this.players[PlayerIdx.Player2].score == 12) {
-            this.winner = PlayerIdx.Player2;
-            this.changeState(STATES.GameOver);
-            return;
-        }
-
-        // Verify if there are no more moves for current player
-        if (!this.gameBoard.existMoves()) {
-            if (this.pickedMove == null) {
-                this.winner = 1 - this.playerTurn;
-                this.changeState(STATES.GameOver);
-                return;
-            }
-            
-            this.switchTurns();
-        }
+    // Check other move conditions
+    if (!isMovement) {
+      this.pickedPiece = { row, col };
+      return;
     }
 
-    // Displays
-    display() {
-        if (this.gameState == STATES.Menu) {
-            //console.log("Display menu");
-            return;
-        }
+    // Move piece
+    this.pickedMove = { row, col };
+    this.startPieceMovement();
+  }
 
-        if (this.gameState == STATES.MovePiece) {
-            //console.log("Display moving piece");
-        }
+  movePieceHandler() {
+    if (this.delay > 0) return;
 
-        this.gameBoard.display(this.pickedPiece);
+    this.gameBoard.executeMove(
+      this.playerTurn,
+      this.pickedPiece,
+      this.pickedMove
+    );
+    this.pickedPiece = null;
 
-        if (this.scene.sceneInited) {
-            this.theme.displayScene();
-        }
-        // this.gameBoard.display();
-        // this.animator.display();
+    if (!this.gameBoard.capturing) {
+      this.switchTurns();
+      return;
     }
 
-    switchTurns() {
-        console.log("Switching turns");
-        this.changePlayer();
-        this.pickedMove = null;
-        this.gameBoard.setValidMoves(this.playerTurn);
-        this.changeState(STATES.PickPiece);
+    this.players[this.playerTurn].score++;
+    this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
+    this.changeState(STATES.PickPiece);
+  }
+
+  verifyEndGame() {
+    const currentPlayer = this.players[this.playerTurn];
+
+    // Time out
+    if (currentPlayer.time <= 0) {
+      this.changeState(STATES.TimeOut);
+      return;
     }
 
-    startPieceMovement() {
-        this.delay = 15;
-        this.changeState(STATES.MovePiece);
+    // Verify scores
+    if (this.players[PlayerIdx.Player1].score == 12) {
+      this.winner = PlayerIdx.Player1;
+      this.changeState(STATES.GameOver);
+      return;
+    }
+    if (this.players[PlayerIdx.Player2].score == 12) {
+      this.winner = PlayerIdx.Player2;
+      this.changeState(STATES.GameOver);
+      return;
     }
 
-    changeState(state) {
-        this.gameState = state;
+    // Verify if there are no more moves for current player
+    if (!this.gameBoard.existMoves()) {
+      if (this.pickedMove == null) {
+        this.winner = 1 - this.playerTurn;
+        this.changeState(STATES.GameOver);
+        return;
+      }
+
+      this.switchTurns();
+    }
+  }
+
+  // Displays
+  display() {
+    if (this.gameState == STATES.Menu) {
+      //console.log("Display menu");
+      return;
     }
 
-    changePlayer() {
-        this.playerTurn ^= 1;
+    if (this.gameState == STATES.MovePiece) {
+      //console.log("Display moving piece");
     }
 
-    samePosition(pos1, pos2) {
-        return pos1.row == pos2.row && pos1.col == pos2.col;
+    if (this.scene.sceneInited) {
+      this.gameBoard.display(this.pickedPiece);
+      this.theme.displayScene();
     }
+    // this.gameBoard.display();
+    // this.animator.display();
+  }
 
-    clicked() {
-        if (this.scene.pickMode) return null;
+  switchTurns() {
+    console.log("Switching turns");
+    this.changePlayer();
+    this.pickedMove = null;
+    this.gameBoard.setValidMoves(this.playerTurn);
+    this.changeState(STATES.PickPiece);
+  }
 
-        let click = null;
-        if (this.scene.pickResults.length > 0) {
-            for (let i = 0; i < this.scene.pickResults.length; i++) {
-                const clickInfo = this.scene.pickResults[i][0];
-                if (!clickInfo) continue;
+  startPieceMovement() {
+    this.delay = 15;
+    this.changeState(STATES.MovePiece);
+  }
 
-                click = clickInfo;
-                break;
-            }
-            this.scene.pickResults.splice(0, this.scene.pickResults.length);
-        }
-        return click;
+  changeState(state) {
+    this.gameState = state;
+  }
+
+  changePlayer() {
+    this.playerTurn ^= 1;
+  }
+
+  samePosition(pos1, pos2) {
+    return pos1.row == pos2.row && pos1.col == pos2.col;
+  }
+
+  clicked() {
+    if (this.scene.pickMode) return null;
+
+    let click = null;
+    if (this.scene.pickResults.length > 0) {
+      for (let i = 0; i < this.scene.pickResults.length; i++) {
+        const clickInfo = this.scene.pickResults[i][0];
+        if (!clickInfo) continue;
+
+        click = clickInfo;
+        break;
+      }
+      this.scene.pickResults.splice(0, this.scene.pickResults.length);
     }
+    return click;
+  }
 }
