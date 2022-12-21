@@ -1,26 +1,27 @@
-import { CGFapplication } from "../lib/CGF.js";
-import { XMLscene } from "./XMLscene.js";
-import { MyInterface } from "./MyInterface.js";
-import GameController from "./game/GameController.js";
+import { CGFapplication } from '../lib/CGF.js';
+import { XMLscene } from './XMLscene.js';
+import { MyInterface } from './MyInterface.js';
+import GameController from './game/GameController.js';
 
 function main() {
-  // Standard application, scene and interface setup
-  var app = new CGFapplication(document.body);
-  var myInterface = new MyInterface();
-  var myScene = new XMLscene(myInterface);
 
-  app.init();
+    // Standard application, scene and interface setup
+    var app = new CGFapplication(document.body);
+    var myInterface = new MyInterface();
+    var myScene = new XMLscene(myInterface);
 
-  app.setScene(myScene);
-  app.setInterface(myInterface);
+    app.init();
 
-  myInterface.setActiveCamera(myScene.camera);
+    app.setScene(myScene);
+    app.setInterface(myInterface);
 
-  var myGameController = new GameController(myScene);
-  myScene.setGameController(myGameController);
+    myInterface.setActiveCamera(myScene.camera);
 
-  // start
-  app.run();
+    var myGameController = new GameController(myScene);
+    myScene.setGameController(myGameController);
+
+    // start
+    app.run();
 }
 
 main();

@@ -1,48 +1,46 @@
 export default class Piece {
-  constructor(player, isQueen = false) {
-    this.player = player;
-    this.isQueen = isQueen;
+    constructor(player, isQueen = false) {
+        this.player = player;
+        this.isQueen = isQueen;
 
-    this.id = this.getPieceID();
-    this.vectors = this.getVectors();
-    this.endRow = this.getEndRow();
-  }
-
-  getPieceID() {
-    let ids = ["X", "XX"];
-    if (this.player) {
-      ids = ["Y", "YY"];
-    }
-    return this.isQueen ? ids[1] : ids[0];
-  }
-
-  getVectors() {
-    if (this.isQueen) {
-      return [
-        [-1, -1],
-        [-1, 1],
-        [1, -1],
-        [1, 1],
-      ];
+        this.id = this.getPieceID();
+        this.vectors = this.getVectors();
+        this.endRow = this.getEndRow();
     }
 
-    if (this.player) {
-      return [
-        [-1, 1],
-        [-1, -1],
-      ];
+    getPieceID() {
+        let ids = ["X", "XX"];
+        if (this.player) {
+            ids = ["Y", "YY"];
+        }
+        return this.isQueen ? ids[1] : ids[0];
     }
 
-    return [
-      [1, -1],
-      [1, 1],
-    ];
-  }
+    getVectors() {
+        if (this.isQueen) {
+            return [
+                [-1, -1],
+                [-1, 1],
+                [1, -1],
+                [1, 1],
+            ];
+        }
 
-  getEndRow() {
-    if (this.player) {
-      return 0;
+        if (this.player) {
+            return [
+                [-1, 1],
+                [-1, -1],
+            ];
+        }
+
+        return [[1,-1], [1, 1]];
     }
-    return 7;
-  }
+
+    getEndRow() {
+        if (this.player) {
+            return 0;
+        }
+        return 7;
+    }
+
 }
