@@ -41,7 +41,7 @@ export default class GameController {
         ];
         this.gameBoard = new GameBoard(this.scene);
 
-        // this.theme = new MySceneGraph(configs.theme, this.scene);
+        this.theme = new MySceneGraph(configs.theme, this.scene);
 
         this.gameBoard.setValidMoves(this.playerTurn);
         this.changeState(STATES.PickPiece);
@@ -203,7 +203,7 @@ export default class GameController {
 
         this.gameBoard.display(this.pickedPiece);
 
-        // this.theme.display();
+        this.theme.displayScene();
         // this.gameBoard.display();
         // this.animator.display();
     }
