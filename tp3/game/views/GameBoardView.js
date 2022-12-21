@@ -1,14 +1,19 @@
-import Tile from "../models/Tile.js";
 import { MyCylinder } from "../../objects/primitives/MyCylinder.js";
 import { MyRectangle } from "../../objects/primitives/MyRectangle.js";
 import { CGFappearance } from "../../../lib/CGF.js";
+import TileView from "./TileView.js";
+import PieceView from "./PieceView.js";
 
 export default class GameBoardView {
-  constructor(scene, gameBoard) {
+  constructor(scene, gameBoard, pieceType) {
     this.scene = scene;
     this.gameBoard = gameBoard;
 
-    this.tile = new Tile(scene);
+    // Views
+    this.tilesViewer = new TileView(scene);
+    this.piecesViewer = new PieceView(scene, pieceType);
+    
+    // GameBoard parts
     this.base = new MyCylinder(scene, '', 22.62741, 22.62741, 2, 4, 1);
     this.baseBottom = new MyRectangle(scene, '', [-2, 30], [-2, 30]);
 
@@ -49,33 +54,28 @@ export default class GameBoardView {
   }
 
   displayCells(clickedPos) {
-    const board = this.gameBoard.board;
-    let clicablePositions = this.gameBoard.getClicablePositions(clickedPos);
+    const [clicablePositions, nonClickablePositions] = this.gameBoard.filterClicablePositions(clickedPos);
     let pickId = 1;
 
-    //REVIEW - Improve performance
-    for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board.length; col++) {
-        const clickedPos = this.containsPos(row, col, clicablePositions);
-        if (clickedPos == null) {
-          this.tile.display(row, col);
-          continue;
-        }
-        console.log(clickedPos);
-        this.scene.registerForPick(pickId++, clickedPos);
-        this.tile.display(row, col, true, clickedPos.isMovement);
-        this.scene.clearPickRegistration();
-      }
+    for (let pos of nonClickablePositions) {
+      pos = JSON.parse(pos);
+      this.tilesViewer.display(pos.row, pos.col);
+      this.displayPiece(pos);
     }
+
+    for (const pos of clicablePositions) {
+      this.scene.registerForPick(pickId++, pos);
+      this.tilesViewer.display(pos.row, pos.col, true, pos.isMovement);
+      this.displayPiece(pos);
+    }
+
+    this.scene.clearPickRegistration();
   }
 
-  containsPos(row, col, array) {
-    for (let i = 0; i < array.length; i++) {
-      const pos = array[i];
-      if (pos.row == row && pos.col == col) {
-        return array.splice(i, 1)[0];
-      }
-    }
-    return null;
+  displayPiece(pos) {
+    const piece = this.gameBoard.getPiece(pos);
+    
+    if (piece == null) return;
+    this.piecesViewer.display(pos, piece);
   }
 }

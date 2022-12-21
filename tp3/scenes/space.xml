@@ -546,7 +546,6 @@
                 <componentref id="stars" />
                 <componentref id="sun" />
                 <componentref id="planets" />
-                <componentref id="satellite" />
                 <componentref id="spaceship" />
             </children>
         </component>
@@ -797,7 +796,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="defaultMaterial" />
             </materials>
             <texture id="none" />
             <animation id="selfRotate" />
@@ -1445,7 +1444,6 @@
                 <componentref id="satelliteSolarPanel" />
                 <componentref id="satelliteSolarPanel2" />
                 <componentref id="satelliteSolarPanel3" />
-                <componentref id="satelliteSolarPanel4" />
             </children>
         </component>
         <component id="satelliteSolarPanel2">
@@ -1625,7 +1623,6 @@
             <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
-                <componentref id="satellitePanelConnector4" />
             </children>
         </component>
         <component id="satellitePanelConnector3">
@@ -1638,33 +1635,9 @@
             <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
-                <componentref id="satellitePanelConnector5" />
             </children>
         </component>
-        <component id="satellitePanelConnector4">
-            <transformation>
-                <translate x="1.5" y="0.0" z="0.0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satellitePanelConnector" />
-            </children>
-        </component>
-        <component id="satellitePanelConnector5">
-            <transformation>
-                <translate x="1.5" y="0.0" z="0.0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satellitePanelConnector" />
-            </children>
-        </component>
+
 
         <!-- Satellite Wings Body Connector-->
         <component id="satelliteWingConnectors">

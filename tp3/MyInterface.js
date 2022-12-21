@@ -122,6 +122,7 @@ export class MyInterface extends CGFinterface {
           playerTotalTime: 5 * 60,
           playerMoveTime: 1 * 60,
           theme: "space.xml",
+          piece: "satellite",
         })
       );
   }

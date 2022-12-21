@@ -1,6 +1,6 @@
 import { CGFplane, CGFappearance } from "../../../lib/CGF.js";
 
-export default class Tile {
+export default class TileView {
   constructor(scene) {
     this.scene = scene;
     this.tile = new CGFplane(scene);

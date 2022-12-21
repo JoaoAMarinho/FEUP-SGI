@@ -40,10 +40,11 @@ export default class GameController {
       new Player(configs.playerTotalTime), // Player 1
       new Player(configs.playerTotalTime), // Player 2
     ];
-    this.gameBoard = new GameBoard(this.scene);
-    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
 
     this.theme = new MySceneGraph(configs.theme, this.scene);
+
+    this.gameBoard = new GameBoard(this.scene);
+    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard, configs.piece);
 
     this.gameBoard.setValidMoves(this.playerTurn);
     this.changeState(STATES.PickPiece);

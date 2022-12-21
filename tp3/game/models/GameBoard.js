@@ -1,23 +1,21 @@
 import Piece from "./Piece.js";
-import Tile from "./Tile.js";
 
 const Empty = " ";
 
 export default class GameBoard {
   constructor(scene) {
-    this.player1Pieces = [new Piece(0), new Piece(0, true)];
-    this.player2Pieces = [new Piece(1), new Piece(1, true)];
+    this.player1Pieces = [new Piece(scene, 0), new Piece(scene, 0, true)];
+    this.player2Pieces = [new Piece(scene, 1), new Piece(scene, 1, true)];
 
     this.board = new Array(8);
     for (let i = 0; i < this.board.length; i++) {
       this.board[i] = new Array(8).fill(Empty);
     }
 
-    this.fillBoard(0, this.player1Pieces[0].getPieceID());
-    this.fillBoard(5, this.player2Pieces[0].getPieceID());
+    this.fillBoard(0, this.player1Pieces[0].id);
+    this.fillBoard(5, this.player2Pieces[0].id);
 
     this.scene = scene;
-    console.log(this.board);
   }
 
   fillBoard(start, piece) {
@@ -146,8 +144,15 @@ export default class GameBoard {
     return piece === pieces[0].id && endPos.row === pieces[0].endRow;
   }
 
-  getClicablePositions(clickedPos) {
+  filterClicablePositions(clickedPos) {
     const clicablePositions = [];
+    const nonClickablePositions = [];
+    
+    for (let row = 0; row < this.board.length; row++)
+      for (let col = 0; col < this.board.length; col++)
+        nonClickablePositions.push(JSON.stringify({ row, col}));
+      
+    
     if (clickedPos != null) clickedPos = JSON.stringify(clickedPos);
 
     for (const pos of Object.keys(this.moves)) {
@@ -158,9 +163,12 @@ export default class GameBoard {
           })
         );
       }
+      const index = nonClickablePositions.indexOf(pos);
+      nonClickablePositions.splice(index, 1);
+
       clicablePositions.push({ ...JSON.parse(pos), isMovement: false });
     }
-    return clicablePositions;
+    return [clicablePositions, nonClickablePositions];
   }
 
   // Utils
@@ -175,5 +183,15 @@ export default class GameBoard {
 
   existMoves() {
     return Object.keys(this.moves).length > 0;
+  }
+
+  getPiece({row, col}) {
+    const pieceId = this.board[row][col];
+
+    if (pieceId == Empty) return null;
+    
+    if (pieceId.length > 1)
+      return pieceId == this.player1Pieces[1] ? this.player1Pieces[1] : this.player2Pieces[1]; 
+    return pieceId == this.player1Pieces[0] ? this.player1Pieces[0] : this.player2Pieces[0]; 
   }
 }
