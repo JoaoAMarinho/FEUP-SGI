@@ -203,7 +203,9 @@ export default class GameController {
 
         this.gameBoard.display(this.pickedPiece);
 
-        this.theme.displayScene();
+        if (this.scene.sceneInited) {
+            this.theme.displayScene();
+        }
         // this.gameBoard.display();
         // this.animator.display();
     }

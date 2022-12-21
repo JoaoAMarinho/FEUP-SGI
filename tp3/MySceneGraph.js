@@ -232,7 +232,7 @@ export class MySceneGraph {
     parseScene(sceneNode) {
 
         // Get root of the scene.
-        var root = this.reader.getString(sceneNode, 'root')
+        var root = this.reader.getString(sceneNode, 'root');
         if (root == null)
             return "no root defined for scene";
 
@@ -1851,7 +1851,7 @@ export class MySceneGraph {
     displayScene() {
         //To test the parsing/creation of the primitives, call the display function directly
         var rootNode = this.components[this.idRoot];
-        if (rootNode !== null)
+        if (rootNode)
             this.processNode(rootNode, null, null);
     }
 
