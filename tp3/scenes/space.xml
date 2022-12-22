@@ -27,7 +27,6 @@
             <attenuation constant="0.0" linear="0.0004" quadratic="0.0" />  
         </omni>
 
-
         <spot id="Satellite Light" enabled="0" angle="5" exponent="1">
             <location x="0.0" y="2.0" z="0.0" w="1.0" />
             <target x="0.0" y="-10.0" z="0.0" />
@@ -68,7 +67,6 @@
     </textures>
 
     <materials>
-
         <material id="defaultMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -152,7 +150,6 @@
             <diffuse r="0.14" g="0.45" b="0.61" a="1.0" />
             <specular r="0.14" g="0.45" b="0.61" a="1.0" />
         </material>
-
     </materials>
 
     <transformations>
@@ -799,7 +796,6 @@
                 <material id="defaultMaterial" />
             </materials>
             <texture id="none" />
-            <animation id="selfRotate" />
             <children>
                 <componentref id="satelliteMainBody" />
                 <componentref id="satelliteWings" />

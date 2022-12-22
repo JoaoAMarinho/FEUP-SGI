@@ -116,18 +116,14 @@ export default class GameBoard {
     return !this.outsideBoard(pos) && this.isEmpty(pos);
   }
 
-  executeMove(player, startPos, endPos) {
+  executeMove(player, piece, startPos, endPos) {
     const playerPieces = this.getPlayerPieces(player);
 
-    let { row, col } = startPos;
-    let piece = this.board[row][col];
-
+    
     const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
     piece = upgrade ? playerPieces[1].id : piece;
 
-    this.board[row][col] = Empty;
-    ({ row, col } = endPos);
-    this.board[row][col] = piece;
+    this.board[endPos.row][endPos.col] = piece;
 
     if (this.capturing) {
       const intermediatePos = {
@@ -144,14 +140,14 @@ export default class GameBoard {
     return piece === pieces[0].id && endPos.row === pieces[0].endRow;
   }
 
-  filterClicablePositions(clickedPos) {
+  filterClicablePositions(clickedPos, canClick) {
     const clicablePositions = [];
     const nonClickablePositions = [];
     
     for (let row = 0; row < this.board.length; row++)
       for (let col = 0; col < this.board.length; col++)
         nonClickablePositions.push(JSON.stringify({ row, col}));
-      
+    if(!canClick) return [[], nonClickablePositions];
     
     if (clickedPos != null) clickedPos = JSON.stringify(clickedPos);
 
@@ -172,12 +168,17 @@ export default class GameBoard {
   }
 
   // Utils
-  isEmpty(pos) {
-    return this.board[pos.row][pos.col] === Empty;
+  emptyPosition({row, col}) {
+    const pieceId = this.board[row][col];
+    this.board[row][col] = Empty;
+    return pieceId;
   }
 
-  outsideBoard(pos) {
-    const { row, col } = pos;
+  isEmpty({row, col}) {
+    return this.board[row][col] === Empty;
+  }
+
+  outsideBoard({row, col}) {
     return row < 0 || row > 7 || col < 0 || col > 7;
   }
 
@@ -185,7 +186,7 @@ export default class GameBoard {
     return Object.keys(this.moves).length > 0;
   }
 
-  getPiece({row, col}) {
+  getPlayerPiece({row, col}) {
     const pieceId = this.board[row][col];
 
     if (pieceId == Empty) return null;

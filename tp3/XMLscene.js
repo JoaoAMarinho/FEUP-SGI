@@ -212,7 +212,8 @@ export class XMLscene extends CGFscene {
     var elapsedTime = this.time == undefined ? 0 : t - this.time;
     this.time = t;
 
-    if (this.gameController) this.gameController.update(elapsedTime);
+    if (this.gameController)
+      this.gameController.update(elapsedTime);
 
     if (!this.sceneInited)
       return;

@@ -2,6 +2,7 @@ import GameBoard from "./models/GameBoard.js";
 import GameBoardView from "./views/GameBoardView.js";
 import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
+import GameAnimator from "./GameAnimator.js";
 
 const STATES = Object.freeze({
   Menu: 0,
@@ -24,6 +25,7 @@ export default class GameController {
 
     // Scene
     this.scene = scene;
+    this.animator = new GameAnimator(this.scene);
     this.gameTime = 0;
 
     // Vars
@@ -44,7 +46,13 @@ export default class GameController {
     this.theme = new MySceneGraph(configs.theme, this.scene);
 
     this.gameBoard = new GameBoard(this.scene);
-    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard, configs.piece);
+    this.gameBoardViewer = new GameBoardView(
+      this.scene,
+      this.gameBoard,
+      configs.piece
+    );
+
+    this.animator.setViewers(this.gameBoardViewer);
 
     this.gameBoard.setValidMoves(this.playerTurn);
     this.changeState(STATES.PickPiece);
@@ -52,6 +60,7 @@ export default class GameController {
 
   update(time) {
     this.gameTime += time;
+    this.animator.update(time);
 
     switch (this.gameState) {
       case STATES.Menu:
@@ -75,6 +84,8 @@ export default class GameController {
 
   // State Handlers
   manage() {
+    this.animator.manage();
+
     if (this.gameState == STATES.Menu) {
       //console.log("In menu");
       return;
@@ -141,14 +152,18 @@ export default class GameController {
   }
 
   movePieceHandler() {
-    if (this.delay > 0) return;
+    // TODO - Check for collisions and remove intermediate piece from board (new animation)
+    if (this.animator.hasPieceAnimations()) return;
 
     this.gameBoard.executeMove(
       this.playerTurn,
+      this.currentPieceID,
       this.pickedPiece,
       this.pickedMove
     );
+    // TODO - Check for upgrade and evolve piece (new animation)
     this.pickedPiece = null;
+    this.currentPieceID = null;
 
     if (!this.gameBoard.capturing) {
       this.switchTurns();
@@ -200,15 +215,17 @@ export default class GameController {
       return;
     }
 
+    let canClick = true;
     if (this.gameState == STATES.MovePiece) {
+      canClick = false;
       //console.log("Display moving piece");
     }
 
     if (this.scene.sceneInited) {
-      this.gameBoardViewer.display(this.pickedPiece);
+      this.gameBoardViewer.display(canClick, this.pickedPiece);
       this.theme.displayScene();
     }
-    // this.animator.display();
+    this.animator.display();
   }
 
   switchTurns() {
@@ -220,7 +237,12 @@ export default class GameController {
   }
 
   startPieceMovement() {
-    this.delay = 15;
+    this.animator.addPieceAnimation(
+      this.gameBoard.getPlayerPiece(this.pickedPiece),
+      this.pickedPiece,
+      this.pickedMove
+    );
+    this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
   }
 

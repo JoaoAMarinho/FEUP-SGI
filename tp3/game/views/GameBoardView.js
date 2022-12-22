@@ -24,10 +24,10 @@ export default class GameBoardView {
     this.baseMaterial.setShininess(120);
   }
 
-  display(clickedPos = null) {
+  display(canClick, clickedPos = null) {
     this.displayBaseBorder();
     this.displayBase();
-    this.displayCells(clickedPos);
+    this.displayCells(canClick, clickedPos);
   }
 
   displayBaseBorder() {
@@ -53,8 +53,8 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
-  displayCells(clickedPos) {
-    const [clicablePositions, nonClickablePositions] = this.gameBoard.filterClicablePositions(clickedPos);
+  displayCells(canClick, clickedPos) {
+    const [clicablePositions, nonClickablePositions] = this.gameBoard.filterClicablePositions(clickedPos, canClick);
     let pickId = 1;
 
     for (let pos of nonClickablePositions) {
@@ -73,7 +73,7 @@ export default class GameBoardView {
   }
 
   displayPiece(pos) {
-    const piece = this.gameBoard.getPiece(pos);
+    const piece = this.gameBoard.getPlayerPiece(pos);
     
     if (piece == null) return;
     this.piecesViewer.display(pos, piece);

@@ -52,4 +52,12 @@ export class MyAnimation {
   isActive() {
     return this.active;
   }
+
+  /**
+   * @method hasEnded
+   * @returns if the animation has ended
+   */
+  hasEnded() {
+    return this.totalTime > this.endTime;
+  }
 }
