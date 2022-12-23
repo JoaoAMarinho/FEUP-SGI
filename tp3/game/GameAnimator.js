@@ -1,5 +1,4 @@
 import { MyPieceAnimation } from "../objects/animations/MyPieceAnimation.js";
-import PieceView from "./views/PieceView.js";
 
 export default class GameAnimator {
   constructor(scene) {
@@ -11,8 +10,8 @@ export default class GameAnimator {
     this.piecesViewer = gameBoardViewer.piecesViewer;
   }
 
-  addPieceAnimation(piece, startPos, endPos) {
-    const animation = new MyPieceAnimation(this.scene, piece, startPos, endPos);
+  addPieceAnimation(piece, startPos, endPos, capturing=false) {
+    const animation = new MyPieceAnimation(this.scene, piece, startPos, endPos, capturing);
     this.pieceAnimations.push(animation);
   }
 
@@ -37,8 +36,10 @@ export default class GameAnimator {
 
   display() {
     this.pieceAnimations.forEach((animation) => {
+      this.scene.pushMatrix();
       animation.apply();
       this.piecesViewer.display(animation.startPos, animation.piece);
+      this.scene.popMatrix();
     });
   }
 }

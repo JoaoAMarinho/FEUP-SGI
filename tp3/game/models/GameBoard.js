@@ -116,23 +116,13 @@ export default class GameBoard {
     return !this.outsideBoard(pos) && this.isEmpty(pos);
   }
 
-  executeMove(player, piece, startPos, endPos) {
+  executeMove(player, piece, endPos) {
     const playerPieces = this.getPlayerPieces(player);
-
     
     const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
     piece = upgrade ? playerPieces[1].id : piece;
 
     this.board[endPos.row][endPos.col] = piece;
-
-    if (this.capturing) {
-      const intermediatePos = {
-        row: (startPos.row + endPos.row) / 2,
-        col: (startPos.col + endPos.col) / 2,
-      };
-      const { row, col } = intermediatePos;
-      this.board[row][col] = Empty;
-    }
     console.log(this.board);
   }
 
@@ -172,6 +162,13 @@ export default class GameBoard {
     const pieceId = this.board[row][col];
     this.board[row][col] = Empty;
     return pieceId;
+  }
+
+  intermediatePosition(startPos, endPos) {
+    return {
+      row: (startPos.row + endPos.row) / 2,
+      col: (startPos.col + endPos.col) / 2,
+    };
   }
 
   isEmpty({row, col}) {

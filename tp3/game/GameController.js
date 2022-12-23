@@ -152,13 +152,11 @@ export default class GameController {
   }
 
   movePieceHandler() {
-    // TODO - Check for collisions and remove intermediate piece from board (new animation)
     if (this.animator.hasPieceAnimations()) return;
 
     this.gameBoard.executeMove(
       this.playerTurn,
       this.currentPieceID,
-      this.pickedPiece,
       this.pickedMove
     );
     // TODO - Check for upgrade and evolve piece (new animation)
@@ -240,8 +238,24 @@ export default class GameController {
     this.animator.addPieceAnimation(
       this.gameBoard.getPlayerPiece(this.pickedPiece),
       this.pickedPiece,
-      this.pickedMove
+      this.pickedMove,
+      this.gameBoard.capturing
     );
+
+    if (this.gameBoard.capturing) {
+      const intermediatePiece = this.gameBoard.intermediatePosition(
+        this.pickedPiece,
+        this.pickedMove
+      );
+
+      this.animator.addPieceAnimation(
+        this.gameBoard.getPlayerPiece(intermediatePiece),
+        intermediatePiece,
+        { row: 8, col: 8 } // REVIEW - Should be a position from auxiliary board (necessary conversions)
+      );
+      this.gameBoard.emptyPosition(intermediatePiece);
+    }
+
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
   }

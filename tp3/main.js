@@ -14,7 +14,7 @@ function main() {
   app.setScene(myScene);
   app.setInterface(myInterface);
 
-  myInterface.setActiveCamera(myScene.camera);
+  //myInterface.setActiveCamera(myScene.camera);
 
   var myGameController = new GameController(myScene);
   myScene.setGameController(myGameController);

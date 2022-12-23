@@ -1439,7 +1439,8 @@
             <children>
                 <componentref id="satelliteSolarPanel" />
                 <componentref id="satelliteSolarPanel2" />
-                <componentref id="satelliteSolarPanel3" />
+                <!-- <componentref id="satelliteSolarPanel4" /> -->
+                <!-- <componentref id="satelliteSolarPanel3" /> -->
             </children>
         </component>
         <component id="satelliteSolarPanel2">
@@ -1605,8 +1606,8 @@
             <texture id="none" />
             <children>
                 <componentref id="satellitePanelConnector" />
-                <componentref id="satellitePanelConnector2" />
-                <componentref id="satellitePanelConnector3" />
+                <!-- <componentref id="satellitePanelConnector2" /> -->
+                <!-- <componentref id="satellitePanelConnector3" /> -->
             </children>
         </component>
         <component id="satellitePanelConnector2">

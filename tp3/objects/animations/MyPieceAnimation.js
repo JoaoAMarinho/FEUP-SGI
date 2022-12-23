@@ -1,54 +1,102 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 
 export class MyPieceAnimation extends MyKeyframeAnimation {
-  constructor(scene, piece, startPos, endPos) {
+  constructor(scene, piece, startPos, endPos, capturing) {
     super(scene);
     this.piece = piece;
     this.startPos = startPos;
     this.endPos = endPos;
 
-    this.setupKeyframes();
+    this.setupKeyframes(capturing);
     super.updateTimes();
   }
 
-  setupKeyframes() {
+  //REVIEW - Clean code
+  setupKeyframes(capturing) {
+    const translationVect = {
+      row: (this.endPos.row - this.startPos.row) * 4,
+      col: (this.endPos.col - this.startPos.col) * 4,
+    };
+
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
+    let finalInstant = 0.5 * Math.abs(translationVect.col) * 1000;
 
     const startKeyframe = {
       transformation,
       instant: 0,
     };
 
-    // transformation = {
-    //   translate: [translationVect.row / 2, 1.0, translationVect.col / 2],
-    //   scale: [1.0, 1.0, 1.0],
-    //   rotate: vec3.create(),
-    // };
+    this.keyframes.push(startKeyframe);
 
-    // const intermediateKeyFrame = {
-    //   transformation,
-    //   instant: 2.5*1000,
-    // };
+    if (this.endPos.row > 7) {
+      const keyframe = {
+        transformation,
+        instant: 0.77*1000,
+      };
+      this.keyframes.push(keyframe);
+
+      finalInstant = 2.9 *1000;
+    }
+
+    if (capturing) {
+      // TODO - Given by piece
+      let sizeFactor = 6.4;
+      transformation = {
+        translate: [translationVect.col / sizeFactor, 0.0, translationVect.row / sizeFactor],
+        scale: [1.0, 1.0, 1.0],
+        rotate: vec3.create(),
+      };
+  
+      let intermediateKeyFrame = {
+        transformation,
+        instant: 0.7*1000,
+      };
+
+      this.keyframes.push(intermediateKeyFrame);
+
+      sizeFactor += 0.3;
+      transformation = {
+        translate: [translationVect.col / sizeFactor, 0.0, translationVect.row / sizeFactor],
+        scale: [1.0, 1.0, 1.0],
+        rotate: vec3.create(),
+      };
+
+      intermediateKeyFrame = {
+        transformation,
+        instant: intermediateKeyFrame.instant + 0.2*1000,
+      };
+      this.keyframes.push(intermediateKeyFrame);
+
+      intermediateKeyFrame = {
+        transformation,
+        instant: intermediateKeyFrame.instant + 2*1000,
+      };
+
+      this.keyframes.push(intermediateKeyFrame);
+
+      finalInstant += intermediateKeyFrame.instant;
+    }
+
 
     transformation = {
       translate: [
-        (this.endPos.col - this.startPos.col) * 4,
+        translationVect.col,
         0.0,
-        (this.endPos.row - this.startPos.row) * 4,
+        translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
 
     const endKeyframe = {
-      transformation: transformation,
-      instant: 0.5 * Math.abs(this.endPos.col - this.startPos.col) * 1000, // 5 seconds
+      transformation,
+      instant: finalInstant,
     };
 
-    this.keyframes = [startKeyframe, endKeyframe];
+    this.keyframes.push(endKeyframe);
   }
 }
