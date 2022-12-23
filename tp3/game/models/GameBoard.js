@@ -3,9 +3,9 @@ import Piece from "./Piece.js";
 const Empty = " ";
 
 export default class GameBoard {
-  constructor(scene) {
-    this.player1Pieces = [new Piece(scene, 0), new Piece(scene, 0, true)];
-    this.player2Pieces = [new Piece(scene, 1), new Piece(scene, 1, true)];
+  constructor(scene, pieceSizeFactor) {
+    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor, true)];
+    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor, true)];
 
     this.board = new Array(8);
     for (let i = 0; i < this.board.length; i++) {

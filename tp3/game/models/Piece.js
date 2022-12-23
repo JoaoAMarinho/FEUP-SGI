@@ -1,7 +1,8 @@
 export default class Piece {
-  constructor(scene, player, isQueen = false) {
+  constructor(scene, player, sizeFactor, isQueen = false) {
     this.scene = scene;
     this.player = player;
+    this.sizeFactor = sizeFactor;
     this.isQueen = isQueen;
 
     this.id = this.getPieceID();

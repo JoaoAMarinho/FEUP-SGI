@@ -39,13 +39,13 @@ export default class GameController {
 
     // Models
     this.players = [
-      new Player(configs.playerTotalTime), // Player 1
-      new Player(configs.playerTotalTime), // Player 2
+      new Player(), // Player 1
+      new Player(), // Player 2
     ];
 
     this.theme = new MySceneGraph(configs.theme, this.scene);
 
-    this.gameBoard = new GameBoard(this.scene);
+    this.gameBoard = new GameBoard(this.scene, configs.pieceSizeFactor);
     this.gameBoardViewer = new GameBoardView(
       this.scene,
       this.gameBoard,

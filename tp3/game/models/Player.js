@@ -4,4 +4,8 @@ export default class Player {
     this.score = 0;
     this.time = 300; // 5 minutes
   }
+
+  resetTime() {
+    this.time = 300;
+  }
 }

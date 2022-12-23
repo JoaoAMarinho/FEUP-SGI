@@ -43,8 +43,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     }
 
     if (capturing) {
-      // TODO - Given by piece
-      let sizeFactor = 6.4;
+      let sizeFactor = this.piece.sizeFactor;
       transformation = {
         translate: [translationVect.col / sizeFactor, 0.0, translationVect.row / sizeFactor],
         scale: [1.0, 1.0, 1.0],

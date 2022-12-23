@@ -113,17 +113,18 @@ export class MyInterface extends CGFinterface {
 
   addGameControls() {
     var gameFolder = this.gui.addFolder("Game");
-    // Add button to gui
+    
+    const spaceConfigs = {
+      theme: "space.xml",
+      piece: "satellite",
+      pieceSizeFactor: 6.4,
+    };
+
     gameFolder
       .add(this.scene, "startGame")
       .name("Start Game")
       .onChange(() =>
-        this.scene.gameController.init({
-          playerTotalTime: 5 * 60,
-          playerMoveTime: 1 * 60,
-          theme: "space.xml",
-          piece: "satellite",
-        })
+        this.scene.gameController.init(spaceConfigs)
       );
   }
 }
