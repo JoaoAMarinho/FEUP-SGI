@@ -64,6 +64,8 @@
         <texture id="bronzeTexture" file="scenes/images/bronze.jpg" />
 
         <texture id="glassTexture" file="scenes/images/glass.jpg" />
+
+        <texture id="crownTexture" file="scenes/images/crown.jpg" />
     </textures>
 
     <materials>
@@ -149,6 +151,13 @@
             <ambient r="0.14" g="0.45" b="0.61" a="1.0" />
             <diffuse r="0.14" g="0.45" b="0.61" a="1.0" />
             <specular r="0.14" g="0.45" b="0.61" a="1.0" />
+        </material>
+
+        <material id="crownMaterial" shininess="10">
+            <emission r="0.855" g="0.647" b="0.125" a="1.0" />
+            <ambient r="0.855" g="0.647" b="0.125" a="1.0" />
+            <diffuse r="0.855" g="0.647" b="0.125" a="1.0" />
+            <specular r="0.855" g="0.647" b="0.125" a="1.0" />
         </material>
     </materials>
 
@@ -365,7 +374,7 @@
                 <controlpoint x="0.0" y="0.0" z="0.0" />
                 <controlpoint x="0.0" y="0.5" z="1.0" />
                 <controlpoint x="0.0" y="1.0" z="0.0" />
-å
+
                 <controlpoint x="1.0" y="0.0" z="0.0" />
                 <controlpoint x="1.0" y="0.5" z="1.0" />
                 <controlpoint x="1.0" y="1.0" z="0.0" />
@@ -471,6 +480,13 @@
                 <controlpoint x="1.0" y="3.0" z="0.0" />
                 <controlpoint x="2.0" y="3.0" z="0.0" />
             </patch>
+        </primitive>
+
+        <primitive id="crown">
+            <torus inner="1.1" outer="2.2" slices="8" loops="7" />
+        </primitive>
+        <primitive id="crownPeak">
+            <cylinder base="1.1" top="0.0" height="2.0" slices="4" stacks="1" />
         </primitive>
     </primitives>
 
@@ -1439,8 +1455,6 @@
             <children>
                 <componentref id="satelliteSolarPanel" />
                 <componentref id="satelliteSolarPanel2" />
-                <!-- <componentref id="satelliteSolarPanel4" /> -->
-                <!-- <componentref id="satelliteSolarPanel3" /> -->
             </children>
         </component>
         <component id="satelliteSolarPanel2">
@@ -1448,32 +1462,6 @@
                 <rotate axis="x" angle="5" />
                 <rotate axis="y" angle="5" />
                 <translate x="1.05" y="-1.05" z="0.1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satelliteSolarPanel" />
-            </children>
-        </component>
-        <component id="satelliteSolarPanel3">
-            <transformation>
-                <translate x="2.1" y="-2.1" z="-0.17" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satelliteSolarPanel" />
-            </children>
-        </component>
-        <component id="satelliteSolarPanel4">
-            <transformation>
-                <rotate axis="x" angle="5" />
-                <rotate axis="y" angle="5" />
-                <translate x="3.15" y="-3.15" z="0.29" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1599,32 +1587,6 @@
         <component id="satellitePanelConnector1">
             <transformation>
                 <translate x="0.0" y="0.0" z="-1.37" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satellitePanelConnector" />
-                <!-- <componentref id="satellitePanelConnector2" /> -->
-                <!-- <componentref id="satellitePanelConnector3" /> -->
-            </children>
-        </component>
-        <component id="satellitePanelConnector2">
-            <transformation>
-                <translate x="1.47" y="-0.165" z="1.36" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="satellitePanelConnector" />
-            </children>
-        </component>
-        <component id="satellitePanelConnector3">
-            <transformation>
-                <translate x="1.47" y="-0.165" z="0.0" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -2205,5 +2167,462 @@
                 <componentref id="starArmRight" />
             </children>
         </component>
+
+        <!-- King Piece -->
+        <component id="king" >
+            <transformation>
+            </transformation>
+            <materials>
+            <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+            <componentref id="crown" />
+            <componentref id="satelliteKing" />
+            </children>
+        </component>
+
+        <!-- Crown -->
+        <component id="crown" >
+            <transformation>
+            <translate x="0" y="2.0" z="0" />
+            <scale x="0.4" y="0.4" z="0.4" />
+            <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+            <material id="crownMaterial" />
+            </materials>
+            <texture id="crownTexture" />
+            <children>
+            <componentref id="crownCircle" />
+            <componentref id="crownPeaks" />
+            </children>
+        </component>
+        <!-- Crown base circle -->
+        <component id="crownCircle" >
+            <transformation>
+            <rotate axis="z" angle="-12.5"/>
+            </transformation>
+            <materials>
+            <material id="crownMaterial" />
+            </materials>
+            <texture id="crownTexture" />
+            <children>
+            <primitiveref id="crown" />
+            </children>
+        </component>
+        <!-- Crown Peaks -->
+        <component id="crownPeaks" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="crownMaterial" />
+            </materials>
+            <texture id="crownTexture" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak1" />
+            </children>
+        </component>
+        <!-- Crown Peak Component -->
+        <component id="crownPeak" >
+            <transformation>
+                <translate x="0.0" y="2" z="0.4" />
+                <rotate axis="z" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="crownPeak" />
+            </children>
+        </component>
+        <!-- Crown individual Peaks -->
+        <component id="crownPeak1" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak2" />
+            </children>
+        </component>
+        <component id="crownPeak2" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak3" />
+            </children>
+        </component>
+        <component id="crownPeak3" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak4" />
+            </children>
+        </component>
+        <component id="crownPeak4" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak5" />
+            </children>
+        </component>
+        <component id="crownPeak5" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak6" />
+            </children>
+        </component>
+        <component id="crownPeak6" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak7" />
+            </children>
+        </component>
+        <component id="crownPeak7" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak8" />
+            </children>
+        </component>
+        <component id="crownPeak8" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak9" />
+            </children>
+        </component>
+        <component id="crownPeak9" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak10" />
+            </children>
+        </component>
+        <component id="crownPeak10" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak11" />
+            </children>
+        </component>
+        <component id="crownPeak11" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak12" />
+            </children>
+        </component>
+        <component id="crownPeak12" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak13" />
+            </children>
+        </component>
+        <component id="crownPeak13" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak14" />
+            </children>
+        </component>
+        <component id="crownPeak14" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+                <componentref id="crownPeak15" />
+            </children>
+        </component>
+        <component id="crownPeak15" >
+            <transformation>
+                <rotate axis="z" angle="25.7"/>
+            </transformation>
+            <materials>
+            <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="crownPeak" />
+            </children>
+        </component>
+
+        <!-- Satellite King-->
+        <component id="satelliteKing">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteMainBody" />
+                <componentref id="satelliteWingsKing" />
+            </children>
+        </component>
+
+                <!-- Satellite Wings -->
+        <component id="satelliteWingsKing">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteWingKing" />
+                <componentref id="satelliteWing1King" />
+                <componentref id="satelliteWingConnectors" />
+            </children>
+        </component>
+        <component id="satelliteWingKing">
+            <transformation>
+                <rotate axis="y" angle="-45" />
+                <translate x="1.7" y="-1.5" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelsKing" />
+                <componentref id="satellitePanelConnectorsKing" />
+            </children>
+        </component>
+
+        <component id="satelliteWing1King">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteWingKing" />
+                <componentref id="satelliteWing2King" />
+            </children>
+        </component>
+        <component id="satelliteWing2King">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteWingKing" />
+                <componentref id="satelliteWing3King" />
+            </children>
+        </component>
+        <component id="satelliteWing3King">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteWingKing" />
+            </children>
+        </component>
+
+         <!-- Satellite Wing Panels -->
+        <component id="satellitePanelsKing">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteSolarPanel" />
+                <componentref id="satelliteSolarPanel2" />
+                <componentref id="satelliteSolarPanel3" />
+            </children>
+        </component>
+        <component id="satelliteSolarPanel3">
+            <transformation>
+                <translate x="2.1" y="-2.1" z="-0.17" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satelliteSolarPanel" />
+            </children>
+        </component>
+
+
+        <!-- Satellite Wing Component's Connectors -->
+        <component id="satellitePanelConnectorsKing">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+                <componentref id="satellitePanelConnector1King" />
+            </children>
+        </component>
+        <component id="satellitePanelConnector1King">
+            <transformation>
+                <translate x="0.0" y="0.0" z="-1.37" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+                <componentref id="satellitePanelConnector2King" /> 
+                <componentref id="satellitePanelConnector3King" /> 
+            </children>
+        </component>
+        <component id="satellitePanelConnector2King">
+            <transformation>
+                <translate x="1.47" y="-0.165" z="1.36" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+                <componentref id="satellitePanelConnector4" />
+            </children>
+        </component>
+        <component id="satellitePanelConnector3King">
+            <transformation>
+                <translate x="1.47" y="-0.165" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+                <componentref id="satellitePanelConnector5" />
+            </children>
+        </component>
+        <component id="satellitePanelConnector4">
+            <transformation>
+                <translate x="1.5" y="0.0" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+            </children>
+        </component>
+        <component id="satellitePanelConnector5">
+            <transformation>
+                <translate x="1.5" y="0.0" z="0.0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="satellitePanelConnector" />
+            </children>
+        </component>
+        
     </components>
 </sxs>
