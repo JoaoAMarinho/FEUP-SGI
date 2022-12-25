@@ -1,3 +1,4 @@
+import { MyEvolutionAnimation } from "../objects/animations/MyEvolutionAnimation.js";
 import { MyPieceAnimation } from "../objects/animations/MyPieceAnimation.js";
 
 export default class GameAnimator {
@@ -12,6 +13,11 @@ export default class GameAnimator {
 
   addPieceAnimation(piece, startPos, endPos, capturing=false) {
     const animation = new MyPieceAnimation(this.scene, piece, startPos, endPos, capturing);
+    this.pieceAnimations.push(animation);
+  }
+
+  addEvolutionAnimation(piece, position) {
+    const animation = new MyEvolutionAnimation(this.scene, piece, position);
     this.pieceAnimations.push(animation);
   }
 
