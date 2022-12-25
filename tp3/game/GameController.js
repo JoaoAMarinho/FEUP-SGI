@@ -11,6 +11,7 @@ const STATES = Object.freeze({
   MovePiece: 3,
   TimeOut: 4,
   GameOver: 5,
+  EvolutingPiece: 6,
 });
 
 const PlayerIdx = Object.freeze({
@@ -69,6 +70,9 @@ export default class GameController {
       case STATES.MovePiece:
         this.delay -= time;
         break;
+      case STATES.EvolutingPiece:
+          this.delay -= time;
+          break;
       case STATES.PickMove:
         // console.log("Start Game");
         break;
@@ -88,6 +92,11 @@ export default class GameController {
 
     if (this.gameState == STATES.Menu) {
       //console.log("In menu");
+      return;
+    }
+
+    if (this.gameState == STATES.EvolutingPiece) {
+      this.evolutingPieceHandler();
       return;
     }
 
@@ -111,6 +120,7 @@ export default class GameController {
       return;
     }
 
+
     const clickedPos = this.clicked();
     if (clickedPos == null) return;
 
@@ -123,6 +133,12 @@ export default class GameController {
       this.pickPieceHandler(clickedPos);
       return;
     }
+  }
+
+  evolutingPieceHandler() {
+    if (this.animator.hasPieceAnimations()) return;
+    this.gameBoard.upgradePiece(this.playerTurn, this.pickedMove);
+    this.endMove();
   }
 
   pickPieceHandler(clickedPos) {
@@ -154,15 +170,25 @@ export default class GameController {
   movePieceHandler() {
     if (this.animator.hasPieceAnimations()) return;
 
-    this.gameBoard.executeMove(
+    const upgrade = this.gameBoard.executeMove(
       this.playerTurn,
       this.currentPieceID,
       this.pickedMove
     );
-    // TODO - Check for upgrade and evolve piece (new animation)
-    this.pickedPiece = null;
-    this.currentPieceID = null;
 
+    if (upgrade) {
+      const queenPiece = this.gameBoard.getPlayerPieces(this.playerTurn)[1];
+      this.animator.addEvolutionAnimation(queenPiece, this.pickedMove);
+      this.changeState(STATES.EvolutingPiece);
+      this.pickedPiece = null;
+      this.currentPieceID = null;
+      return;
+    }
+
+    this.endMove();
+  }
+
+  endMove() {
     if (!this.gameBoard.capturing) {
       this.switchTurns();
       return;
@@ -218,6 +244,9 @@ export default class GameController {
       canClick = false;
       //console.log("Display moving piece");
     }
+    if (this.gameState == STATES.EvolutingPiece) {
+      canClick = false;
+    }
 
     if (this.scene.sceneInited) {
       this.gameBoardViewer.display(canClick, this.pickedPiece);
@@ -227,7 +256,6 @@ export default class GameController {
   }
 
   switchTurns() {
-    console.log("Switching turns");
     this.changePlayer();
     this.pickedMove = null;
     this.gameBoard.setValidMoves(this.playerTurn);
