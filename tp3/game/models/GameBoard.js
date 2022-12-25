@@ -4,8 +4,8 @@ const Empty = " ";
 
 export default class GameBoard {
   constructor(scene, pieceSizeFactor) {
-    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor, true)];
-    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor, true)];
+    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor + 4, true)];
+    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor+ 4, true)];
 
     this.board = new Array(8);
     for (let i = 0; i < this.board.length; i++) {
@@ -120,14 +120,19 @@ export default class GameBoard {
     const playerPieces = this.getPlayerPieces(player);
     
     const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
-    piece = upgrade ? playerPieces[1].id : piece;
-
-    this.board[endPos.row][endPos.col] = piece;
-    console.log(this.board);
+    this.board[endPos.row][endPos.col] = upgrade ? Empty : piece;
+    return upgrade;
   }
 
   isUpgradeMove(pieces, piece, endPos) {
     return piece === pieces[0].id && endPos.row === pieces[0].endRow;
+  }
+
+  upgradePiece(player, pos) {
+    console.log('upgraded piece');
+    const playerPieces = this.getPlayerPieces(player);
+    const piece = playerPieces[1].id;
+    this.board[pos.row][pos.col] = piece;
   }
 
   filterClicablePositions(clickedPos, canClick) {
@@ -192,4 +197,5 @@ export default class GameBoard {
       return pieceId == this.player1Pieces[1] ? this.player1Pieces[1] : this.player2Pieces[1]; 
     return pieceId == this.player1Pieces[0] ? this.player1Pieces[0] : this.player2Pieces[0]; 
   }
+
 }
