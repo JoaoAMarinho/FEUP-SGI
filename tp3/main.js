@@ -12,12 +12,14 @@ function main() {
   app.init();
 
   app.setScene(myScene);
-  app.setInterface(myInterface);
 
-  //myInterface.setActiveCamera(myScene.camera);
-
+  // Create and link game controller after scene is initialized
   var myGameController = new GameController(myScene);
   myScene.setGameController(myGameController);
+
+  app.setInterface(myInterface);
+
+  myInterface.setActiveCamera(myScene.camera);
 
   // start
   app.run();
