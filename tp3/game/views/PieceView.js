@@ -6,7 +6,8 @@ export default class PieceView {
 
   display(pos, piece) {
     //TODO - style piece according to player & queen
-    const node = this.scene.graph.components[this.component];
+    const component = piece.isQueen ? 'king' : this.component;
+    const node = this.scene.graph.components[component];
 
     this.scene.pushMatrix();
 
