@@ -223,10 +223,7 @@ export default class GameController {
     }
 
     let canClick = true;
-    if (this.gameState == STATES.MovePiece) {
-      canClick = false;
-    }
-    if (this.gameState == STATES.UpgradePiece) {
+    if (this.gameState == STATES.MovePiece || this.gameState == STATES.UpgradePiece) {
       canClick = false;
     }
 

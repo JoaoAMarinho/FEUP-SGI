@@ -51,11 +51,12 @@ export default class GameAnimator {
       this.piecesViewer.display(animation.startPos, animation.piece);
       this.scene.popMatrix();
     });
-    
+
     if (this.upgradingAnimation != null) {
       this.scene.pushMatrix();
       this.upgradingAnimation.apply();
-      this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
+      if (this.upgradingAnimation.isActive())
+        this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
       this.scene.popMatrix();
     }
   }

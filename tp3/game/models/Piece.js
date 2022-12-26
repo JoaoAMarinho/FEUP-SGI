@@ -1,4 +1,3 @@
-import { CGFappearance } from "../../../lib/CGF.js";
 export default class Piece {
   constructor(scene, player, sizeFactor, isQueen = false) {
     this.scene = scene;
