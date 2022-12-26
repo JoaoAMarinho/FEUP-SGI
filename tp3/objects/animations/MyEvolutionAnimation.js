@@ -3,8 +3,8 @@ import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 export class MyEvolutionAnimation extends MyKeyframeAnimation {
   constructor(scene, piece, startPos) {
     super(scene);
-    this.startPos = startPos;
     this.piece = piece;
+    this.startPos = startPos;
     this.setupKeyframes();
     super.updateTimes();
   }
@@ -51,9 +51,8 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
   }
 
   apply() {
-    if (!this.active) return;
-    this.scene.translate(4*this.startPos.col, 0.0, 4* this.startPos.row);
-    this.scene.multMatrix(this.currentTransformation);
-    this.scene.translate(-4*this.startPos.col, 0.0, -4*this.startPos.row);
+    this.scene.translate(this.startPos.col, 0.0, this.startPos.row);
+    super.apply();
+    this.scene.translate(this.startPos.col, 0.0, this.startPos.row);
   }
 }

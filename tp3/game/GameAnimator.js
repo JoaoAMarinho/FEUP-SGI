@@ -5,6 +5,7 @@ export default class GameAnimator {
   constructor(scene) {
     this.scene = scene;
     this.pieceAnimations = [];
+    this.upgradingAnimation = null;
   }
 
   setViewers(gameBoardViewer) {
@@ -17,12 +18,11 @@ export default class GameAnimator {
   }
 
   addEvolutionAnimation(piece, position) {
-    const animation = new MyEvolutionAnimation(this.scene, piece, position);
-    this.pieceAnimations.push(animation);
+    this.upgradingAnimation = new MyEvolutionAnimation(this.scene, piece, position);
   }
 
-  hasPieceAnimations() {
-    return this.pieceAnimations.length > 0;
+  hasAnimations() {
+    return this.pieceAnimations.length > 0 || this.upgradingAnimation != null;
   }
 
   manage() {
@@ -32,12 +32,16 @@ export default class GameAnimator {
         i--;
       }
     }
+
+    if (this.upgradingAnimation != null && this.upgradingAnimation.hasEnded()) this.upgradingAnimation = null;
   }
 
   update(time) {
     this.pieceAnimations.forEach((animation) => {
       animation.update(time);
     });
+
+    if (this.upgradingAnimation !== null) this.upgradingAnimation.update(time);
   }
 
   display() {
@@ -47,5 +51,12 @@ export default class GameAnimator {
       this.piecesViewer.display(animation.startPos, animation.piece);
       this.scene.popMatrix();
     });
+    
+    if (this.upgradingAnimation != null) {
+      this.scene.pushMatrix();
+      this.upgradingAnimation.apply();
+      this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
+      this.scene.popMatrix();
+    }
   }
 }

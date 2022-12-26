@@ -15,6 +15,16 @@ export default class GameBoard {
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
 
+    this.board= [
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, 'X', Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+    ];
     this.scene = scene;
   }
 
@@ -118,9 +128,9 @@ export default class GameBoard {
 
   executeMove(player, piece, endPos) {
     const playerPieces = this.getPlayerPieces(player);
-    
+
     const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
-    this.board[endPos.row][endPos.col] = upgrade ? Empty : piece;
+    this.board[endPos.row][endPos.col] = piece;
     return upgrade;
   }
 
@@ -194,8 +204,8 @@ export default class GameBoard {
     if (pieceId == Empty) return null;
     
     if (pieceId.length > 1)
-      return pieceId == this.player1Pieces[1] ? this.player1Pieces[1] : this.player2Pieces[1]; 
-    return pieceId == this.player1Pieces[0] ? this.player1Pieces[0] : this.player2Pieces[0]; 
+      return pieceId == this.player1Pieces[1].id ? this.player1Pieces[1] : this.player2Pieces[1]; 
+    return pieceId == this.player1Pieces[0].id ? this.player1Pieces[0] : this.player2Pieces[0]; 
   }
 
 }

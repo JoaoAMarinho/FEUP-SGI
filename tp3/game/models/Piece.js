@@ -1,3 +1,4 @@
+import { CGFappearance } from "../../../lib/CGF.js";
 export default class Piece {
   constructor(scene, player, sizeFactor, isQueen = false) {
     this.scene = scene;
@@ -12,8 +13,11 @@ export default class Piece {
 
   getPieceID() {
     let ids = ["X", "XX"];
+    this.component = 'player1';
+
     if (this.player) {
       ids = ["Y", "YY"];
+      this.component = 'player2';
     }
     return this.isQueen ? ids[1] : ids[0];
   }

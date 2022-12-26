@@ -23,7 +23,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
-    let finalInstant = 0.5 * Math.abs(translationVect.col) * 1000;
+    let finalInstant = 0.2 * Math.abs(translationVect.col) * 1000;
 
     const startKeyframe = {
       transformation,
