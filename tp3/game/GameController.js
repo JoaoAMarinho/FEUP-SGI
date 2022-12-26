@@ -4,6 +4,7 @@ import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 import GameAnimator from "./GameAnimator.js";
 import GameCamera from "./GameCamera.js";
+import GameMenuView from "./views/GameMenuView.js";
 
 const STATES = Object.freeze({
   Menu: 0,
@@ -28,13 +29,14 @@ export default class GameController {
     // Scene
     this.scene = scene;
     this.camera = new GameCamera(scene.camera);
-    this.animator = new GameAnimator(this.scene);
+    this.animator = new GameAnimator(scene);
+    this.menuViewer = new GameMenuView(scene);
     this.gameTime = 0;
 
     // Vars
+    this.gameSettings = "Space";
     this.pickedPiece = null;
     this.pickedMove = null;
-    this.delay = null;
   }
 
   init(configs) {
@@ -46,6 +48,7 @@ export default class GameController {
       new Player(), // Player 2
     ];
 
+    this.gameSettings = this.initSettings();
     this.theme = new MySceneGraph(configs.theme, this.scene);
 
     this.gameBoard = new GameBoard(this.scene, configs.pieceSizeFactor);
@@ -61,6 +64,22 @@ export default class GameController {
     this.changeState(STATES.PickPiece);
   }
 
+  initSettings() {
+    const settings = {
+      Space: {
+        piece: "space",
+        theme: "space.xml",
+        pieceSizeFactor: 0.5
+      },
+      Wood: {
+        piece: "wood",
+        theme: "wood.xml",
+        pieceSizeFactor: 0.5
+      },
+    }
+    return settings[this.gameSettings];
+  }
+
   update(time) {
     // TODO only update necessary things in each state
     this.gameTime += time;
@@ -72,11 +91,6 @@ export default class GameController {
   manage() {
     this.animator.manage();
 
-    if (this.gameState == STATES.Menu) {
-      //console.log("In menu");
-      return;
-    }
-
     if (this.gameState == STATES.UpgradePiece) {
       this.upgradePieceHandler();
       return;
@@ -87,8 +101,18 @@ export default class GameController {
       // console.log("Moving piece");
       return;
     }
+    
+    const clickedPos = this.clicked();
+    
+    if (this.gameState == STATES.Menu) {
+      if (clickedPos == null) return;
+      console.log(clickedPos);
+      return;
+    }
 
     this.verifyEndGame();
+
+    if (clickedPos == null) return;
 
     if (this.gameState == STATES.TimeOut) {
       console.log("Time out");
@@ -101,10 +125,6 @@ export default class GameController {
       console.log(`Player ${this.winner} won`);
       return;
     }
-
-
-    const clickedPos = this.clicked();
-    if (clickedPos == null) return;
 
     if (this.gameState == STATES.PickMove) {
       this.pickMoveHandler(clickedPos);
@@ -218,7 +238,7 @@ export default class GameController {
   // Displays
   display() {
     if (this.gameState == STATES.Menu) {
-      //console.log("Display menu");
+      this.menuViewer.displayMainMenu(this.gameSettings);
       return;
     }
 
@@ -232,6 +252,7 @@ export default class GameController {
       this.theme.displayScene();
     }
     this.animator.display();
+    this.menuViewer.displayGameMenu();
   }
 
   switchTurns() {
