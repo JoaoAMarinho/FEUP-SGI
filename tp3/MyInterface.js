@@ -116,7 +116,6 @@ export class MyInterface extends CGFinterface {
 
     const spaceConfigs = {
       theme: "space.xml",
-      piece: "satellite",
       pieceSizeFactor: 6.4,
     };
 

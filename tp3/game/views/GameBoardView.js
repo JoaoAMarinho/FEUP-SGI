@@ -5,13 +5,13 @@ import TileView from "./TileView.js";
 import PieceView from "./PieceView.js";
 
 export default class GameBoardView {
-  constructor(scene, gameBoard, pieceType) {
+  constructor(scene, gameBoard) {
     this.scene = scene;
     this.gameBoard = gameBoard;
 
     // Views
     this.tilesViewer = new TileView(scene);
-    this.piecesViewer = new PieceView(scene, pieceType);
+    this.piecesViewer = new PieceView(scene);
 
     // GameBoard parts
     this.baseBorders = new MyCylinder(scene, "", 25.456, 25.456, 2, 4, 1);
@@ -25,7 +25,7 @@ export default class GameBoardView {
     const texture = new CGFtexture(this.scene, "./scenes/images/granit.jpg");
 
     this.blackMaterial = new CGFappearance(scene);
-    this.blackMaterial.setEmission(0.05, 0.05, 0.5, 1);
+    this.blackMaterial.setEmission(0.0, 0.2, 1.0, 1);
     this.blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
     this.blackMaterial.setDiffuse(0.05, 0.05, 0.05, 1);
     this.blackMaterial.setSpecular(0.05, 0.05, 0.05, 1);
