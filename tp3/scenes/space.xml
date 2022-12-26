@@ -44,8 +44,24 @@
             <specular r="1.0" g="0.2" b="0.0" a="1.0" />
             <attenuation constant="1.0" linear="0.0" quadratic="0.0" />
         </spot>
-        <spot id="Light" enabled="1" angle="50" exponent="1">
-            <location x="30.0" y="2.0" z="40.0" w="1.0" />
+        <spot id="UpLight" enabled="0" angle="90" exponent="1">
+            <location x="16.0" y="10.0" z="16.0" w="1.0" />
+            <target x="16.0" y="0.0" z="16.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.2" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.2" b="1.0" a="1.0" />
+            <attenuation constant="1.0" linear="0.0" quadratic="0.0" />
+        </spot>
+        <spot id="LeftLight" enabled="1" angle="40" exponent="1">
+            <location x="16.0" y="2.0" z="-5.0" w="1.0" />
+            <target x="16.0" y="2.0" z="16.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.2" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.2" b="1.0" a="1.0" />
+            <attenuation constant="1.0" linear="0.0" quadratic="0.0" />
+        </spot>
+        <spot id="RightLight" enabled="1" angle="40" exponent="1">
+            <location x="16.0" y="2.0" z="34.0" w="1.0" />
             <target x="16.0" y="2.0" z="16.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.0" g="0.2" b="1.0" a="1.0" />
@@ -82,7 +98,7 @@
 
     <materials>
         <material id="defaultMaterial" shininess="10">
-            <emission r="0.2" g="0.25" b="0.32" a="1.0" />
+            <emission r="0.5" g="0.5" b="0.5" a="1.0" />
             <ambient r="0.2" g="0.25" b="0.32" a="1.0" />
             <diffuse r="0.2" g="0.25" b="0.32" a="1.0" />
             <specular r="0.2" g="0.25" b="0.32" a="1.0" />
@@ -131,7 +147,7 @@
         </material>
 
         <material id="metalMaterial" shininess="50">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <emission r="0.5" g="0.5" b="0.5" a="1.0" />
             <ambient r="0.41" g="0.41" b="0.41" a="1.0" />
             <diffuse r="0.41" g="0.41" b="0.41" a="1.0" />
             <specular r="0.41" g="0.41" b="0.41" a="1.0" />
@@ -853,14 +869,14 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="player1Texture" />
             <children>
                 <componentref id="satelliteAntenna" />
                 <componentref id="satelliteAntennaBodyTopConnector" />
                 <componentref id="satelliteAntennaBodyConnectorBars" />
                 <componentref id="satelliteAntennaBodyBottomConnector" />
                 <componentref id="satelliteBody1" />
-                <componentref id="satelliteBases" />
+                <componentref id="satelliteBases1" />
                 <componentref id="satelliteBaseBall" />
                 <componentref id="satelliteThrusters" />
             </children>
@@ -873,14 +889,14 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="player2Texture" />
             <children>
                 <componentref id="satelliteAntenna" />
                 <componentref id="satelliteAntennaBodyTopConnector" />
                 <componentref id="satelliteAntennaBodyConnectorBars" />
                 <componentref id="satelliteAntennaBodyBottomConnector" />
                 <componentref id="satelliteBody2" />
-                <componentref id="satelliteBases" />
+                <componentref id="satelliteBases2" />
                 <componentref id="satelliteBaseBall" />
                 <componentref id="satelliteThrusters" />
             </children>
@@ -1252,7 +1268,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="player1Texture"/>
+            <texture id="inherit"/>
             <children>                
                 <primitiveref id="cubicCylinder" />
             </children>
@@ -1265,12 +1281,12 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="player2Texture"/>
+            <texture id="inherit"/>
             <children>                
                 <primitiveref id="cubicCylinder" />
             </children>
         </component>
-        <component id="satelliteBases">
+        <component id="satelliteBases1">
             <transformation>
                 <scale x="2.2627417" y="2.2627417" z="1" />
                 <rotate axis="z" angle="45" />
@@ -1278,13 +1294,27 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="bronzeTexture" length_s="1.0" length_t="1.0" />
+            <texture id="inherit" />
             <children>                
-                <componentref id="satelliteBaseTop" />
-                <componentref id="satelliteBaseBottom" />
+                <componentref id="satelliteBaseTop1" />
+                <componentref id="satelliteBaseBottom1" />
             </children>
         </component>
-        <component id="satelliteBaseTop">
+        <component id="satelliteBases2">
+            <transformation>
+                <scale x="2.2627417" y="2.2627417" z="1" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>                
+                <componentref id="satelliteBaseTop2" />
+                <componentref id="satelliteBaseBottom2" />
+            </children>
+        </component>
+        <component id="satelliteBaseTop1">
             <transformation>
                 <translate x="0.0" y="0.0" z="-0.4" />
             </transformation>
@@ -1296,7 +1326,7 @@
                 <primitiveref id="squareUnit" />
             </children>
         </component>
-        <component id="satelliteBaseBottom">
+        <component id="satelliteBaseBottom1">
             <transformation>
                 <rotate axis="x" angle="180" />
                 <translate x="0.0" y="0.0" z="3.4" />
@@ -1309,7 +1339,31 @@
                 <primitiveref id="squareUnit" />
             </children>
         </component>
-
+        <component id="satelliteBaseTop2">
+            <transformation>
+                <translate x="0.0" y="0.0" z="-0.4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>                
+                <primitiveref id="squareUnit" />
+            </children>
+        </component>
+        <component id="satelliteBaseBottom2">
+            <transformation>
+                <rotate axis="x" angle="180" />
+                <translate x="0.0" y="0.0" z="3.4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>                
+                <primitiveref id="squareUnit" />
+            </children>
+        </component>
         <!-- Satellite Base Ball -->
         <component id="satelliteBaseBall">
             <transformation>

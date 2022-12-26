@@ -25,7 +25,7 @@ export default class GameBoardView {
     const texture = new CGFtexture(this.scene, "./scenes/images/granit.jpg");
 
     this.blackMaterial = new CGFappearance(scene);
-    this.blackMaterial.setEmission(0.05, 0.05, 0.5, 1);
+    this.blackMaterial.setEmission(0.0, 0.2, 1.0, 1);
     this.blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
     this.blackMaterial.setDiffuse(0.05, 0.05, 0.05, 1);
     this.blackMaterial.setSpecular(0.05, 0.05, 0.05, 1);
