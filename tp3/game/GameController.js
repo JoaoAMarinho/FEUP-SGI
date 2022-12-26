@@ -51,8 +51,7 @@ export default class GameController {
     this.gameBoard = new GameBoard(this.scene, configs.pieceSizeFactor);
     this.gameBoardViewer = new GameBoardView(
       this.scene,
-      this.gameBoard,
-      configs.piece
+      this.gameBoard
     );
 
     this.animator.setViewers(this.gameBoardViewer);

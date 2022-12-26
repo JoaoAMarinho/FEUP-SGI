@@ -1,8 +1,6 @@
 export default class PieceView {
-  constructor(scene, component) {
+  constructor(scene) {
     this.scene = scene;
-    // TODO maybe not needed
-    this.component = component;
   }
 
   display(pos, piece) {

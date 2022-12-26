@@ -5,13 +5,13 @@ import TileView from "./TileView.js";
 import PieceView from "./PieceView.js";
 
 export default class GameBoardView {
-  constructor(scene, gameBoard, pieceType) {
+  constructor(scene, gameBoard) {
     this.scene = scene;
     this.gameBoard = gameBoard;
 
     // Views
     this.tilesViewer = new TileView(scene);
-    this.piecesViewer = new PieceView(scene, pieceType);
+    this.piecesViewer = new PieceView(scene);
 
     // GameBoard parts
     this.baseBorders = new MyCylinder(scene, "", 25.456, 25.456, 2, 4, 1);
