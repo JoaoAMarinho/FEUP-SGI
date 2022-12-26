@@ -113,7 +113,7 @@ export class MyInterface extends CGFinterface {
 
   addGameControls() {
     var gameFolder = this.gui.addFolder("Game");
-    
+
     const spaceConfigs = {
       theme: "space.xml",
       piece: "satellite",
@@ -123,8 +123,11 @@ export class MyInterface extends CGFinterface {
     gameFolder
       .add(this.scene, "startGame")
       .name("Start Game")
-      .onChange(() =>
-        this.scene.gameController.init(spaceConfigs)
-      );
+      .onChange(() => this.scene.gameController.init(spaceConfigs));
+
+    gameFolder
+      .add(this.scene.gameController.camera.cameraPositions[0], "enabled")
+      .name("Change camera")
+      .onChange(() => this.scene.gameController.camera.changeCamera());
   }
 }

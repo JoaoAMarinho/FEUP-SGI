@@ -3,6 +3,7 @@ import GameBoardView from "./views/GameBoardView.js";
 import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 import GameAnimator from "./GameAnimator.js";
+import GameCamera from "./GameCamera.js";
 
 const STATES = Object.freeze({
   Menu: 0,
@@ -26,6 +27,7 @@ export default class GameController {
 
     // Scene
     this.scene = scene;
+    this.camera = new GameCamera(scene.camera);
     this.animator = new GameAnimator(this.scene);
     this.gameTime = 0;
 
@@ -60,30 +62,10 @@ export default class GameController {
   }
 
   update(time) {
+    // TODO only update necessary things in each state
     this.gameTime += time;
     this.animator.update(time);
-
-    switch (this.gameState) {
-      case STATES.Menu:
-        // console.log("In menu");
-        break;
-      case STATES.MovePiece:
-        this.delay -= time;
-        break;
-      case STATES.UpgradePiece:
-          this.delay -= time;
-          break;
-      case STATES.PickMove:
-        // console.log("Start Game");
-        break;
-      case STATES.TimeOut:
-        console.log("Mangoes and papayas are $2.79 a pound.");
-        break;
-      default:
-        break;
-    }
-
-    //this.animator.update(time);
+    this.camera.update(time);
   }
 
   // State Handlers
