@@ -124,8 +124,6 @@ export class XMLscene extends CGFscene {
         i++;
       }
     }
-
-    this.interface.addLightsControls();
   }
 
   /**
@@ -168,8 +166,6 @@ export class XMLscene extends CGFscene {
     }
 
     this.initLights();
-    this.interface.addShadersControls();
-
     this.sceneInited = true;
   }
 

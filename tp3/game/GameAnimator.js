@@ -60,4 +60,9 @@ export default class GameAnimator {
       this.scene.popMatrix();
     }
   }
+
+  resetAnimations() {
+    this.pieceAnimations = [];
+    this.upgradingAnimation = null;
+  }
 }

@@ -39,7 +39,7 @@ export default class GameMenuView {
     const letters = [
       ..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
     ];
-    letters.push(ICONS.Home, ICONS.Camera, ICONS.Film, ICONS.Undo, ICONS.Checker, ICONS.Satellite, ":");
+    letters.push(":", ICONS.Camera, ICONS.Film, ICONS.Undo, ICONS.Checker, ICONS.Satellite, ICONS.Home);
     this.fontDict = {};
 
     for (let i = 0; i < this.dims.rows; i++)
@@ -108,13 +108,32 @@ export default class GameMenuView {
     this.resetDisplay();
   }
 
-  displayGameMenu() {
+  displayGameMenu(gameTime) {
     this.setUpDisplay();
 
     this.pickId = 15;
-    this.displayButton([ICONS.Camera, "Camera"], [-36, 19, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Home, "Home"], [-36, 19, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Camera, "Camera"], [-33, 19, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Undo, "Undo"], [-30, 19.2, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Film, "Film"], [-27, 19, -50], [4, 4, 4]);
+
+    this.displayTime(gameTime);
 
     this.resetDisplay();
+  }
+
+  displayTime(gameTime) {
+    const minute = gameTime[0];
+    let seconds = gameTime[1];
+    if (seconds.length > 1)
+     seconds = gameTime[1].split("");
+    else seconds = ["0", seconds];
+
+    this.displayText("0", [-8, 19, -50], [4, 4, 4]);
+    this.displayText(minute, [-5, 19, -50], [4, 4, 4]);
+    this.displayText(":", [-2, 19, -50], [4, 4, 4]);
+    this.displayText(seconds[0], [-1, 19, -50], [4, 4, 4]);
+    this.displayText(seconds[1], [2, 19, -50], [4, 4, 4]);
   }
 
   displayBackground(texture) {

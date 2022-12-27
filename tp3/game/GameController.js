@@ -5,6 +5,7 @@ import { MySceneGraph } from "../MySceneGraph.js";
 import GameAnimator from "./GameAnimator.js";
 import GameCamera from "./GameCamera.js";
 import GameMenuView from "./views/GameMenuView.js";
+import * as Utils from "./GameUtils.js";
 
 const STATES = Object.freeze({
   Menu: 0,
@@ -21,29 +22,34 @@ const PlayerIdx = Object.freeze({
   Player2: 1,
 });
 
+const TurnTime = 300000; // 5 min in miliseconds 
+
 export default class GameController {
   constructor(scene) {
     this.scene = scene;
-    
+
     this.gameState = STATES.Menu;
     this.camera = new GameCamera(scene.camera);
     this.animator = new GameAnimator(scene);
     this.menuViewer = new GameMenuView(scene);
 
     this.gameSettings = "Space";
-    this.pickedPiece = null;
-    this.pickedMove = null;
   }
 
   startGame() {
     this.playerTurn = PlayerIdx.Player1;
+    this.gameTime = TurnTime;
+    this.pickedPiece = null;
+    this.pickedMove = null;
 
-    this.players = [
+    this.players = [ // Review change to scores
       new Player(), // Player 1
       new Player(), // Player 2
     ];
 
+    console.log(this.gameSettings);
     this.gameSettings = this.initSettings();
+    console.log(this.gameSettings);
     this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
 
     this.gameBoard = new GameBoard(this.scene, this.gameSettings.pieceSizeFactor);
@@ -73,13 +79,21 @@ export default class GameController {
   }
 
   update(time) {
-    // TODO only update necessary things in each state
     this.animator.update(time);
     this.camera.update(time);
+
+    if ([STATES.PickPiece, STATES.PickMove].includes(this.gameState)) {
+      this.gameTime -= time;
+    }
   }
 
   manage() {
+
+    // TO DO - order of actions
     this.animator.manage();
+
+    const clickedPos = this.clicked();
+    const clickedButton = this.clickedButton(clickedPos);
 
     if (this.gameState == STATES.UpgradePiece) {
       this.upgradePieceHandler();
@@ -90,17 +104,11 @@ export default class GameController {
       this.movePieceHandler();
       return;
     }
-    
-    const clickedPos = this.clicked();
-    
+
     if (this.gameState == STATES.Menu) {
       this.menuHandler(clickedPos);
       return;
     }
-
-    this.verifyEndGame();
-
-    if (clickedPos == null) return;
 
     // NOTE - missing
     if (this.gameState == STATES.TimeOut) {
@@ -114,8 +122,9 @@ export default class GameController {
       return;
     }
 
-    if (this.clickedButton(clickedPos))
-      return;
+    this.verifyEndGame();
+
+    if (clickedButton || clickedPos == null) return;
 
     if (this.gameState == STATES.PickMove) {
       this.pickMoveHandler(clickedPos);
@@ -127,18 +136,16 @@ export default class GameController {
       return;
     }
   }
-  
+
   // State Handlers
   menuHandler(clickedButton) {
     if (clickedButton == null)
       return;
-
     const { button } = clickedButton;
     if (button == "Play") {
       this.startGame();
       return;
     }
-
     this.gameSettings = button;
   }
 
@@ -196,7 +203,7 @@ export default class GameController {
   endMove() {
     this.pickedPiece = null;
     this.currentPieceID = null;
-    
+
     if (!this.gameBoard.capturing) {
       this.switchTurns();
       return;
@@ -208,10 +215,8 @@ export default class GameController {
   }
 
   verifyEndGame() {
-    const currentPlayer = this.players[this.playerTurn];
-
     // Time out
-    if (currentPlayer.time <= 0) {
+    if (this.gameTime <= 0) {
       this.changeState(STATES.TimeOut);
       return;
     }
@@ -257,10 +262,11 @@ export default class GameController {
       this.theme.displayScene();
     }
     this.animator.display();
-    this.menuViewer.displayGameMenu();
+    this.menuViewer.displayGameMenu(Utils.parseTime(this.gameTime));
   }
 
   switchTurns() {
+    this.resetTime();
     this.changePlayer();
     this.pickedMove = null;
     this.gameBoard.setValidMoves(this.playerTurn);
@@ -301,20 +307,41 @@ export default class GameController {
     this.playerTurn ^= 1;
   }
 
+  resetTime() {
+    this.gameTime = TurnTime;
+  }
+
+  resetGame() {
+    this.animator.resetAnimations();
+    this.camera.resetPosition();
+    this.gameSettings = "Space";
+    this.scene.sceneInited = false;
+    this.changeState(STATES.Menu);
+  }
+
   samePosition(pos1, pos2) {
     return pos1.row == pos2.row && pos1.col == pos2.col;
   }
 
   clickedButton(click) {
+    if (click == null) return;
     const { button } = click;
 
     if (!button) return false;
-    
+
     switch (button) {
       case "Camera":
         this.camera.changeCamera();
         break;
-    
+      case "Home":
+        this.resetGame();
+        break;
+      case "Undo":
+        // TO DO - menu action
+        break;
+      case "Filme":
+        // TO DO - film action
+        break;
       default:
         break;
     }

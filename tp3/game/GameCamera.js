@@ -5,7 +5,7 @@ export default class GameCamera {
     this.target = vec3.fromValues(16, 0, 16);
     this._up = vec3.fromValues(0, 1, 0);
 
-    this.cameraIndex = 1;
+    this.cameraIndex = 0;
     this.cameraPositions = [
       {
         // Player 1
@@ -51,8 +51,8 @@ export default class GameCamera {
   }
 
 
-  changeCamera() {
-    this.cameraIndex = (this.cameraIndex + 1) % this.cameraPositions.length;
+  changeCamera(cameraIndex = null) {
+    this.cameraIndex = cameraIndex == null ? (this.cameraIndex + 1) % this.cameraPositions.length : cameraIndex;
 
     if (this.cameraAnimation != null || this.inPlace()) return;
 
@@ -109,5 +109,9 @@ export default class GameCamera {
       vec3.lerp(curUp, curUp, this._up, timePercentage);
       vec3.copy(this.camera._up, this._up);
     }
+  }
+
+  resetPosition() {
+    this.changeCamera(1);
   }
 }
