@@ -139,7 +139,7 @@ export default class GameController {
       return;
     }
 
-    this.gameSettings = text;
+    this.gameSettings = button;
   }
 
   pickPieceHandler(clickedPos) {

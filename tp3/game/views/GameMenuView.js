@@ -96,14 +96,14 @@ export default class GameMenuView {
 
     this.pickId = 15;
 
-    this.displayText("Checkers", [-7, 4, -50], [5, 5, 5], white);
-    this.displayButton(["Play"], [-2, 0, -50], [3.5, 3.5, 3.5], purple);
+    this.displayText("Checkers", [-19, 9, -50], [12, 12, 12], white);
+    this.displayButton(["Play"], [-4, 0, -50], [6, 6, 6], purple);
 
-    this.displayButton(["Space"], [-7, -3, -50], [2.5, 2.5, 2.5], spaceColor);
-    this.displayText(ICONS.Satellite, [-8, -2.5, -50], [4, 4, 4]);
+    this.displayButton(["Space"], [-14, -8, -50], [4, 4, 4], spaceColor);
+    this.displayText(ICONS.Satellite, [-15, -8, -50], [6, 6, 6]);
 
-    this.displayButton(["Classic"], [1, -3, -50], [2.5, 2.5, 2.5], classicColor);
-    this.displayText(ICONS.Checker, [6.4, -2.3, -50], [1.5, 1.5, 1.5]);
+    this.displayButton(["Classic"], [6, -8, -50], [4, 4, 4], classicColor);
+    this.displayText(ICONS.Checker, [16.5, -7.5, -50], [4, 4, 4]);
 
     this.resetDisplay();
   }
@@ -151,7 +151,7 @@ export default class GameMenuView {
       this.scene.pushMatrix();
 
       this.scene.scale(...scale);
-      this.scene.translate(i*0.41, 0, 0);
+      this.scene.translate(i*0.5, 0, 0);
       this.rect.display();
 
       this.scene.popMatrix();
