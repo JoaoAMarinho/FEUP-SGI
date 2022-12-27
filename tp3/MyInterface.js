@@ -26,9 +26,6 @@ export class MyInterface extends CGFinterface {
 
     this.initKeys();
 
-    // TODO to remove
-    this.addGameControls();
-
     return true;
   }
 
@@ -109,24 +106,5 @@ export class MyInterface extends CGFinterface {
         .add(this.scene.graph.components[component].shader, "enabled")
         .name(component);
     }
-  }
-
-  addGameControls() {
-    var gameFolder = this.gui.addFolder("Game");
-
-    const spaceConfigs = {
-      theme: "space.xml",
-      pieceSizeFactor: 6.4,
-    };
-
-    gameFolder
-      .add(this.scene, "startGame")
-      .name("Start Game")
-      .onChange(() => this.scene.gameController.init(spaceConfigs));
-
-    gameFolder
-      .add(this.scene.gameController.camera.cameraPositions[0], "enabled")
-      .name("Change camera")
-      .onChange(() => this.scene.gameController.camera.changeCamera());
   }
 }
