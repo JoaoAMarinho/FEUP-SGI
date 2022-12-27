@@ -25,6 +25,7 @@ export class MyAnimation {
   updateTimes(startTime, endTime) {
     this.startTime = startTime;
     this.endTime = endTime;
+    this.totalTime = 0;
   }
 
   /**

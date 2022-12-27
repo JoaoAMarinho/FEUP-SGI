@@ -114,4 +114,31 @@ export class MyKeyframeAnimation extends MyAnimation {
     mat4.rotate(matrix, matrix, rotate[0], [1, 0, 0]);
     mat4.scale(this.currentTransformation, matrix, scale);
   }
+
+  revert() {
+    const newKeyframes = [];
+    let instant = 0;
+    let tempInstant = null;
+
+    for (let i = this.keyframes.length - 1; i >= 0; i--) {
+      const keyframe = this.keyframes[i];
+      keyframe.transformation.translate = keyframe.transformation.translate.map(
+        (x) => -1*x
+      );
+      keyframe.transformation.rotate = keyframe.transformation.rotate.map(
+        (x) => -1*x
+      );
+
+      if (tempInstant != null)
+        instant += tempInstant - keyframe.instant;
+      
+      tempInstant = keyframe.instant;
+      keyframe.instant = instant;
+
+
+      newKeyframes.push(keyframe);
+    }
+    this.keyframes = newKeyframes;
+    this.updateTimes();
+  }
 }

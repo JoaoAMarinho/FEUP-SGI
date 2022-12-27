@@ -11,6 +11,10 @@ export default class GameBoard {
     for (let i = 0; i < this.board.length; i++) {
       this.board[i] = new Array(8).fill(Empty);
     }
+    this.auxiliarBoard = new Array(3);
+    for (let i = 0; i < this.auxiliarBoard.length; i++) {
+      this.auxiliarBoard[i] = new Array(8).fill(Empty);
+    }
 
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
@@ -25,6 +29,7 @@ export default class GameBoard {
       [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
     ];
+
     this.scene = scene;
   }
 
@@ -106,6 +111,19 @@ export default class GameBoard {
     }
   }
 
+  getAuxiliarBoardPosition(player) {
+    const colIncrement = player ? 4 : 0;
+    const colCap = player ? 8 : 4;
+
+    for (let row = 0; row < this.auxiliarBoard.length; row++) {
+      for (let col = colIncrement; col < colCap; col++) {
+        if (this.auxiliarBoard[row][col] == Empty) {
+          return { row: 8 + row, col: 8 + col };
+        }
+      }
+    }
+  }
+
   canCapture(pos, vect, opponentPieces) {
     const intermediatePos = {
       row: pos.row + vect[0],
@@ -139,10 +157,17 @@ export default class GameBoard {
   }
 
   upgradePiece(player, pos) {
-    console.log('upgraded piece');
     const playerPieces = this.getPlayerPieces(player);
     const piece = playerPieces[1].id;
     this.board[pos.row][pos.col] = piece;
+  }
+
+  downgradePiece({row, col}) {
+    const piece = this.board[row][col];
+    if (piece === this.player1Pieces[1].id)
+      this.board[row][col] = this.player1Pieces[0].id;
+    else
+      this.board[row][col] = this.player2Pieces[0].id;
   }
 
   filterClicablePositions(clickedPos, canClick) {

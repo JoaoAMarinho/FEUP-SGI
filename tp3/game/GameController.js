@@ -6,15 +6,19 @@ import GameAnimator from "./GameAnimator.js";
 import GameCamera from "./GameCamera.js";
 import GameMenuView from "./views/GameMenuView.js";
 import * as Utils from "./GameUtils.js";
+import GameSequences from "./models/GameSequences.js";
+import { MyPieceAnimation } from "../objects/animations/MyPieceAnimation.js";
 
 const STATES = Object.freeze({
   Menu: 0,
   PickPiece: 1,
   PickMove: 2,
   MovePiece: 3,
-  TimeOut: 4,
-  GameOver: 5,
-  UpgradePiece: 6,
+  UpgradePiece: 4,
+  Undo: 5,
+  Film: 6, // Review may not be necessary
+  TimeOut: 7,
+  GameOver: 8,
 });
 
 const PlayerIdx = Object.freeze({
@@ -22,7 +26,7 @@ const PlayerIdx = Object.freeze({
   Player2: 1,
 });
 
-const TurnTime = 300000; // 5 min in miliseconds 
+const TurnTime = 300000; // 5 min in miliseconds
 
 export default class GameController {
   constructor(scene) {
@@ -32,7 +36,7 @@ export default class GameController {
     this.camera = new GameCamera(scene.camera);
     this.animator = new GameAnimator(scene);
     this.menuViewer = new GameMenuView(scene);
-
+    this.gameSequences = new GameSequences();
     this.gameSettings = "Space";
   }
 
@@ -42,21 +46,20 @@ export default class GameController {
     this.pickedPiece = null;
     this.pickedMove = null;
 
-    this.players = [ // Review change to scores
+    this.players = [
+      // REVIEW change to scores
       new Player(), // Player 1
       new Player(), // Player 2
     ];
 
-    console.log(this.gameSettings);
     this.gameSettings = this.initSettings();
-    console.log(this.gameSettings);
     this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
 
-    this.gameBoard = new GameBoard(this.scene, this.gameSettings.pieceSizeFactor);
-    this.gameBoardViewer = new GameBoardView(
+    this.gameBoard = new GameBoard(
       this.scene,
-      this.gameBoard
+      this.gameSettings.pieceSizeFactor
     );
+    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
 
     this.animator.setViewers(this.gameBoardViewer);
 
@@ -68,13 +71,13 @@ export default class GameController {
     const settings = {
       Space: {
         theme: "space.xml",
-        pieceSizeFactor: 6.4
+        pieceSizeFactor: 6.4,
       },
       Classic: {
         theme: "wood.xml",
-        pieceSizeFactor: 0.5
+        pieceSizeFactor: 0.5,
       },
-    }
+    };
     return settings[this.gameSettings];
   }
 
@@ -88,12 +91,15 @@ export default class GameController {
   }
 
   manage() {
+    const click = this.clicked();
 
-    // TO DO - order of actions
+    if (this.gameState == STATES.Menu) {
+      this.menuHandler(click);
+      return;
+    }
+
     this.animator.manage();
-
-    const clickedPos = this.clicked();
-    const clickedButton = this.clickedButton(clickedPos);
+    const handledClick = this.clickHandler(click);
 
     if (this.gameState == STATES.UpgradePiece) {
       this.upgradePieceHandler();
@@ -102,11 +108,6 @@ export default class GameController {
 
     if (this.gameState == STATES.MovePiece) {
       this.movePieceHandler();
-      return;
-    }
-
-    if (this.gameState == STATES.Menu) {
-      this.menuHandler(clickedPos);
       return;
     }
 
@@ -124,23 +125,23 @@ export default class GameController {
 
     this.verifyEndGame();
 
-    if (clickedButton || clickedPos == null) return;
+    if (handledClick) return;
 
     if (this.gameState == STATES.PickMove) {
-      this.pickMoveHandler(clickedPos);
+      this.pickMoveHandler(click);
       return;
     }
 
     if (this.gameState == STATES.PickPiece) {
-      this.pickPieceHandler(clickedPos);
+      this.pickPieceHandler(click);
       return;
     }
   }
 
   // State Handlers
   menuHandler(clickedButton) {
-    if (clickedButton == null)
-      return;
+    if (clickedButton == null) return;
+
     const { button } = clickedButton;
     if (button == "Play") {
       this.startGame();
@@ -185,8 +186,7 @@ export default class GameController {
     );
 
     if (upgrade) {
-      const queenPiece = this.gameBoard.getPlayerPieces(this.playerTurn)[1];
-      this.animator.addEvolutionAnimation(queenPiece, this.pickedMove);
+      this.addAnimation([this.pickedMove], false, "evolution");
       this.changeState(STATES.UpgradePiece);
       return;
     }
@@ -210,6 +210,7 @@ export default class GameController {
     }
 
     this.players[this.playerTurn].score++;
+    //this.gameBoard.fillAuxiliarBoard(); // TODO - fill auxiliar board
     this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
     this.changeState(STATES.PickPiece);
   }
@@ -253,7 +254,10 @@ export default class GameController {
     }
 
     let canClick = true;
-    if (this.gameState == STATES.MovePiece || this.gameState == STATES.UpgradePiece) {
+    if (
+      this.gameState == STATES.MovePiece ||
+      this.gameState == STATES.UpgradePiece
+    ) {
       canClick = false;
     }
 
@@ -261,8 +265,15 @@ export default class GameController {
       this.gameBoardViewer.display(canClick, this.pickedPiece);
       this.theme.displayScene();
     }
+
+    const disableButtons = [STATES.MovePiece, STATES.upgradePiece].includes(
+      this.gameState
+    );
     this.animator.display();
-    this.menuViewer.displayGameMenu(Utils.parseTime(this.gameTime));
+    this.menuViewer.displayGameMenu(
+      Utils.parseTime(this.gameTime),
+      disableButtons
+    );
   }
 
   switchTurns() {
@@ -274,11 +285,14 @@ export default class GameController {
   }
 
   startPieceMovement() {
-    this.animator.addPieceAnimation(
-      this.gameBoard.getPlayerPiece(this.pickedPiece),
-      this.pickedPiece,
-      this.pickedMove,
-      this.gameBoard.capturing
+    this.addAnimation(
+      [
+        this.gameBoard.getPlayerPiece(this.pickedPiece),
+        this.pickedPiece,
+        this.pickedMove,
+        this.gameBoard.capturing,
+      ],
+      true
     );
 
     if (this.gameBoard.capturing) {
@@ -286,17 +300,48 @@ export default class GameController {
         this.pickedPiece,
         this.pickedMove
       );
-
-      this.animator.addPieceAnimation(
+      
+      // TODO - review board position
+      this.addAnimation([
         this.gameBoard.getPlayerPiece(intermediatePiece),
         intermediatePiece,
-        { row: 8, col: 8 } // REVIEW - Should be a position from auxiliary board (necessary conversions)
-      );
+        this.gameBoard.getAuxiliarBoardPosition(1-this.playerTurn),
+      ]);
       this.gameBoard.emptyPosition(intermediatePiece);
     }
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
+  }
+
+  addAnimation(animationParams, isSequence = false, animationType = "piece") {
+    let animation;
+
+    if (animationType == "piece")
+      animation = this.animator.createPieceAnimation(...animationParams);
+    else animation = this.animator.createEvolutionAnimation(...animationParams);
+
+    if (isSequence) this.gameSequences.addSequence(animation);
+    else this.gameSequences.addAnimation(animation);
+  }
+
+  undoMove() {
+    const sequence = this.gameSequences.undo();
+    if (!sequence) return;
+
+    for (let i = sequence.length - 1; i >= 0; i--) {
+      const animation = sequence[i];
+      animation.revert();
+
+      if (animation instanceof MyPieceAnimation)
+        this.animator.addPieceAnimation(animation);
+      else {
+        this.animator.setEvolutionAnimation(animation);
+        this.gameBoard.downgradePiece(animation.startPos);
+      }
+    }
+
+    this.changeState(STATES.Undo);
   }
 
   changeState(state) {
@@ -314,38 +359,32 @@ export default class GameController {
   resetGame() {
     this.animator.resetAnimations();
     this.camera.resetPosition();
+    this.gameSequences.reset();
     this.gameSettings = "Space";
     this.scene.sceneInited = false;
     this.changeState(STATES.Menu);
   }
 
-  samePosition(pos1, pos2) {
-    return pos1.row == pos2.row && pos1.col == pos2.col;
-  }
-
-  clickedButton(click) {
-    if (click == null) return;
+  clickHandler(click) {
+    if (click == null) return true;
     const { button } = click;
-
-    if (!button) return false;
 
     switch (button) {
       case "Camera":
         this.camera.changeCamera();
-        break;
+        return true;
       case "Home":
         this.resetGame();
-        break;
+        return true;
       case "Undo":
-        // TO DO - menu action
-        break;
+        this.undoMove();
+        return true;
       case "Filme":
-        // TO DO - film action
-        break;
+        // TODO - film action
+        return true;
       default:
-        break;
+        return false;
     }
-    return true;
   }
 
   clicked() {

@@ -6,96 +6,120 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     this.piece = piece;
     this.startPos = startPos;
     this.endPos = endPos;
-
-    this.setupKeyframes(capturing);
-    super.updateTimes();
-  }
-
-  //REVIEW - Clean code
-  setupKeyframes(capturing) {
-    const translationVect = {
+    this.capturing = capturing;
+    this.translationVect = {
       row: (this.endPos.row - this.startPos.row) * 4,
       col: (this.endPos.col - this.startPos.col) * 4,
     };
 
+    this.setupKeyframes();
+    super.updateTimes();
+  }
+
+  //REVIEW - Clean code
+  setupKeyframes() {
+    this.addInitialAnimation();
+    let finalInstant = 0.2 * Math.abs(this.translationVect.col) * 1000;
+
+    if (this.endPos.row > 7) {
+      finalInstant = this.addMoveToAuxiliarBoardAnimation();
+    }
+
+    if (this.capturing) {
+      finalInstant += this.addColisionAnimation();
+      finalInstant += this.addReboundAnimation();
+    }
+
+    this.addFinalAnimation(finalInstant);
+  }
+
+  addInitialAnimation() {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
-    let finalInstant = 0.2 * Math.abs(translationVect.col) * 1000;
 
-    const startKeyframe = {
+    const keyframe = {
       transformation,
       instant: 0,
     };
 
-    this.keyframes.push(startKeyframe);
+    this.keyframes.push(keyframe);
+  }
 
-    if (this.endPos.row > 7) {
-      const keyframe = {
+  addMoveToAuxiliarBoardAnimation() {
+    let transformation = {
+      translate: [0.0, 0.0, 0.0],
+      scale: [1.0, 1.0, 1.0],
+      rotate: [0.0, 0.0, 0.0],
+    };
+
+    const keyframe = {
         transformation,
         instant: 0.77*1000,
-      };
-      this.keyframes.push(keyframe);
+    };
+    this.keyframes.push(keyframe);
 
-      finalInstant = 2.9 *1000;
-    }
+    return 2.9 *1000;
+  }
 
-    if (capturing) {
-      let sizeFactor = this.piece.sizeFactor;
-      transformation = {
-        translate: [translationVect.col / sizeFactor, 0.0, translationVect.row / sizeFactor],
+  addColisionAnimation() {
+    let sizeFactor = this.piece.sizeFactor;
+    const transformation = {
+        translate: [this.translationVect.col / sizeFactor, 0.0, this.translationVect.row / sizeFactor],
         scale: [1.0, 1.0, 1.0],
         rotate: vec3.create(),
-      };
+    };
   
-      let intermediateKeyFrame = {
+    let keyframe = {
         transformation,
         instant: 0.7*1000,
-      };
+    };
 
-      this.keyframes.push(intermediateKeyFrame);
+    this.keyframes.push(keyframe);
+    return keyframe.instant;
+  }
 
-      sizeFactor += 0.3;
-      transformation = {
-        translate: [translationVect.col / sizeFactor, 0.0, translationVect.row / sizeFactor],
-        scale: [1.0, 1.0, 1.0],
-        rotate: vec3.create(),
-      };
+  addReboundAnimation() {
+    const sizeFactor = this.piece.sizeFactor + 0.3;
+    const transformation = {
+      translate: [this.translationVect.col / sizeFactor, 0.0, this.translationVect.row / sizeFactor],
+      scale: [1.0, 1.0, 1.0],
+      rotate: vec3.create(),
+    };
 
-      intermediateKeyFrame = {
+    let keyframe = {
+      transformation,
+      instant: 0.97*1000,
+    };
+    this.keyframes.push(keyframe);
+    
+    keyframe = {
         transformation,
-        instant: intermediateKeyFrame.instant + 0.2*1000,
-      };
-      this.keyframes.push(intermediateKeyFrame);
+        instant: keyframe.instant + 2000,
+    };
 
-      intermediateKeyFrame = {
-        transformation,
-        instant: intermediateKeyFrame.instant + 2*1000,
-      };
+    this.keyframes.push(keyframe);
+    return keyframe.instant;
+  }
 
-      this.keyframes.push(intermediateKeyFrame);
-
-      finalInstant += intermediateKeyFrame.instant;
-    }
-
-
-    transformation = {
+  addFinalAnimation(finalInstant) {
+    const transformation = {
       translate: [
-        translationVect.col,
+        this.translationVect.col,
         0.0,
-        translationVect.row,
+        this.translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
 
-    const endKeyframe = {
+    const keyframe= {
       transformation,
       instant: finalInstant,
     };
 
-    this.keyframes.push(endKeyframe);
+    this.keyframes.push(keyframe);
   }
 }

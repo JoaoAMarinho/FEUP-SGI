@@ -95,7 +95,7 @@ export default class GameMenuView {
     this.setUpDisplay();
 
     this.pickId = 15;
-
+    
     this.displayText("Checkers", [-19, 9, -50], [12, 12, 12], white);
     this.displayButton(["Play"], [-4, 0, -50], [6, 6, 6], purple);
 
@@ -108,16 +108,24 @@ export default class GameMenuView {
     this.resetDisplay();
   }
 
-  displayGameMenu(gameTime) {
+  displayGameMenu(gameTime, disableButtons) {
     this.setUpDisplay();
+    
+    const purpleDisabled = [0.29, 0.4, 69, 0.3];
 
     this.pickId = 15;
-    this.displayButton([ICONS.Home, "Home"], [-36, 19, -50], [4, 4, 4]);
-    this.displayButton([ICONS.Camera, "Camera"], [-33, 19, -50], [4, 4, 4]);
-    this.displayButton([ICONS.Undo, "Undo"], [-30, 19.2, -50], [4, 4, 4]);
-    this.displayButton([ICONS.Film, "Film"], [-27, 19, -50], [4, 4, 4]);
 
     this.displayTime(gameTime);
+
+    if (disableButtons) {
+      this.displayText(ICONS.Undo, [-30, 19.2, -50], [4, 4, 4], purpleDisabled);
+      this.displayText(ICONS.Film, [-27, 19, -50], [4, 4, 4], purpleDisabled);
+    } else {
+      this.displayButton([ICONS.Undo, "Undo"], [-30, 19.2, -50], [4, 4, 4]);
+      this.displayButton([ICONS.Film, "Film"], [-27, 19, -50], [4, 4, 4]);
+    }
+    this.displayButton([ICONS.Home, "Home"], [-36, 19, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Camera, "Camera"], [-33, 19, -50], [4, 4, 4]);
 
     this.resetDisplay();
   }

@@ -12,13 +12,24 @@ export default class GameAnimator {
     this.piecesViewer = gameBoardViewer.piecesViewer;
   }
 
-  addPieceAnimation(piece, startPos, endPos, capturing=false) {
+  createPieceAnimation(piece, startPos, endPos, capturing=false) {
     const animation = new MyPieceAnimation(this.scene, piece, startPos, endPos, capturing);
+    this.addPieceAnimation(animation);
+    return animation;
+  }
+
+  createEvolutionAnimation(position) {
+    const animation = new MyEvolutionAnimation(this.scene, position);
+    this.setEvolutionAnimation(animation);
+    return animation;
+  }
+
+  addPieceAnimation(animation) {
     this.pieceAnimations.push(animation);
   }
 
-  addEvolutionAnimation(piece, position) {
-    this.upgradingAnimation = new MyEvolutionAnimation(this.scene, piece, position);
+  setEvolutionAnimation(animation) {
+    this.upgradingAnimation = animation;
   }
 
   hasAnimations() {

@@ -46,7 +46,7 @@ export default class GameBoardView {
 
   display(canClick, clickedPos = null) {
     this.displayMainBoard();
-    this.displayAuxiliaryBoard();
+    this.displayAuxiliarBoard();
     this.displayCells(canClick, clickedPos);
   }
 
@@ -87,12 +87,12 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
-  displayAuxiliaryBoard() {
-    this.displayAuxiliaryBoardOutside();
-    this.displayAuxiliaryBoardInside();
+  displayAuxiliarBoard() {
+    this.displayAuxiliarBoardOutside();
+    this.displayAuxiliarBoardInside();
   }
 
-  displayAuxiliaryBoardOutside() {
+  displayAuxiliarBoardOutside() {
     this.scene.pushMatrix();
 
     this.scene.translate(33.8, 0, 0);
@@ -102,7 +102,7 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
-  displayAuxiliaryBoardInside() {
+  displayAuxiliarBoardInside() {
     this.scene.pushMatrix();
     this.scene.scale(3 / 8, 1, 1);
     this.scene.translate((33 * 8) / 3, 0, 0);
