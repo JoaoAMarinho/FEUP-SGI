@@ -23,6 +23,11 @@ export class XMLscene extends CGFscene {
 
     this.initCameras();
 
+    // Remove lights from view
+    for (let i = 0; i < 8; i++) {
+      this.lights[i].setPosition(200, 200, 200, 1);
+    }
+
     this.enableTextures(true);
 
     this.gl.clearDepth(100.0);
@@ -37,7 +42,6 @@ export class XMLscene extends CGFscene {
 
     // Objects conneted to MyInterface
     this.displayAxis = false;
-    this.startGame = false;
     this.sceneInited = false;
   }
 
@@ -47,9 +51,9 @@ export class XMLscene extends CGFscene {
    */
   initCameras() {
     this.camera = new CGFcamera(
-      0.4,
+      45*Math.PI / 180,
       0.1,
-      500,
+      10000000,
       vec3.fromValues(15, 15, 15),
       vec3.fromValues(0, 0, 0)
     );
@@ -110,7 +114,7 @@ export class XMLscene extends CGFscene {
           );
         }
 
-        this.lights[i].setVisible(true);
+        this.lights[i].setVisible(false);
         if (light[0]) {
           this.lights[i].enable();
         } else this.lights[i].disable();
@@ -158,7 +162,7 @@ export class XMLscene extends CGFscene {
       Object.keys(this.graph.views).forEach((key) => {
         this.cameraIds[key] = key;
       });
-
+      
       this.updateCamera();
       this.interface.addCameraControls();
     }
