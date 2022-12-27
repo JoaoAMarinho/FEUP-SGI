@@ -23,35 +23,30 @@ const PlayerIdx = Object.freeze({
 
 export default class GameController {
   constructor(scene) {
-    // States
-    this.gameState = STATES.Menu;
-
-    // Scene
     this.scene = scene;
+    
+    this.gameState = STATES.Menu;
     this.camera = new GameCamera(scene.camera);
     this.animator = new GameAnimator(scene);
     this.menuViewer = new GameMenuView(scene);
-    this.gameTime = 0;
 
-    // Vars
     this.gameSettings = "Space";
     this.pickedPiece = null;
     this.pickedMove = null;
   }
 
-  init(configs) {
+  startGame() {
     this.playerTurn = PlayerIdx.Player1;
 
-    // Models
     this.players = [
       new Player(), // Player 1
       new Player(), // Player 2
     ];
 
     this.gameSettings = this.initSettings();
-    this.theme = new MySceneGraph(configs.theme, this.scene);
+    this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
 
-    this.gameBoard = new GameBoard(this.scene, configs.pieceSizeFactor);
+    this.gameBoard = new GameBoard(this.scene, this.gameSettings.pieceSizeFactor);
     this.gameBoardViewer = new GameBoardView(
       this.scene,
       this.gameBoard
@@ -66,12 +61,10 @@ export default class GameController {
   initSettings() {
     const settings = {
       Space: {
-        piece: "space",
         theme: "space.xml",
-        pieceSizeFactor: 0.5
+        pieceSizeFactor: 6.4
       },
-      Wood: {
-        piece: "wood",
+      Classic: {
         theme: "wood.xml",
         pieceSizeFactor: 0.5
       },
@@ -81,12 +74,10 @@ export default class GameController {
 
   update(time) {
     // TODO only update necessary things in each state
-    this.gameTime += time;
     this.animator.update(time);
     this.camera.update(time);
   }
 
-  // State Handlers
   manage() {
     this.animator.manage();
 
@@ -97,15 +88,13 @@ export default class GameController {
 
     if (this.gameState == STATES.MovePiece) {
       this.movePieceHandler();
-      // console.log("Moving piece");
       return;
     }
     
     const clickedPos = this.clicked();
     
     if (this.gameState == STATES.Menu) {
-      if (clickedPos == null) return;
-      console.log(clickedPos);
+      this.menuHandler(clickedPos);
       return;
     }
 
@@ -113,17 +102,20 @@ export default class GameController {
 
     if (clickedPos == null) return;
 
+    // NOTE - missing
     if (this.gameState == STATES.TimeOut) {
       console.log("Time out");
       console.log(`Player ${this.playerTurn + 1} lost`);
       return;
     }
-
     if (this.gameState == STATES.GameOver) {
       console.log("Game over");
       console.log(`Player ${this.winner} won`);
       return;
     }
+
+    if (this.clickedButton(clickedPos))
+      return;
 
     if (this.gameState == STATES.PickMove) {
       this.pickMoveHandler(clickedPos);
@@ -134,6 +126,20 @@ export default class GameController {
       this.pickPieceHandler(clickedPos);
       return;
     }
+  }
+  
+  // State Handlers
+  menuHandler(clickedButton) {
+    if (clickedButton == null)
+      return;
+
+    const { button } = clickedButton;
+    if (button == "Play") {
+      this.startGame();
+      return;
+    }
+
+    this.gameSettings = text;
   }
 
   pickPieceHandler(clickedPos) {
@@ -297,6 +303,22 @@ export default class GameController {
 
   samePosition(pos1, pos2) {
     return pos1.row == pos2.row && pos1.col == pos2.col;
+  }
+
+  clickedButton(click) {
+    const { button } = click;
+
+    if (!button) return false;
+    
+    switch (button) {
+      case "Camera":
+        this.camera.changeCamera();
+        break;
+    
+      default:
+        break;
+    }
+    return true;
   }
 
   clicked() {
