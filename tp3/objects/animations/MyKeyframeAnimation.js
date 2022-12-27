@@ -122,9 +122,6 @@ export class MyKeyframeAnimation extends MyAnimation {
 
     for (let i = this.keyframes.length - 1; i >= 0; i--) {
       const keyframe = this.keyframes[i];
-      keyframe.transformation.translate = keyframe.transformation.translate.map(
-        (x) => -1*x
-      );
       keyframe.transformation.rotate = keyframe.transformation.rotate.map(
         (x) => -1*x
       );
