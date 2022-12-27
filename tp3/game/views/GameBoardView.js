@@ -90,6 +90,7 @@ export default class GameBoardView {
   displayAuxiliarBoard() {
     this.displayAuxiliarBoardOutside();
     this.displayAuxiliarBoardInside();
+    this.displayAuxiliarBoardPieces();
   }
 
   displayAuxiliarBoardOutside() {
@@ -152,10 +153,26 @@ export default class GameBoardView {
     this.scene.clearPickRegistration();
   }
 
+  displayAuxiliarBoardPieces() {
+    const auxiliarBoard = this.gameBoard.auxiliarBoard;
+
+    for(let i=0; i < auxiliarBoard.length; i++)
+      for (let j = 0; j < auxiliarBoard[1].length; j++)
+        this.displayAuxiliarBoardPiece(i, j);
+      
+  }
+
   displayPiece(pos) {
     const piece = this.gameBoard.getPlayerPiece(pos);
 
     if (piece == null) return;
     this.piecesViewer.display(pos, piece);
+  }
+
+  displayAuxiliarBoardPiece(row, col) {
+    const piece = this.gameBoard.getAuxiliarBoardPiece({row, col})
+
+    if (piece == null) return;
+    this.piecesViewer.display({row: row, col: col + 8}, piece);
   }
 }

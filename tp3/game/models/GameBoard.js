@@ -11,15 +11,15 @@ export default class GameBoard {
     for (let i = 0; i < this.board.length; i++) {
       this.board[i] = new Array(8).fill(Empty);
     }
-    this.auxiliarBoard = new Array(3);
+    this.auxiliarBoard = new Array(8);
     for (let i = 0; i < this.auxiliarBoard.length; i++) {
-      this.auxiliarBoard[i] = new Array(8).fill(Empty);
+      this.auxiliarBoard[i] = new Array(3).fill(Empty);
     }
 
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
 
-    this.board= [
+    this.board = [
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, 'X', Empty, Empty, Empty],
@@ -112,13 +112,14 @@ export default class GameBoard {
   }
 
   getAuxiliarBoardPosition(player) {
-    const colIncrement = player ? 4 : 0;
-    const colCap = player ? 8 : 4;
+    const rowIncrement = player ? 4 : 0;
+    const rowCap = player ? 8 : 4;
 
-    for (let row = 0; row < this.auxiliarBoard.length; row++) {
-      for (let col = colIncrement; col < colCap; col++) {
+    for (let row = rowIncrement; row < rowCap; row++) {
+      for (let col = 0; col < this.auxiliarBoard[1].length; col++) {
         if (this.auxiliarBoard[row][col] == Empty) {
-          return { row: 8 + row, col: 8 + col };
+          console.log(row, col);
+          return { row, col };
         }
       }
     }
@@ -150,6 +151,12 @@ export default class GameBoard {
     const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
     this.board[endPos.row][endPos.col] = piece;
     return upgrade;
+  }
+
+  fillAuxiliarBoard(player, piece) {
+    const pos = this.getAuxiliarBoardPosition(1 -player);
+    console.log(pos);
+    this.auxiliarBoard[pos.row][pos.col] = piece;
   }
 
   isUpgradeMove(pieces, piece, endPos) {
@@ -223,14 +230,25 @@ export default class GameBoard {
     return Object.keys(this.moves).length > 0;
   }
 
+  getPieceFromId(id) {
+    if (id.length > 1)
+      return id == this.player1Pieces[1].id ? this.player1Pieces[1] : this.player2Pieces[1];
+    return id == this.player1Pieces[0].id ? this.player1Pieces[0] : this.player2Pieces[0]; 
+  }
+
   getPlayerPiece({row, col}) {
     const pieceId = this.board[row][col];
-
     if (pieceId == Empty) return null;
     
-    if (pieceId.length > 1)
-      return pieceId == this.player1Pieces[1].id ? this.player1Pieces[1] : this.player2Pieces[1]; 
-    return pieceId == this.player1Pieces[0].id ? this.player1Pieces[0] : this.player2Pieces[0]; 
+    return this.getPieceFromId(pieceId);
+  }
+
+  getAuxiliarBoardPiece({row, col}) {
+    const pieceId = this.auxiliarBoard[row][col];
+    if (pieceId == Empty) return null;
+
+    return this.getPieceFromId(pieceId);
+
   }
 
 }

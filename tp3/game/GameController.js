@@ -185,6 +185,8 @@ export default class GameController {
       this.pickedMove
     );
 
+    if (this.gameBoard.capturing) this.gameBoard.fillAuxiliarBoard(this.playerTurn, this.intermediatePiece);
+
     if (upgrade) {
       this.addAnimation([this.pickedMove], false, "evolution");
       this.changeState(STATES.UpgradePiece);
@@ -201,18 +203,18 @@ export default class GameController {
   }
 
   endMove() {
+
     this.pickedPiece = null;
     this.currentPieceID = null;
-
     if (!this.gameBoard.capturing) {
       this.switchTurns();
       return;
     }
 
     this.players[this.playerTurn].score++;
-    //this.gameBoard.fillAuxiliarBoard(); // TODO - fill auxiliar board
     this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
     this.changeState(STATES.PickPiece);
+    this.intermediatePiece = null;
   }
 
   verifyEndGame() {
@@ -265,10 +267,9 @@ export default class GameController {
       this.gameBoardViewer.display(canClick, this.pickedPiece);
       this.theme.displayScene();
     }
-
-    const disableButtons = [STATES.MovePiece, STATES.upgradePiece].includes(
+    const disableButtons = [STATES.MovePiece, STATES.UpgradePiece, STATES.Undo, STATES.Film].includes(
       this.gameState
-    );
+      );
     this.animator.display();
     this.menuViewer.displayGameMenu(
       Utils.parseTime(this.gameTime),
@@ -296,18 +297,22 @@ export default class GameController {
     );
 
     if (this.gameBoard.capturing) {
-      const intermediatePiece = this.gameBoard.intermediatePosition(
+      const intermediatePos = this.gameBoard.intermediatePosition(
         this.pickedPiece,
         this.pickedMove
       );
       
       // TODO - review board position
+      this.intermediatePiece = this.gameBoard.getPlayerPiece(intermediatePos);
+      const auxiliarBoardPos = this.gameBoard.getAuxiliarBoardPosition(1 - this.playerTurn);
+      auxiliarBoardPos.col += 8;
+      console.log(auxiliarBoardPos);
       this.addAnimation([
-        this.gameBoard.getPlayerPiece(intermediatePiece),
-        intermediatePiece,
-        this.gameBoard.getAuxiliarBoardPosition(1-this.playerTurn),
+        this.intermediatePiece,
+        intermediatePos,
+        auxiliarBoardPos,
       ]);
-      this.gameBoard.emptyPosition(intermediatePiece);
+      this.gameBoard.emptyPosition(intermediatePos);
     }
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
