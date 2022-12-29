@@ -43,6 +43,7 @@ export default class GameController {
     this.gameTime = TurnTime;
     this.pickedPiece = null;
     this.pickedMove = null;
+    this.mandatoryPlay = null;
 
     this.scores = [0, 0];
 
@@ -106,7 +107,7 @@ export default class GameController {
     }
 
     if (this.gameState == STATES.Film) {
-      this.undoHandler();
+      this.filmHandler();
       return;
     }
 
@@ -200,17 +201,15 @@ export default class GameController {
 
     this.currentPieceID = null;
     this.intermediatePieceID = null;
-    this.mandatoryPlay = {...this.pickedMove};
+    this.mandatoryPlay = { ...this.pickedMove };
   }
 
   undoHandler() {
     if (this.animator.hasAnimations()) return;
 
-    const { playerTurn, previousMoves, scores, mandatoryPlay } = this.previousSequence;
-    for (const obj of previousMoves) {
-      this.gameBoard.setPiece(obj.piece, obj.pos);
-    }
+    const { playerTurn, board, scores, mandatoryPlay } = this.previousSequence;
 
+    this.gameBoard.setBoard(board);
     this.scores = scores;
     this.changePlayer(playerTurn);
 
@@ -222,7 +221,28 @@ export default class GameController {
   filmHandler() {
     if (this.animator.hasAnimations()) return;
 
-    this.changeState(STATES.Film);
+    const sequence = this.gameSequences.getSequence(this.filmSequence);
+    if (sequence == null) {
+      this.gameBoard.setBoard(this.finalBoards.board);
+      this.gameBoard.setAuxiliarBoard(this.finalBoards.auxiliarBoard);
+      this.finalBoards = null;
+      this.changeState(STATES.PickPiece);
+      return;
+    }
+
+    const { moves, board, auxiliarBoard } = sequence;
+    this.gameBoard.setBoard(board, true);
+    this.gameBoard.setAuxiliarBoard(auxiliarBoard, true);
+
+    for (const animation of moves) {
+      animation.reset();
+      if (animation instanceof MyPieceAnimation) {
+        this.animator.addPieceAnimation(animation);
+        this.gameBoard.emptyPosition(animation.startPos);
+      } else this.animator.setEvolutionAnimation(animation);
+    }
+
+    this.filmSequence++;
   }
 
   verifyEndGame() {
@@ -247,6 +267,7 @@ export default class GameController {
     // Verify if there are no more moves for current player
     if (!this.gameBoard.existMoves()) {
       if (this.pickedMove == null) {
+        console.log("No more moves");
         this.winner = 1 - this.playerTurn;
         this.changeState(STATES.GameOver);
         return;
@@ -285,6 +306,7 @@ export default class GameController {
 
   switchTurns() {
     this.pickedMove = null;
+    this.mandatoryPlay = null;
     this.currentPieceID = null;
     this.intermediatePieceID = null;
 
@@ -310,7 +332,13 @@ export default class GameController {
     );
     let totalTime = animation.endTime;
 
-    this.gameSequences.addSequence(this.playerTurn, [...this.scores], this.mandatoryPlay);
+    this.gameSequences.addSequence(
+      this.gameBoard.getBoardCopy(),
+      this.gameBoard.getAuxiliarBoardCopy(),
+      this.playerTurn,
+      [...this.scores],
+      this.mandatoryPlay
+    );
     this.mandatoryPlay = null;
 
     if (upgrade) {
@@ -375,7 +403,6 @@ export default class GameController {
     if (!sequence) return;
 
     const { moves } = sequence;
-    const previousMoves = [];
 
     for (let i = moves.length - 1; i >= 0; i--) {
       const animation = moves[i];
@@ -384,18 +411,21 @@ export default class GameController {
       if (animation instanceof MyPieceAnimation) {
         this.animator.addPieceAnimation(animation);
         this.gameBoard.emptyPosition(animation.endPos);
-        previousMoves.push({
-          pos: animation.startPos,
-          piece: animation.piece.id,
-        });
       } else this.animator.setEvolutionAnimation(animation);
     }
 
-    this.previousSequence = {...sequence, previousMoves};
+    this.previousSequence = sequence;
     this.changeState(STATES.Undo);
   }
 
   beginFilm() {
+    if (!this.gameSequences.hasSequences()) return;
+
+    this.filmSequence = 0;
+    this.finalBoards = {
+      board: this.gameBoard.getBoardCopy(),
+      auxiliarBoard: this.gameBoard.getAuxiliarBoardCopy(),
+    };
     this.changeState(STATES.Film);
   }
 
@@ -403,7 +433,7 @@ export default class GameController {
     this.gameState = state;
   }
 
-  changePlayer(player=null) {
+  changePlayer(player = null) {
     this.gameTime = TurnTime;
     this.playerTurn = player == null ? this.playerTurn ^ 1 : player;
   }

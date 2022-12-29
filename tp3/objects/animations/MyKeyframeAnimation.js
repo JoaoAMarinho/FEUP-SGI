@@ -23,6 +23,7 @@ export class MyKeyframeAnimation extends MyAnimation {
       this.keyframes[0].instant,
       this.keyframes[this.keyframes.length - 1].instant
     );
+    if (this.keyframes[0].instant == 0) this.active = true;
   }
 
   /**

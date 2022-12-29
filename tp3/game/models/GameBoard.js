@@ -11,26 +11,31 @@ export default class GameBoard {
     for (let i = 0; i < this.board.length; i++) {
       this.board[i] = new Array(8).fill(Empty);
     }
-    this.auxiliarBoard = new Array(8);
-    for (let i = 0; i < this.auxiliarBoard.length; i++) {
-      this.auxiliarBoard[i] = new Array(3).fill(Empty);
-    }
+
+    this.createAuxiliarBoard();
 
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
 
     this.board = [
+      [Empty, Empty, Empty, 'X', Empty, Empty, Empty, Empty],
+      ['Y', Empty, Empty, Empty, Empty, Empty, 'Y', Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, 'Y', Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, 'X', Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, 'Y', Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, 'Y', Empty, Empty],
+      ['X', Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
     ];
 
     this.scene = scene;
+  }
+
+  createAuxiliarBoard() {
+    this.auxiliarBoard = new Array(8);
+    for (let i = 0; i < this.auxiliarBoard.length; i++) {
+      this.auxiliarBoard[i] = new Array(3).fill(Empty);
+    }
   }
 
   fillBoard(start, piece) {
@@ -41,6 +46,22 @@ export default class GameBoard {
         }
       }
     }
+  }
+
+  setBoard(board, copy=false) {
+    this.board = copy ? board.map((row) => row.slice()) : board;
+  }
+
+  setAuxiliarBoard(board, copy=false) {
+    this.auxiliarBoard = copy ? board.map((row) => row.slice()) : board;
+  }
+
+  getBoardCopy() {
+    return this.board.map((row) => row.slice());
+  }
+
+  getAuxiliarBoardCopy() {
+    return this.auxiliarBoard.map((row) => row.slice());
   }
 
   setPiece(piece, position) {
