@@ -14,11 +14,10 @@ const STATES = Object.freeze({
   PickPiece: 1,
   PickMove: 2,
   MovePiece: 3,
-  UpgradePiece: 4,
-  Undo: 5,
-  Film: 6, // Review may not be necessary
-  TimeOut: 7,
-  GameOver: 8,
+  Undo: 4,
+  Film: 5, // Review may not be necessary
+  TimeOut: 6,
+  GameOver: 7,
 });
 
 const PlayerIdx = Object.freeze({
@@ -101,11 +100,6 @@ export default class GameController {
     this.animator.manage();
     const handledClick = this.clickHandler(click);
 
-    if (this.gameState == STATES.UpgradePiece) {
-      this.upgradePieceHandler();
-      return;
-    }
-
     if (this.gameState == STATES.MovePiece) {
       this.movePieceHandler();
       return;
@@ -173,48 +167,34 @@ export default class GameController {
 
     // Move piece
     this.pickedMove = { row, col };
-    this.startPieceMovement();
+    this.setupPieceAnimations();
   }
 
   movePieceHandler() {
     if (this.animator.hasAnimations()) return;
 
-    const upgrade = this.gameBoard.executeMove(
-      this.playerTurn,
+    this.gameBoard.executeMove(
       this.currentPieceID,
+      this.playerTurn,
       this.pickedMove
     );
 
-    if (this.gameBoard.capturing) this.gameBoard.fillAuxiliarBoard(this.playerTurn, this.intermediatePiece);
-
-    if (upgrade) {
-      this.addAnimation([this.pickedMove], false, "evolution");
-      this.changeState(STATES.UpgradePiece);
-      return;
-    }
-
-    this.endMove();
-  }
-
-  upgradePieceHandler() {
-    if (this.animator.hasAnimations()) return;
-    this.gameBoard.upgradePiece(this.playerTurn, this.pickedMove);
-    this.endMove();
-  }
-
-  endMove() {
-
     this.pickedPiece = null;
-    this.currentPieceID = null;
+
     if (!this.gameBoard.capturing) {
       this.switchTurns();
       return;
     }
 
+    this.gameBoard.fillAuxiliarBoard(this.playerTurn, this.intermediatePieceID);
+
     this.players[this.playerTurn].score++;
     this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
     this.changeState(STATES.PickPiece);
-    this.intermediatePiece = null;
+
+    this.pickedMove = null;
+    this.currentPieceID = null;
+    this.intermediatePieceID = null;
   }
 
   verifyEndGame() {
@@ -255,21 +235,18 @@ export default class GameController {
       return;
     }
 
-    let canClick = true;
-    if (
-      this.gameState == STATES.MovePiece ||
-      this.gameState == STATES.UpgradePiece
-    ) {
-      canClick = false;
-    }
+    const canClick = this.gameState != STATES.MovePiece;
 
     if (this.scene.sceneInited) {
       this.gameBoardViewer.display(canClick, this.pickedPiece);
       this.theme.displayScene();
     }
-    const disableButtons = [STATES.MovePiece, STATES.UpgradePiece, STATES.Undo, STATES.Film].includes(
-      this.gameState
-      );
+    const disableButtons = [
+      STATES.MovePiece,
+      STATES.Undo,
+      STATES.Film,
+    ].includes(this.gameState);
+
     this.animator.display();
     this.menuViewer.displayGameMenu(
       Utils.parseTime(this.gameTime),
@@ -278,45 +255,70 @@ export default class GameController {
   }
 
   switchTurns() {
-    this.resetTime();
-    this.changePlayer();
     this.pickedMove = null;
+    this.currentPieceID = null;
+    this.intermediatePieceID = null;
+
+    this.changePlayer();
     this.gameBoard.setValidMoves(this.playerTurn);
     this.changeState(STATES.PickPiece);
   }
 
-  startPieceMovement() {
-    this.addAnimation(
+  setupPieceAnimations() {
+    const playerPiece = this.gameBoard.getPlayerPiece(this.pickedPiece);
+    let animation = this.addAnimation(
       [
-        this.gameBoard.getPlayerPiece(this.pickedPiece),
+        playerPiece,
         this.pickedPiece,
         this.pickedMove,
         this.gameBoard.capturing,
       ],
       true
     );
+    let totalTime = animation.endTime;
 
-    if (this.gameBoard.capturing) {
-      const intermediatePos = this.gameBoard.intermediatePosition(
-        this.pickedPiece,
-        this.pickedMove
+    const upgrade = this.gameBoard.isUpgradeMove(
+      this.playerTurn,
+      this.pickedPiece,
+      this.pickedMove
+    );
+
+    if (upgrade) {
+      animation = this.addAnimation(
+        [playerPiece, this.pickedMove, totalTime],
+        false,
+        "evolution"
       );
-      
-      // TODO - review board position
-      this.intermediatePiece = this.gameBoard.getPlayerPiece(intermediatePos);
-      const auxiliarBoardPos = this.gameBoard.getAuxiliarBoardPosition(1 - this.playerTurn);
-      auxiliarBoardPos.col += 8;
-      console.log(auxiliarBoardPos);
-      this.addAnimation([
-        this.intermediatePiece,
-        intermediatePos,
-        auxiliarBoardPos,
-      ]);
-      this.gameBoard.emptyPosition(intermediatePos);
+      totalTime = animation.endTime
     }
+
+    if (this.gameBoard.capturing) this.setupCaptureAnimation(totalTime);
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
+  }
+
+  setupCaptureAnimation(endTime) {
+    const intermediatePos = this.gameBoard.intermediatePosition(
+      this.pickedPiece,
+      this.pickedMove
+    );
+
+    const piece = this.gameBoard.getPlayerPiece(intermediatePos);
+    const auxiliarBoardPos = this.gameBoard.getAuxiliarBoardPosition(
+      1 - this.playerTurn
+    );
+
+    const animation = this.addAnimation([
+      piece,
+      intermediatePos,
+      auxiliarBoardPos,
+      false,
+      endTime,
+    ]);
+
+    this.intermediatePieceID = this.gameBoard.emptyPosition(intermediatePos);
+    return animation.endTime;
   }
 
   addAnimation(animationParams, isSequence = false, animationType = "piece") {
@@ -328,6 +330,8 @@ export default class GameController {
 
     if (isSequence) this.gameSequences.addSequence(animation);
     else this.gameSequences.addAnimation(animation);
+
+    return animation;
   }
 
   undoMove() {
@@ -354,11 +358,8 @@ export default class GameController {
   }
 
   changePlayer() {
-    this.playerTurn ^= 1;
-  }
-
-  resetTime() {
     this.gameTime = TurnTime;
+    this.playerTurn ^= 1;
   }
 
   resetGame() {

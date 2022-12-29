@@ -4,8 +4,8 @@ const Empty = " ";
 
 export default class GameBoard {
   constructor(scene, pieceSizeFactor) {
-    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor + 4, true)];
-    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor+ 4, true)];
+    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor, true)];
+    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor, true)];
 
     this.board = new Array(8);
     for (let i = 0; i < this.board.length; i++) {
@@ -118,8 +118,7 @@ export default class GameBoard {
     for (let row = rowIncrement; row < rowCap; row++) {
       for (let col = 0; col < this.auxiliarBoard[1].length; col++) {
         if (this.auxiliarBoard[row][col] == Empty) {
-          console.log(row, col);
-          return { row, col };
+          return { row, col: col + 8 };
         }
       }
     }
@@ -145,28 +144,24 @@ export default class GameBoard {
     return !this.outsideBoard(pos) && this.isEmpty(pos);
   }
 
-  executeMove(player, piece, endPos) {
+  executeMove(piece, player, endPos) {
     const playerPieces = this.getPlayerPieces(player);
+    const playerPiece = piece === playerPieces[0].id ? playerPieces[0] : playerPieces[1];
 
-    const upgrade = this.isUpgradeMove(playerPieces, piece, endPos);
-    this.board[endPos.row][endPos.col] = piece;
-    return upgrade;
+    if (playerPiece.isQueen || playerPiece.endRow == endPos.row)
+      this.board[endPos.row][endPos.col] = playerPieces[1].id;
+    else this.board[endPos.row][endPos.col] = piece;
   }
 
   fillAuxiliarBoard(player, piece) {
     const pos = this.getAuxiliarBoardPosition(1 -player);
-    console.log(pos);
-    this.auxiliarBoard[pos.row][pos.col] = piece;
+    this.auxiliarBoard[pos.row][pos.col-8] = piece;
   }
 
-  isUpgradeMove(pieces, piece, endPos) {
-    return piece === pieces[0].id && endPos.row === pieces[0].endRow;
-  }
-
-  upgradePiece(player, pos) {
+  isUpgradeMove(player, startPos, endPos) {
+    const piece = this.board[startPos.row][startPos.col];
     const playerPieces = this.getPlayerPieces(player);
-    const piece = playerPieces[1].id;
-    this.board[pos.row][pos.col] = piece;
+    return piece === playerPieces[0].id && endPos.row === playerPieces[0].endRow;
   }
 
   downgradePiece({row, col}) {
@@ -248,7 +243,6 @@ export default class GameBoard {
     if (pieceId == Empty) return null;
 
     return this.getPieceFromId(pieceId);
-
   }
 
 }

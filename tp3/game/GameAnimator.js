@@ -12,14 +12,26 @@ export default class GameAnimator {
     this.piecesViewer = gameBoardViewer.piecesViewer;
   }
 
-  createPieceAnimation(piece, startPos, endPos, capturing=false) {
-    const animation = new MyPieceAnimation(this.scene, piece, startPos, endPos, capturing);
+  createPieceAnimation(piece, startPos, endPos, capturing, endTime = null) {
+    const animation = new MyPieceAnimation(
+      this.scene,
+      piece,
+      startPos,
+      endPos,
+      capturing,
+      endTime
+    );
     this.addPieceAnimation(animation);
     return animation;
   }
 
-  createEvolutionAnimation(position) {
-    const animation = new MyEvolutionAnimation(this.scene, position);
+  createEvolutionAnimation(piece, position, startTime) {
+    const animation = new MyEvolutionAnimation(
+      this.scene,
+      piece,
+      position,
+      startTime
+    );
     this.setEvolutionAnimation(animation);
     return animation;
   }
@@ -44,7 +56,8 @@ export default class GameAnimator {
       }
     }
 
-    if (this.upgradingAnimation != null && this.upgradingAnimation.hasEnded()) this.upgradingAnimation = null;
+    if (this.upgradingAnimation != null && this.upgradingAnimation.hasEnded())
+      this.upgradingAnimation = null;
   }
 
   update(time) {
@@ -65,9 +78,14 @@ export default class GameAnimator {
 
     if (this.upgradingAnimation != null) {
       this.scene.pushMatrix();
-      this.upgradingAnimation.apply();
-      if (this.upgradingAnimation.isActive())
+      if (this.upgradingAnimation.isActive()) {
+        this.piecesViewer.display(
+          this.upgradingAnimation.startPos,
+          this.upgradingAnimation.piece
+        );
+        this.upgradingAnimation.apply();
         this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
+      }
       this.scene.popMatrix();
     }
   }

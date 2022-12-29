@@ -1,36 +1,37 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 
 export class MyPieceAnimation extends MyKeyframeAnimation {
-  constructor(scene, piece, startPos, endPos, capturing) {
+  constructor(scene, piece, startPos, endPos, capturing, endTime) {
     super(scene);
     this.piece = piece;
+
     this.startPos = startPos;
-    console.log(startPos, endPos);
     this.endPos = endPos;
+
     this.capturing = capturing;
     this.translationVect = {
       row: (this.endPos.row - this.startPos.row) * 4,
       col: (this.endPos.col - this.startPos.col) * 4,
     };
 
-    this.setupKeyframes();
+    this.setupKeyframes(endTime);
     super.updateTimes();
   }
 
   //REVIEW - Clean code
-  setupKeyframes() {
+  setupKeyframes(endTime) {
     this.addInitialAnimation();
-    let finalInstant = 0.2 * Math.abs(this.translationVect.col) * 1000;
+    let finalInstant = 200;
 
     if (this.endPos.col > 7) {
-      finalInstant = 3000;
-      this.addMoveToAuxiliarBoardAnimation();
+      finalInstant = (endTime != null) ? endTime : 3000;
+      this.addMoveToAuxiliarBoardAnimation(endTime);
     }
 
     if (this.capturing) {
+      finalInstant = 3000;
       this.addColisionAnimation();
       this.addReboundAnimation();
-      finalInstant = 3000;
     }
 
     this.addFinalAnimation(finalInstant);
@@ -51,7 +52,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
-  addMoveToAuxiliarBoardAnimation() {
+  addMoveToAuxiliarBoardAnimation(endTime) {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [1.0, 1.0, 1.0],
@@ -63,7 +64,10 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
         instant: 0.77*1000,
     };
     this.keyframes.push(keyframe);
-    }
+
+    if (endTime != null)
+      this.addFinalAnimation(3000);
+  }
 
   addColisionAnimation() {
     let sizeFactor = this.piece.sizeFactor;

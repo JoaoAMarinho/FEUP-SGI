@@ -1,14 +1,16 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 
 export class MyEvolutionAnimation extends MyKeyframeAnimation {
-  constructor(scene, startPos) {
+  constructor(scene, piece, startPos, startTime) {
     super(scene);
     this.startPos = startPos;
-    this.setupKeyframes();
+    this.piece = piece;
+
+    this.setupKeyframes(startTime);
     super.updateTimes();
   }
 
-  setupKeyframes() {
+  setupKeyframes(startTime) {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [0.0, 0.0, 0.0],
@@ -17,7 +19,7 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
 
     let keyframe = {
       transformation,
-      instant: 0,
+      instant: startTime,
     };
 
     this.keyframes.push(keyframe);
@@ -30,7 +32,7 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
 
     keyframe = {
       transformation,
-      instant: 1500,
+      instant: keyframe.instant + 1500,
     };
 
     this.keyframes.push(keyframe);
