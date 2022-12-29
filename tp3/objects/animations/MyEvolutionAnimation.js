@@ -1,10 +1,9 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 
 export class MyEvolutionAnimation extends MyKeyframeAnimation {
-  constructor(scene, piece, startPos, startTime) {
+  constructor(scene, startPos, startTime) {
     super(scene);
     this.startPos = startPos;
-    this.piece = piece;
 
     this.setupKeyframes(startTime);
     super.updateTimes();

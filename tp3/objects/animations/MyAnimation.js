@@ -61,4 +61,9 @@ export class MyAnimation {
   hasEnded() {
     return this.totalTime > this.endTime;
   }
+
+  reset() {
+    this.totalTime = 0;
+    this.active = false;
+  }
 }

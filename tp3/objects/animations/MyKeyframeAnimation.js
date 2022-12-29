@@ -136,6 +136,14 @@ export class MyKeyframeAnimation extends MyAnimation {
       newKeyframes.push(keyframe);
     }
     this.keyframes = newKeyframes;
+
+    this.reset();
     this.updateTimes();
+  }
+
+  reset() {
+    super.reset();
+    this.keyframeIndex = 0;
+    this.finalKeyframe = false;
   }
 }

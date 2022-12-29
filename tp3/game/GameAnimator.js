@@ -25,10 +25,9 @@ export default class GameAnimator {
     return animation;
   }
 
-  createEvolutionAnimation(piece, position, startTime) {
+  createEvolutionAnimation(position, startTime) {
     const animation = new MyEvolutionAnimation(
       this.scene,
-      piece,
       position,
       startTime
     );
@@ -72,17 +71,14 @@ export default class GameAnimator {
     this.pieceAnimations.forEach((animation) => {
       this.scene.pushMatrix();
       animation.apply();
-      this.piecesViewer.display(animation.startPos, animation.piece);
+      if (animation.isActive())
+        this.piecesViewer.display(animation.startPos, animation.piece);
       this.scene.popMatrix();
     });
 
     if (this.upgradingAnimation != null) {
       this.scene.pushMatrix();
       if (this.upgradingAnimation.isActive()) {
-        this.piecesViewer.display(
-          this.upgradingAnimation.startPos,
-          this.upgradingAnimation.piece
-        );
         this.upgradingAnimation.apply();
         this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
       }

@@ -21,10 +21,10 @@ export default class GameBoard {
 
     this.board = [
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, 'Y', Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, 'X', Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, 'Y', Empty, Empty],
+      [Empty, Empty, Empty, Empty, Empty, 'Y', Empty, Empty],
       ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
@@ -41,6 +41,10 @@ export default class GameBoard {
         }
       }
     }
+  }
+
+  setPiece(piece, position) {
+    this.board[position.row][position.col] = piece;
   }
 
   getPlayerPieces(player) {
@@ -164,14 +168,6 @@ export default class GameBoard {
     return piece === playerPieces[0].id && endPos.row === playerPieces[0].endRow;
   }
 
-  downgradePiece({row, col}) {
-    const piece = this.board[row][col];
-    if (piece === this.player1Pieces[1].id)
-      this.board[row][col] = this.player1Pieces[0].id;
-    else
-      this.board[row][col] = this.player2Pieces[0].id;
-  }
-
   filterClicablePositions(clickedPos, canClick) {
     const clicablePositions = [];
     const nonClickablePositions = [];
@@ -201,6 +197,11 @@ export default class GameBoard {
 
   // Utils
   emptyPosition({row, col}) {
+    if (col > 7) {
+      const pieceId = this.auxiliarBoard[row][col - 8];
+      this.auxiliarBoard[row][col - 8] = Empty;
+      return pieceId;
+    }
     const pieceId = this.board[row][col];
     this.board[row][col] = Empty;
     return pieceId;

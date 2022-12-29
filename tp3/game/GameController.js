@@ -1,6 +1,5 @@
 import GameBoard from "./models/GameBoard.js";
 import GameBoardView from "./views/GameBoardView.js";
-import Player from "./models/Player.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 import GameAnimator from "./GameAnimator.js";
 import GameCamera from "./GameCamera.js";
@@ -45,11 +44,7 @@ export default class GameController {
     this.pickedPiece = null;
     this.pickedMove = null;
 
-    this.players = [
-      // REVIEW change to scores
-      new Player(), // Player 1
-      new Player(), // Player 2
-    ];
+    this.scores = [0, 0];
 
     this.gameSettings = this.initSettings();
     this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
@@ -102,6 +97,16 @@ export default class GameController {
 
     if (this.gameState == STATES.MovePiece) {
       this.movePieceHandler();
+      return;
+    }
+
+    if (this.gameState == STATES.Undo) {
+      this.undoHandler();
+      return;
+    }
+
+    if (this.gameState == STATES.Film) {
+      this.undoHandler();
       return;
     }
 
@@ -188,13 +193,36 @@ export default class GameController {
 
     this.gameBoard.fillAuxiliarBoard(this.playerTurn, this.intermediatePieceID);
 
-    this.players[this.playerTurn].score++;
+    this.scores[this.playerTurn]++;
+
     this.gameBoard.setValidMoves(this.playerTurn, this.pickedMove);
     this.changeState(STATES.PickPiece);
 
-    this.pickedMove = null;
     this.currentPieceID = null;
     this.intermediatePieceID = null;
+    this.mandatoryPlay = {...this.pickedMove};
+  }
+
+  undoHandler() {
+    if (this.animator.hasAnimations()) return;
+
+    const { playerTurn, previousMoves, scores, mandatoryPlay } = this.previousSequence;
+    for (const obj of previousMoves) {
+      this.gameBoard.setPiece(obj.piece, obj.pos);
+    }
+
+    this.scores = scores;
+    this.changePlayer(playerTurn);
+
+    this.pickedPiece = null;
+    this.gameBoard.setValidMoves(this.playerTurn, mandatoryPlay);
+    this.changeState(STATES.PickPiece);
+  }
+
+  filmHandler() {
+    if (this.animator.hasAnimations()) return;
+
+    this.changeState(STATES.Film);
   }
 
   verifyEndGame() {
@@ -205,12 +233,12 @@ export default class GameController {
     }
 
     // Verify scores
-    if (this.players[PlayerIdx.Player1].score == 12) {
+    if (this.scores[PlayerIdx.Player1] == 12) {
       this.winner = PlayerIdx.Player1;
       this.changeState(STATES.GameOver);
       return;
     }
-    if (this.players[PlayerIdx.Player2].score == 12) {
+    if (this.scores[PlayerIdx.Player2] == 12) {
       this.winner = PlayerIdx.Player2;
       this.changeState(STATES.GameOver);
       return;
@@ -228,14 +256,15 @@ export default class GameController {
     }
   }
 
-  // Displays
   display() {
     if (this.gameState == STATES.Menu) {
       this.menuViewer.displayMainMenu(this.gameSettings);
       return;
     }
 
-    const canClick = this.gameState != STATES.MovePiece;
+    const canClick = ![STATES.MovePiece, STATES.Undo, STATES.Film].includes(
+      this.gameState
+    );
 
     if (this.scene.sceneInited) {
       this.gameBoardViewer.display(canClick, this.pickedPiece);
@@ -266,31 +295,35 @@ export default class GameController {
 
   setupPieceAnimations() {
     const playerPiece = this.gameBoard.getPlayerPiece(this.pickedPiece);
-    let animation = this.addAnimation(
-      [
-        playerPiece,
-        this.pickedPiece,
-        this.pickedMove,
-        this.gameBoard.capturing,
-      ],
-      true
-    );
-    let totalTime = animation.endTime;
-
     const upgrade = this.gameBoard.isUpgradeMove(
       this.playerTurn,
       this.pickedPiece,
       this.pickedMove
     );
 
+    let animation = new MyPieceAnimation(
+      this.scene,
+      playerPiece,
+      this.pickedPiece,
+      this.pickedMove,
+      this.gameBoard.capturing
+    );
+    let totalTime = animation.endTime;
+
+    this.gameSequences.addSequence(this.playerTurn, [...this.scores], this.mandatoryPlay);
+    this.mandatoryPlay = null;
+
     if (upgrade) {
-      animation = this.addAnimation(
-        [playerPiece, this.pickedMove, totalTime],
-        false,
+      const upgradeAnimation = this.addAnimation(
+        [this.pickedMove, totalTime],
         "evolution"
       );
-      totalTime = animation.endTime
+      totalTime = upgradeAnimation.endTime;
+
+      animation.addFinalAnimation(totalTime);
     }
+    this.animator.addPieceAnimation(animation);
+    this.addAnimationToSequence(animation);
 
     if (this.gameBoard.capturing) this.setupCaptureAnimation(totalTime);
 
@@ -321,45 +354,58 @@ export default class GameController {
     return animation.endTime;
   }
 
-  addAnimation(animationParams, isSequence = false, animationType = "piece") {
+  addAnimation(animationParams, animationType = "piece") {
     let animation;
 
     if (animationType == "piece")
       animation = this.animator.createPieceAnimation(...animationParams);
     else animation = this.animator.createEvolutionAnimation(...animationParams);
 
-    if (isSequence) this.gameSequences.addSequence(animation);
-    else this.gameSequences.addAnimation(animation);
+    this.addAnimationToSequence(animation);
 
     return animation;
+  }
+
+  addAnimationToSequence(animation) {
+    this.gameSequences.addAnimation(animation);
   }
 
   undoMove() {
     const sequence = this.gameSequences.undo();
     if (!sequence) return;
 
-    for (let i = sequence.length - 1; i >= 0; i--) {
-      const animation = sequence[i];
+    const { moves } = sequence;
+    const previousMoves = [];
+
+    for (let i = moves.length - 1; i >= 0; i--) {
+      const animation = moves[i];
       animation.revert();
 
-      if (animation instanceof MyPieceAnimation)
+      if (animation instanceof MyPieceAnimation) {
         this.animator.addPieceAnimation(animation);
-      else {
-        this.animator.setEvolutionAnimation(animation);
-        this.gameBoard.downgradePiece(animation.startPos);
-      }
+        this.gameBoard.emptyPosition(animation.endPos);
+        previousMoves.push({
+          pos: animation.startPos,
+          piece: animation.piece.id,
+        });
+      } else this.animator.setEvolutionAnimation(animation);
     }
 
+    this.previousSequence = {...sequence, previousMoves};
     this.changeState(STATES.Undo);
+  }
+
+  beginFilm() {
+    this.changeState(STATES.Film);
   }
 
   changeState(state) {
     this.gameState = state;
   }
 
-  changePlayer() {
+  changePlayer(player=null) {
     this.gameTime = TurnTime;
-    this.playerTurn ^= 1;
+    this.playerTurn = player == null ? this.playerTurn ^ 1 : player;
   }
 
   resetGame() {
@@ -385,8 +431,8 @@ export default class GameController {
       case "Undo":
         this.undoMove();
         return true;
-      case "Filme":
-        // TODO - film action
+      case "Film":
+        this.beginFilm();
         return true;
       default:
         return false;

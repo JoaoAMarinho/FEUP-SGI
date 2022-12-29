@@ -15,10 +15,8 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     };
 
     this.setupKeyframes(endTime);
-    super.updateTimes();
   }
 
-  //REVIEW - Clean code
   setupKeyframes(endTime) {
     this.addInitialAnimation();
     let finalInstant = 200;
@@ -126,5 +124,6 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     };
 
     this.keyframes.push(keyframe);
+    super.updateTimes();
   }
 }
