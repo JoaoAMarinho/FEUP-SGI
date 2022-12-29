@@ -70,9 +70,10 @@ export default class GameAnimator {
   display() {
     this.pieceAnimations.forEach((animation) => {
       this.scene.pushMatrix();
-      animation.apply();
-      if (animation.isActive())
+      if (animation.isActive()) {
+        animation.apply();
         this.piecesViewer.display(animation.startPos, animation.piece);
+      }
       this.scene.popMatrix();
     });
 
