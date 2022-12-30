@@ -23,7 +23,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     let offset = 0;
 
     if (this.endPos.col > 7) {
-      offset += 2;
+      offset = 2;
       finalInstant = (endTime != null) ? endTime : 2400;
       this.addWaitAnimation();
       this.addMoveUpAnimation();
@@ -144,8 +144,8 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   addFinalAnimation(finalInstant, offset=0) {
     const transformation = {
       translate: [
-        this.translationVect.col,
-        0.0-offset,
+        this.translationVect.col+offset,
+        0.0-offset/2,
         this.translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],

@@ -41,7 +41,7 @@ export class XMLscene extends CGFscene {
     this.setPickEnabled(true);
 
     // Objects conneted to MyInterface
-    this.displayAxis = false;
+    this.displayAxis = true;
     this.sceneInited = false;
   }
 
@@ -242,6 +242,13 @@ export class XMLscene extends CGFscene {
       this.interface.isKeyPressed("Keym")
     ) {
       this.graph.updateMaterials(this.graph.components[this.graph.idRoot]);
+    }
+  }
+
+  reset() {
+    this.sceneInited = false;
+    for (let i = 0; i < 8; i++) {
+      this.lights[i].setPosition(200, 200, 200, 1);
     }
   }
 }

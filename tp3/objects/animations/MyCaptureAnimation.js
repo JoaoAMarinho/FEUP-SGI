@@ -13,12 +13,13 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
     this.startPos = startPos;
     this.intermediatePos = intermediatePos;
-    this.endPos = endPos;
 
     this.translationVect = {
-      row: (this.endPos.row - this.intermediatePos.row) * 4,
-      col: (this.endPos.col - this.intermediatePos.col) * 4,
+      row: (endPos.row - this.intermediatePos.row) * 4,
+      col: (endPos.col - this.intermediatePos.col) * 4,
     };
+
+    this.endPos = { row: endPos.row * 4, col: endPos.col * 4 + 2 };
 
     this.calculateStartPos();
 
@@ -127,7 +128,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   addMoveToFinalPosition() {
     const transformation = {
-      translate: [this.endPos.col * 4, 14.0, this.endPos.row * 4],
+      translate: [this.endPos.col, 14.0, this.endPos.row],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
@@ -141,7 +142,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   addMoveDownAnimation() {
     const transformation = {
-      translate: [this.endPos.col * 4, 3.0, this.endPos.row * 4],
+      translate: [this.endPos.col, 1.8, this.endPos.row],
 
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
@@ -159,9 +160,9 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
   addFinalAnimation(endTime) {
     const transformation = {
       translate: [
-        this.endPos.col * 4 + this.translationVect.col * 5,
-        3.0,
-        this.endPos.row * 4 + this.translationVect.row * 5,
+        this.endPos.col + this.translationVect.col * 5,
+        1.8,
+        this.endPos.row + this.translationVect.row * 5,
       ],
 
       scale: [1.0, 1.0, 1.0],

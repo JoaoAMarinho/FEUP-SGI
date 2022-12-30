@@ -15,9 +15,8 @@ const STATES = Object.freeze({
   PickMove: 2,
   MovePiece: 3,
   Undo: 4,
-  Film: 5, // Review may not be necessary
-  TimeOut: 6,
-  GameOver: 7,
+  Film: 5,
+  GameOver: 6,
 });
 
 const PlayerIdx = Object.freeze({
@@ -98,8 +97,6 @@ export default class GameController {
 
     if (this.gameState == STATES.GameOver) {
       this.gameOverHandler(click);
-      console.log("Game over");
-      console.log(`Player ${this.winner} won`);
       return;
     }
 
@@ -118,13 +115,6 @@ export default class GameController {
 
     if (this.gameState == STATES.Film) {
       this.filmHandler();
-      return;
-    }
-
-    // NOTE - missing
-    if (this.gameState == STATES.TimeOut) {
-      console.log("Time out");
-      console.log(`Player ${this.playerTurn + 1} lost`);
       return;
     }
 
@@ -266,7 +256,8 @@ export default class GameController {
   verifyEndGame() {
     // Time out
     if (this.gameTime <= 0) {
-      this.changeState(STATES.TimeOut);
+      this.winner = 1 - this.playerTurn;
+      this.changeState(STATES.GameOver);
       return;
     }
 
@@ -285,7 +276,6 @@ export default class GameController {
     // Verify if there are no more moves for current player
     if (!this.gameBoard.existMoves()) {
       if (this.pickedMove == null) {
-        console.log("No more moves");
         this.winner = 1 - this.playerTurn;
         this.changeState(STATES.GameOver);
         return;
@@ -393,7 +383,6 @@ export default class GameController {
     const auxiliarBoardPos = this.gameBoard.getAuxiliarBoardPosition(
       1 - this.playerTurn
     );
-    auxiliarBoardPos.col += 0.5;
 
     const animation = this.addAnimation([
       piece,
@@ -481,7 +470,7 @@ export default class GameController {
     this.camera.resetPosition();
     this.gameSequences.reset();
     this.gameSettings = "Space";
-    this.scene.sceneInited = false;
+    this.scene.reset();
     this.changeState(STATES.Menu);
   }
 

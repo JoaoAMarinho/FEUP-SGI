@@ -29,12 +29,11 @@ export default class GameBoardView {
     this.blackMaterial.setTexture(texture);
 
     this.whiteMaterial = new CGFappearance(scene);
-    this.whiteMaterial.setAmbient(0, 0, 0, 1);
+    this.whiteMaterial.setAmbient(1, 1, 1, 1);
     this.whiteMaterial.setDiffuse(0, 0, 0, 1);
     this.whiteMaterial.setSpecular(0, 0, 0, 1);
     this.whiteMaterial.setShininess(120);
 
-    this.whiteMaterial.setTexture(texture);
   }
 
   display(canClick, clickedPos = null) {
@@ -45,7 +44,22 @@ export default class GameBoardView {
 
   displayMainBoard() {
     // Display borders
-   this.displayBoard(this.blackMaterial);
+    this.scene.pushMatrix();
+
+    this.scene.translate(14, 0, 14);
+    this.displayBoard();
+    
+    this.scene.popMatrix();
+
+    // Display bottom base
+    this.scene.pushMatrix();
+
+    this.scene.translate(0, -2, 0);
+    this.scene.rotate(Math.PI / 2, 1, 0, 0);
+    this.blackMaterial.apply();
+    this.baseBottom.display();
+
+    this.scene.popMatrix();
 
     // Display top
     this.scene.pushMatrix();
@@ -58,24 +72,13 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
-  displayBoard(material) {
+  displayBoard() {
     this.scene.pushMatrix();
 
-    this.scene.translate(14, 0, 14);
     this.scene.rotate(Math.PI / 4, 0, 1, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    material.apply();
+    this.blackMaterial.apply();
     this.baseBorders.display();
-
-    this.scene.popMatrix();
-
-    // Display bottom base
-    this.scene.pushMatrix();
-
-    this.scene.translate(0, -2, 0);
-    this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    material.apply();
-    this.baseBottom.display();
 
     this.scene.popMatrix();
   }
@@ -89,26 +92,35 @@ export default class GameBoardView {
   displayAuxiliarBoardOutside() {
     this.scene.pushMatrix();
 
-    this.scene.translate(33.8, 0, 0);
-    this.scene.scale(3 / 8, 1, 1);
-    this.displayBoard(this.blackMaterial);
+    this.scene.translate(38, 0, 14);
+    this.scene.scale(3 / 9, 1, 1);
+    this.displayBoard();
+
+    this.scene.popMatrix();
+
+    // Display bottom base
+    this.scene.pushMatrix();
+
+    this.scene.translate(38, -2, 0);
+    this.scene.scale(3 / 9, 1, 1);
+    this.scene.translate(-14, 0, 0);
+    this.scene.rotate(Math.PI / 2, 1, 0, 0);
+    this.blackMaterial.apply();
+    this.baseBottom.display();
 
     this.scene.popMatrix();
   }
 
   displayAuxiliarBoardInside() {
-    this.scene.pushMatrix();
-    this.scene.scale(3 / 8, 1, 1);
-    this.scene.translate((33 * 8) / 3, 0, 0);
-
     // Display borders
     this.scene.pushMatrix();
 
-    this.scene.translate(16, -2, 14);
+    this.scene.translate(38, -2, 14);
+    this.scene.scale(3 / 9, 1, 1);
     this.scene.scale(1, -1, 1);
     this.scene.rotate(Math.PI / 4, 0, 1, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.whiteMaterial.apply();
+    this.blackMaterial.apply();
     this.baseBorders.display();
 
     this.scene.popMatrix();
@@ -116,13 +128,13 @@ export default class GameBoardView {
     // Display base top
     this.scene.pushMatrix();
 
-    this.scene.translate(30, -2, 0);
+    this.scene.translate(38, -2, 0);
+    this.scene.scale(3 / 9, 1, 1);
+    this.scene.translate(14, 0, 0);
     this.scene.scale(-1, 1, 1);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
     this.blackMaterial.apply();
     this.baseBottom.display();
-
-    this.scene.popMatrix();
 
     this.scene.popMatrix();
   }
@@ -166,6 +178,6 @@ export default class GameBoardView {
     const piece = this.gameBoard.getAuxiliarBoardPiece({row, col})
 
     if (piece == null) return;
-    this.piecesViewer.display({row: row, col: col + 8.5, height: -1}, piece);
+    this.piecesViewer.display({row, col: col + 8, height: -0.5}, piece, 2);
   }
 }

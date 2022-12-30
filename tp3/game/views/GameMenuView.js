@@ -116,7 +116,6 @@ export default class GameMenuView {
     const purple = [0.29, 0.4, 69, 1.0];
 
     this.pickId = 15;
-    console.log(scores);
 
     this.displayTime(gameTime);
     this.displayText("Blacks", [25, 19.3, -50], [4, 4, 4], purple);

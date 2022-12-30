@@ -8,6 +8,7 @@ export default class TransporterView {
       let node = this.scene.graph.components[this.component];
       this.scene.pushMatrix();
   
+      this.scene.translate(-1, 0, 0);
       this.scene.rotate(angle, 0, 1, 0);
       this.scene.graph.processNode(node, null, null);
   
