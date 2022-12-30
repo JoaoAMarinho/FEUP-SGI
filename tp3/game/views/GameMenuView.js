@@ -108,40 +108,50 @@ export default class GameMenuView {
     this.resetDisplay();
   }
 
-  displayGameMenu(gameTime, disableButtons) {
+  displayGameMenu(scores, gameTime, disableButtons) {
     this.setUpDisplay();
     
     const purpleDisabled = [0.29, 0.4, 69, 0.3];
+    const purple = [0.29, 0.4, 69, 1.0];
 
     this.pickId = 15;
+    console.log(scores);
 
     this.displayTime(gameTime);
+    this.displayText("Blacks", [25, 19.3, -50], [4, 4, 4], purple);
+    this.displayText(scores[0].toString(), [37, 18.8, -50], [4, 4, 4], purple);
+    this.displayText("Whites", [25, 17.3, -50], [4, 4, 4], purple);
+    this.displayText(scores[1].toString(), [37, 16.6, -50], [4, 4, 4], purple);
 
     if (disableButtons) {
-      this.displayText(ICONS.Undo, [-30, 19.2, -50], [4, 4, 4], purpleDisabled);
-      this.displayText(ICONS.Film, [-27, 19, -50], [4, 4, 4], purpleDisabled);
+      this.displayText(ICONS.Undo, [-30, 19, -50], [4, 4, 4], purpleDisabled);
+      this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], purpleDisabled);
     } else {
-      this.displayButton([ICONS.Undo, "Undo"], [-30, 19.2, -50], [4, 4, 4]);
-      this.displayButton([ICONS.Film, "Film"], [-27, 19, -50], [4, 4, 4]);
+      this.displayButton([ICONS.Undo, "Undo"], [-30, 19, -50], [4, 4, 4], purple);
+      this.displayButton([ICONS.Film, "Film"], [-27, 18.8, -50], [4, 4, 4], purple);
     }
-    this.displayButton([ICONS.Home, "Home"], [-36, 19, -50], [4, 4, 4]);
-    this.displayButton([ICONS.Camera, "Camera"], [-33, 19, -50], [4, 4, 4]);
+    this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], purple);
+    this.displayButton([ICONS.Camera, "Camera"], [-33, 18.8, -50], [4, 4, 4], purple);
+
+
 
     this.resetDisplay();
   }
 
   displayTime(gameTime) {
+    const white = [1.0, 1.0, 1.0, 1.0];
+
     const minute = gameTime[0];
     let seconds = gameTime[1];
     if (seconds.length > 1)
      seconds = gameTime[1].split("");
     else seconds = ["0", seconds];
 
-    this.displayText("0", [-8, 19, -50], [4, 4, 4]);
-    this.displayText(minute, [-5, 19, -50], [4, 4, 4]);
-    this.displayText(":", [-2, 19, -50], [4, 4, 4]);
-    this.displayText(seconds[0], [-1, 19, -50], [4, 4, 4]);
-    this.displayText(seconds[1], [2, 19, -50], [4, 4, 4]);
+    this.displayText("0", [-8, 18.9, -50], [4, 4, 4], white);
+    this.displayText(minute, [-5, 18.9, -50], [4, 4, 4], white);
+    this.displayText(":", [-2, 18.9, -50], [4, 4, 4], white);
+    this.displayText(seconds[0], [-1, 18.9, -50], [4, 4, 4], white);
+    this.displayText(seconds[1], [2, 18.9, -50], [4, 4, 4], white);
   }
 
   displayBackground(texture) {

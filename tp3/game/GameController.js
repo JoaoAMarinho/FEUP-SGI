@@ -305,6 +305,7 @@ export default class GameController {
 
     this.animator.display();
     this.menuViewer.displayGameMenu(
+      this.scores,
       Utils.parseTime(this.gameTime),
       disableButtons
     );
