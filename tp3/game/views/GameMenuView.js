@@ -128,7 +128,7 @@ export default class GameMenuView {
       this.displayText(ICONS.Undo, [-30, 19, -50], [4, 4, 4], purpleDisabled);
       this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], purpleDisabled);
     } else {
-      this.displayButton([ICONS.Undo, "Undo"], [-30, 19, -50], [4, 4, 4], purple);
+      this.displayButton([ICONS.Undo, "Undo"], [-30, 18.8, -50], [4, 4, 4], purple);
       this.displayButton([ICONS.Film, "Film"], [-27, 18.8, -50], [4, 4, 4], purple);
     }
     this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], purple);
@@ -165,7 +165,7 @@ export default class GameMenuView {
 
     this.displayText("0", [-8, 18.9, -50], [4, 4, 4], white);
     this.displayText(minute, [-5, 18.9, -50], [4, 4, 4], white);
-    this.displayText(":", [-2, 18.9, -50], [4, 4, 4], white);
+    this.displayText(":", [-3, 18.9, -50], [4, 4, 4], white);
     this.displayText(seconds[0], [-1, 18.9, -50], [4, 4, 4], white);
     this.displayText(seconds[1], [2, 18.9, -50], [4, 4, 4], white);
   }
