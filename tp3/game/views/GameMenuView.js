@@ -101,10 +101,10 @@ export default class GameMenuView {
     this.displayButton(["Play"], [-4, 0, -50], [6, 6, 6], purple);
 
     this.displayButton(["Space"], [-14, -8, -50], [4, 4, 4], spaceColor);
-    this.displayText(ICONS.Satellite, [-15, -8, -50], [6, 6, 6]);
+    this.displayText(ICONS.Satellite, [-16, -7.5, -50], [6, 6, 6]);
 
     this.displayButton(["Classic"], [6, -8, -50], [4, 4, 4], classicColor);
-    this.displayText(ICONS.Checker, [16.5, -7.5, -50], [4, 4, 4]);
+    this.displayText(ICONS.Checker, [15.5, -7.2, -50], [4, 4, 4]);
 
     this.resetDisplay();
   }
@@ -120,9 +120,9 @@ export default class GameMenuView {
 
     this.displayTime(gameTime);
     this.displayText("Blacks", [25, 19.3, -50], [4, 4, 4], purple);
-    this.displayText(scores[0].toString(), [37, 18.8, -50], [4, 4, 4], purple);
-    this.displayText("Whites", [25, 17.3, -50], [4, 4, 4], purple);
-    this.displayText(scores[1].toString(), [37, 16.6, -50], [4, 4, 4], purple);
+    this.displayText(scores[0].toString(), [38, 19.3, -50], [4, 4, 4], purple);
+    this.displayText("Whites", [25, 16.8, -50], [4, 4, 4], purple);
+    this.displayText(scores[1].toString(), [38, 16.8, -50], [4, 4, 4], purple);
 
     if (disableButtons) {
       this.displayText(ICONS.Undo, [-30, 19, -50], [4, 4, 4], purpleDisabled);
