@@ -63,7 +63,7 @@ export default class GameAnimator {
   }
 
   hasAnimations() {
-    return this.pieceAnimations.length > 0 || this.upgradingAnimation != null || this.captureAnimation != null;
+    return this.pieceAnimations.length > 0 || this.upgradingAnimation != null;
   }
 
   manage() {
@@ -111,7 +111,6 @@ export default class GameAnimator {
     }
 
     if (this.captureAnimation != null) {
-      console.log(this.captureAnimation.startPos);
       this.scene.pushMatrix();
       if (this.captureAnimation.isActive()) {
         this.captureAnimation.apply();

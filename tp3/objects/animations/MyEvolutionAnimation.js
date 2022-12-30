@@ -31,7 +31,7 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
 
     keyframe = {
       transformation,
-      instant: keyframe.instant + 1500,
+      instant: keyframe.instant + 800,
     };
 
     this.keyframes.push(keyframe);

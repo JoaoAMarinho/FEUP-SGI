@@ -5,16 +5,8 @@ export function parseTime(time) {
   return [minute.toString(), seconds.toString()];
 }
 
-export function angle(a, b) {
-  let ax = a[0],
-    ay = a[1],
-    az = a[2],
-    bx = b[0],
-    by = b[1],
-    bz = b[2],
-    mag1 = Math.sqrt(ax * ax + ay * ay + az * az),
-    mag2 = Math.sqrt(bx * bx + by * by + bz * bz),
-    mag = mag1 * mag2,
-    cosine = mag && vec3.dot(a, b) / mag;
-  return Math.acos(Math.min(Math.max(cosine, -1), 1));
+export function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
 }

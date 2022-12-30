@@ -20,8 +20,8 @@ export default class GameBoard {
     this.board = [
       [Empty, Empty, Empty, 'X', Empty, Empty, Empty, Empty],
       ['Y', Empty, Empty, Empty, Empty, Empty, 'Y', Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      ['X', Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
+      [Empty, 'X', Empty, Empty, Empty, Empty, Empty, Empty],
+      [Empty, Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
       [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
       [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],

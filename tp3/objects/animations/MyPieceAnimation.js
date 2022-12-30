@@ -19,26 +19,28 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
   setupKeyframes(endTime) {
     this.addInitialAnimation();
-    let finalInstant = 200;
+    let finalInstant = 600;
 
     if (this.endPos.col > 7) {
-      finalInstant = (endTime != null) ? endTime : 3000;
-      this.addWaitAnimation(endTime);
+      finalInstant = (endTime != null) ? endTime : 2400;
+      this.addWaitAnimation();
       this.addMoveUpAnimation();
       this.addMoveToFinalPosition();
+      this.addFinalAnimation(2300);
     }
 
     if (this.capturing) {
-      finalInstant = 3000;
+      finalInstant = 2400;
       this.addColisionAnimation();
       this.addReboundAnimation();
+      this.addFinalAnimation(1500);
     }
 
     this.addFinalAnimation(finalInstant);
   }
 
   // animations for the auxiliar board moves
-  addWaitAnimation(endTime) {
+  addWaitAnimation() {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [1.0, 1.0, 1.0],
@@ -47,24 +49,21 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     const keyframe = {
         transformation,
-        instant: 0.77*1000,
+        instant: 500,
     };
     this.keyframes.push(keyframe);
-
-    if (endTime != null)
-      this.addFinalAnimation(3000);
   }
 
   addMoveUpAnimation() {
     const transformation = {
-      translate: [0.0, 3.0, 0.0],
+      translate: [0.0, 10.0, 0.0],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
 
     let keyframe = {
       transformation,
-      instant: 1200,
+      instant: 1000,
     };
 
     this.keyframes.push(keyframe);
@@ -72,14 +71,14 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
   addMoveToFinalPosition() {
     const transformation = {
-      translate: [this.translationVect.col, 3.0, this.translationVect.row],
+      translate: [this.translationVect.col, 10.0, this.translationVect.row],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
 
     let keyframe = {
       transformation,
-      instant: 2230,
+      instant: 1800,
     };
     this.keyframes.push(keyframe);
   }
@@ -95,7 +94,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   
     let keyframe = {
         transformation,
-        instant: 0.7*1000,
+        instant: 500,
     };
 
     this.keyframes.push(keyframe);
@@ -112,20 +111,19 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     let keyframe = {
       transformation,
-      instant: 1000,
+      instant: 750,
     };
     this.keyframes.push(keyframe);
     
     keyframe = {
         transformation,
-        instant: 1.2*1000,
+        instant: 1000,
     };
 
     this.keyframes.push(keyframe);
     return keyframe.instant;
   }
 
-  // comon to both movements
   addInitialAnimation() {
     let transformation = {
       translate: [0.0, 0.0, 0.0],

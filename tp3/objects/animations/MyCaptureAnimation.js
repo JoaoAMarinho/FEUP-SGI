@@ -1,5 +1,11 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
-import {angle} from "../../game/GameUtils.js"
+import { getRandomInt } from "../../game/GameUtils.js";
+
+const AxisCombination = [
+  [1, 1, 0],
+  [1, 0, 1],
+  [0, 1, 1],
+];
 
 export class MyCaptureAnimation extends MyKeyframeAnimation {
   constructor(scene, startPos, intermediatePos, endPos, endTime) {
@@ -13,33 +19,58 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
       row: (this.endPos.row - this.intermediatePos.row) * 4,
       col: (this.endPos.col - this.intermediatePos.col) * 4,
     };
-  
+
     this.calculateStartPos();
-    
+
     this.setupKeyframes(endTime);
   }
 
   calculateStartPos() {
     let direction = [
-      (this.intermediatePos.col * 4 - this.startPos[0]),
+      this.intermediatePos.col * 4 - this.startPos[0],
       4 - this.startPos[1],
-      (this.intermediatePos.row * 4 - this.startPos[2]),
+      this.intermediatePos.row * 4 - this.startPos[2],
     ];
     vec3.normalize(direction, direction);
-    let facing = vec3.fromValues(0,0,1);
-    this.facing = angle(facing, direction);
-    
-    vec3.scale(direction, direction, 3);
-    vec3.sub(this.startPos, this.startPos, direction);
+
+    this.facing = Math.atan2(direction[0], direction[2]);
+    this.startPos = this.findPointInNormalPlane(this.startPos, direction);
   }
 
-  setupKeyframes(endTime) {
+  findPointInNormalPlane(point, normal) {
+    const randomCombination =
+      AxisCombination[Math.floor(Math.random() * AxisCombination.length)];
+
+    const randomPoint = [];
+    let randomPointSum = 0;
+    let missingIdx;
+
+    for (let i = 0; i < randomCombination.length; i++) {
+      if (randomCombination[i] === 0) {
+        randomPoint.push(null);
+        randomPointSum -= normal[i] * point[i];
+        missingIdx = i;
+        continue;
+      }
+
+      const randomValue = getRandomInt(5, 20);
+      randomPoint.push(point[i] + randomValue);
+      randomPointSum += normal[i] * randomValue;
+    }
+
+    randomPointSum *= -1 / normal[missingIdx];
+    randomPoint[missingIdx] = randomPointSum;
+
+    return randomPoint;
+  }
+
+  setupKeyframes() {
     this.addInitialAnimation();
     this.addMoveToPiecePosition();
     this.addMoveUpAnimation();
     this.addMoveToFinalPosition();
-    const finalInstant = (endTime != null) ? endTime : 3000;
-    this.addFinalAnimation(finalInstant);
+    this.addMoveDownAnimation();
+    this.addFinalAnimation();
   }
 
   addInitialAnimation() {
@@ -51,37 +82,44 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
     const keyframe = {
       transformation,
-      instant: 0,
+      instant: 0.01,
     };
 
     this.keyframes.push(keyframe);
-
   }
 
   addMoveToPiecePosition() {
     let transformation = {
-      translate: [this.intermediatePos.col*4, 0.0, this.intermediatePos.row*4],
+      translate: [
+        this.intermediatePos.col * 4,
+        4.0,
+        this.intermediatePos.row * 4,
+      ],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
 
     const keyframe = {
       transformation,
-      instant: 1000,
+      instant: 500,
     };
     this.keyframes.push(keyframe);
   }
 
   addMoveUpAnimation() {
     const transformation = {
-      translate: [this.intermediatePos.col *4, 3.0, this.intermediatePos.row *4],
+      translate: [
+        this.intermediatePos.col * 4,
+        14.0,
+        this.intermediatePos.row * 4,
+      ],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
 
     let keyframe = {
       transformation,
-      instant: 1200,
+      instant: 1000,
     };
 
     this.keyframes.push(keyframe);
@@ -89,21 +127,21 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   addMoveToFinalPosition() {
     const transformation = {
-      translate: [this.endPos.col*4, 3.0, this.endPos.row*4],
+      translate: [this.endPos.col * 4, 14.0, this.endPos.row * 4],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
 
     let keyframe = {
       transformation,
-      instant: 2230,
+      instant: 1800,
     };
     this.keyframes.push(keyframe);
   }
 
-  addFinalAnimation(finalInstant) {
+  addMoveDownAnimation() {
     const transformation = {
-      translate: [this.endPos.col * 4, 0.0, this.endPos.row * 4],
+      translate: [this.endPos.col * 4, 4.0, this.endPos.row * 4],
 
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
@@ -111,10 +149,41 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
     const keyframe = {
       transformation,
-      instant: finalInstant,
+      instant: 2300,
     };
 
     this.keyframes.push(keyframe);
     super.updateTimes();
+  }
+
+  addFinalAnimation() {
+    const transformation = {
+      translate: [
+        this.endPos.col * 4 + this.translationVect.col * 5,
+        4.0,
+        this.endPos.row * 4 + this.translationVect.row * 5,
+      ],
+
+      scale: [1.0, 1.0, 1.0],
+      rotate: [0.0, 0.0, 0.0],
+    };
+
+    const keyframe = {
+      transformation,
+      instant: 5000,
+    };
+
+    this.keyframes.push(keyframe);
+    super.updateTimes();
+  }
+
+  update(t) {
+    if (this.keyframeIndex == 1) {
+      this.facing = Math.atan2(
+        this.translationVect.col,
+        this.translationVect.row
+      );
+    }
+    super.update(t);
   }
 }

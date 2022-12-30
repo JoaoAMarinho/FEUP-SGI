@@ -218,6 +218,7 @@ export default class GameController {
 
     this.pickedPiece = null;
     this.gameBoard.setValidMoves(this.playerTurn, mandatoryPlay);
+    this.mandatoryPlay = null;
     this.changeState(STATES.PickPiece);
   }
 
