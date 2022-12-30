@@ -19,8 +19,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.setupKeyframes(endTime);
   }
 
-  calculateStartPos(endTime) {
-    finalInstant = (endTime != null) ? endTime : 3000;
+  calculateStartPos() {
     let direction = [
       (this.intermediatePos.col * 4 - this.startPos[0]),
       4 - this.startPos[1],
@@ -34,12 +33,12 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     vec3.sub(this.startPos, this.startPos, direction);
   }
 
-  setupKeyframes() {
+  setupKeyframes(endTime) {
     this.addInitialAnimation();
     this.addMoveToPiecePosition();
     this.addMoveUpAnimation();
     this.addMoveToFinalPosition();
-    finalInstant = (endTime != null) ? endTime : 3000;
+    const finalInstant = (endTime != null) ? endTime : 3000;
     this.addFinalAnimation(finalInstant);
   }
 
