@@ -104,7 +104,7 @@ export default class GameMenuView {
     this.displayText(ICONS.Satellite, [-16, -7.5, -50], [6, 6, 6]);
 
     this.displayButton(["Classic"], [6, -8, -50], [4, 4, 4], classicColor);
-    this.displayText(ICONS.Checker, [15.5, -7.2, -50], [4, 4, 4]);
+    this.displayText(ICONS.Checker, [16.5, -7.2, -50], [4, 4, 4]);
 
     this.resetDisplay();
   }
