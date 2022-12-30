@@ -92,6 +92,7 @@ export default class GameMenuView {
     }
 
     this.displayBackground(texture);
+    this.texture = texture;
     this.setUpDisplay();
 
     this.pickId = 15;
@@ -136,6 +137,21 @@ export default class GameMenuView {
 
 
     this.resetDisplay();
+  }
+
+  displayGameOverMenu(winner) {
+    this.displayBackground(this.texture);
+    this.setUpDisplay();
+
+    const purple = [0.29, 0.4, 69, 1.0];
+
+    const winnerColor = winner ? "Whites" : "Blacks"; 
+    this.displayText(winnerColor, [-12, 10, -50], [12, 12, 12], purple);
+    this.displayText("WIN", [-3, 4, -50], [12, 12, 12], purple);
+    this.displayButton([ICONS.Home, "Home"], [20, -10, -50], [4, 4, 4], purple);
+    this.displayText("Menu", [11, -9, -50], [4, 4, 4], purple);
+    this.resetDisplay();
+
   }
 
   displayTime(gameTime) {

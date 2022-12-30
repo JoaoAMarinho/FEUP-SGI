@@ -96,6 +96,13 @@ export default class GameController {
       return;
     }
 
+    if (this.gameState == STATES.GameOver) {
+      this.gameOverHandler(click);
+      console.log("Game over");
+      console.log(`Player ${this.winner} won`);
+      return;
+    }
+
     this.animator.manage();
     const handledClick = this.clickHandler(click);
 
@@ -118,11 +125,6 @@ export default class GameController {
     if (this.gameState == STATES.TimeOut) {
       console.log("Time out");
       console.log(`Player ${this.playerTurn + 1} lost`);
-      return;
-    }
-    if (this.gameState == STATES.GameOver) {
-      console.log("Game over");
-      console.log(`Player ${this.winner} won`);
       return;
     }
 
@@ -151,6 +153,16 @@ export default class GameController {
       return;
     }
     this.gameSettings = button;
+  }
+
+  gameOverHandler(clickedButton) {
+    if (clickedButton == null) return;
+
+    const { button } = clickedButton;
+    if (button == "Home") {
+      this.resetGame();
+      return;
+    }
   }
 
   pickPieceHandler(clickedPos) {
@@ -286,6 +298,11 @@ export default class GameController {
   display() {
     if (this.gameState == STATES.Menu) {
       this.menuViewer.displayMainMenu(this.gameSettings);
+      return;
+    }
+
+    if (this.gameState == STATES.GameOver) {
+      this.menuViewer.displayGameOverMenu(this.winner);
       return;
     }
 
