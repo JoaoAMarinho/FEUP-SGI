@@ -39,6 +39,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.addMoveToPiecePosition();
     this.addMoveUpAnimation();
     this.addMoveToFinalPosition();
+    finalInstant = (endTime != null) ? endTime : 3000;
     this.addFinalAnimation(finalInstant);
   }
 
