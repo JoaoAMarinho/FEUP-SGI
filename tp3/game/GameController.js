@@ -69,8 +69,8 @@ export default class GameController {
         pieceSizeFactor: 6.4,
         transporter: "spaceship"
       },
-      Classic: {
-        theme: "wood.xml",
+      Christmas: {
+        theme: "christmas.xml",
         pieceSizeFactor: 0.5,
         transporter: "wood"
       },
@@ -510,6 +510,7 @@ export default class GameController {
       }
       this.scene.pickResults.splice(0, this.scene.pickResults.length);
     }
+    console.log(click)
     return click;
   }
 }

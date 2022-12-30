@@ -41,7 +41,7 @@ export class XMLscene extends CGFscene {
     this.setPickEnabled(true);
 
     // Objects conneted to MyInterface
-    this.displayAxis = true;
+    this.displayAxis = false;
     this.sceneInited = false;
   }
 

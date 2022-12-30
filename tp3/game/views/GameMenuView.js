@@ -51,12 +51,11 @@ export default class GameMenuView {
     this.background = new MySphere(this.scene, '', 100, 60, 60);
     this.backgroundMaterial = new CGFappearance(this.scene);
     this.backgroundMaterial.setEmission(0.5, 0.5, 0.5, 1.0);
-    this.backgroundMaterial.setAmbient(0.2, 0.25, 0.32, 1.0);
-    this.backgroundMaterial.setDiffuse(0.2, 0.25, 0.32, 1.0);
-    this.backgroundMaterial.setSpecular(0.2, 0.25, 0.32, 1.0);
+    this.backgroundMaterial.setAmbient(1.0, 1.0, 1.0, 1.0);
+    this.backgroundMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
+    this.backgroundMaterial.setSpecular(1.0, 1.0, 1.0, 1.0);
 
     this.spaceTexture = new CGFtexture(this.scene, './scenes/images/stars.jpg');
-    this.classicTexture = new CGFtexture(this.scene, './scenes/images/dark.jpg');
   }
 
   getFontPosition(letter) {
@@ -82,13 +81,13 @@ export default class GameMenuView {
     const purpleDisabled = [0.29, 0.4, 69, 0.7];
 
     let spaceColor = purple;
-    let classicColor = purpleDisabled;
+    let christmasColor = purpleDisabled;
     let texture = this.spaceTexture;
 
-    if (clickedMode == "Classic") {
+    if (clickedMode == "Christmas") {
       spaceColor = purpleDisabled;
-      classicColor = purple;
-      texture = this.classicTexture;
+      christmasColor = purple;
+      texture = this.christmasTexture;
     }
 
     this.displayBackground(texture);
@@ -103,8 +102,8 @@ export default class GameMenuView {
     this.displayButton(["Space"], [-14, -8, -50], [4, 4, 4], spaceColor);
     this.displayText(ICONS.Satellite, [-16, -7.5, -50], [6, 6, 6]);
 
-    this.displayButton(["Classic"], [6, -8, -50], [4, 4, 4], classicColor);
-    this.displayText(ICONS.Checker, [16.5, -7.2, -50], [4, 4, 4]);
+    this.displayButton(["Christmas"], [6, -8, -50], [4, 4, 4], christmasColor);
+    this.displayText(ICONS.Checker, [12.5, -7.2, -50], [4, 4, 4]);
 
     this.resetDisplay();
   }
