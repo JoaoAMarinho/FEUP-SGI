@@ -25,6 +25,11 @@ export default class GameCamera {
     this.changeCamera();
   }
 
+  getPosition() {
+    const pos = this.camera.position 
+    return vec3.fromValues(pos[0], pos[1], pos[2]);
+  }
+
   inPlace() {
     const { position } = this.cameraPositions[this.cameraIndex];
     const curPos = vec3.fromValues(

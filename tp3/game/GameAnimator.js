@@ -1,15 +1,19 @@
-import { MyEvolutionAnimation } from "../objects/animations/MyEvolutionAnimation.js";
 import { MyPieceAnimation } from "../objects/animations/MyPieceAnimation.js";
+import { MyEvolutionAnimation } from "../objects/animations/MyEvolutionAnimation.js";
+import { MyCaptureAnimation } from "../objects/animations/MyCaptureAnimation.js";
+import TransporterView from "./views/TransporterView.js";
 
 export default class GameAnimator {
   constructor(scene) {
     this.scene = scene;
     this.pieceAnimations = [];
     this.upgradingAnimation = null;
+    this.captureAnimation = null;
   }
 
-  setViewers(gameBoardViewer) {
+  setViewers(gameBoardViewer, transporter) {
     this.piecesViewer = gameBoardViewer.piecesViewer;
+    this.transporterViewer = new TransporterView(this.scene, transporter);
   }
 
   createPieceAnimation(piece, startPos, endPos, capturing, endTime = null) {
@@ -35,6 +39,17 @@ export default class GameAnimator {
     return animation;
   }
 
+  createCaptureAnimation(startPos, intermediatePos, endPos) {
+    const animation = new MyCaptureAnimation(
+      this.scene,
+      startPos,
+      intermediatePos,
+      endPos,
+    );
+    this.setCaptureAnimation(animation);
+    return animation;
+  }
+
   addPieceAnimation(animation) {
     this.pieceAnimations.push(animation);
   }
@@ -43,8 +58,12 @@ export default class GameAnimator {
     this.upgradingAnimation = animation;
   }
 
+  setCaptureAnimation(animation) {
+    this.captureAnimation = animation;
+  }
+
   hasAnimations() {
-    return this.pieceAnimations.length > 0 || this.upgradingAnimation != null;
+    return this.pieceAnimations.length > 0 || this.upgradingAnimation != null || this.captureAnimation != null;
   }
 
   manage() {
@@ -57,6 +76,9 @@ export default class GameAnimator {
 
     if (this.upgradingAnimation != null && this.upgradingAnimation.hasEnded())
       this.upgradingAnimation = null;
+  
+    if (this.captureAnimation != null && this.captureAnimation.hasEnded())
+      this.captureAnimation = null;
   }
 
   update(time) {
@@ -65,6 +87,8 @@ export default class GameAnimator {
     });
 
     if (this.upgradingAnimation !== null) this.upgradingAnimation.update(time);
+
+    if (this.captureAnimation !== null) this.captureAnimation.update(time);
   }
 
   display() {
@@ -85,10 +109,21 @@ export default class GameAnimator {
       }
       this.scene.popMatrix();
     }
+
+    if (this.captureAnimation != null) {
+      console.log(this.captureAnimation.startPos);
+      this.scene.pushMatrix();
+      if (this.captureAnimation.isActive()) {
+        this.captureAnimation.apply();
+        this.transporterViewer.display(this.captureAnimation.facing);
+      }
+      this.scene.popMatrix();
+    }
   }
 
   resetAnimations() {
     this.pieceAnimations = [];
     this.upgradingAnimation = null;
+    this.captureAnimation = null;
   }
 }

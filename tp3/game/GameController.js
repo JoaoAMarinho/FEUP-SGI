@@ -7,6 +7,7 @@ import GameMenuView from "./views/GameMenuView.js";
 import * as Utils from "./GameUtils.js";
 import GameSequences from "./models/GameSequences.js";
 import { MyPieceAnimation } from "../objects/animations/MyPieceAnimation.js";
+import { MyEvolutionAnimation } from "../objects/animations/MyEvolutionAnimation.js";
 
 const STATES = Object.freeze({
   Menu: 0,
@@ -56,7 +57,7 @@ export default class GameController {
     );
     this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
 
-    this.animator.setViewers(this.gameBoardViewer);
+    this.animator.setViewers(this.gameBoardViewer, this.gameSettings.transporter);
 
     this.gameBoard.setValidMoves(this.playerTurn);
     this.changeState(STATES.PickPiece);
@@ -67,10 +68,12 @@ export default class GameController {
       Space: {
         theme: "space.xml",
         pieceSizeFactor: 6.4,
+        transporter: "spaceship"
       },
       Classic: {
         theme: "wood.xml",
         pieceSizeFactor: 0.5,
+        transporter: "wood"
       },
     };
     return settings[this.gameSettings];
@@ -239,7 +242,8 @@ export default class GameController {
       if (animation instanceof MyPieceAnimation) {
         this.animator.addPieceAnimation(animation);
         this.gameBoard.emptyPosition(animation.startPos);
-      } else this.animator.setEvolutionAnimation(animation);
+      } else if (animation instanceof MyEvolutionAnimation)
+        this.animator.setEvolutionAnimation(animation);
     }
 
     this.filmSequence++;
@@ -378,6 +382,14 @@ export default class GameController {
       endTime,
     ]);
 
+    const captureAnimation = this.addAnimation([
+      this.camera.getPosition(),
+      intermediatePos,
+      auxiliarBoardPos,
+      endTime,
+
+    ], "capture");
+
     this.intermediatePieceID = this.gameBoard.emptyPosition(intermediatePos);
     return animation.endTime;
   }
@@ -387,7 +399,9 @@ export default class GameController {
 
     if (animationType == "piece")
       animation = this.animator.createPieceAnimation(...animationParams);
-    else animation = this.animator.createEvolutionAnimation(...animationParams);
+    else if (animationType == "evolution") 
+      animation = this.animator.createEvolutionAnimation(...animationParams);
+    else animation = this.animator.createCaptureAnimation(...animationParams);
 
     this.addAnimationToSequence(animation);
 
@@ -411,7 +425,8 @@ export default class GameController {
       if (animation instanceof MyPieceAnimation) {
         this.animator.addPieceAnimation(animation);
         this.gameBoard.emptyPosition(animation.endPos);
-      } else this.animator.setEvolutionAnimation(animation);
+      } else if (animation instanceof MyEvolutionAnimation)
+       this.animator.setEvolutionAnimation(animation);
     }
 
     this.previousSequence = sequence;

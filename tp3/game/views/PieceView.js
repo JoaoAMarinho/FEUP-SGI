@@ -3,9 +3,7 @@ export default class PieceView {
     this.scene = scene;
   }
 
-  display(pos, piece) {
-    //TODO - style piece according to player & queen
-  
+  display(pos, piece) {  
     const component = piece.component;
 
     let node = this.scene.graph.components[component];

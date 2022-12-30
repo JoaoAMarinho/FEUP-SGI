@@ -188,109 +188,6 @@
     </transformations>
 
     <animations>
-        <keyframeanim id="selfRotate">
-            <keyframe instant="0.1">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="50.0">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="360" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-        </keyframeanim>
-
-        <keyframeanim id="spaceshipAnimation">
-            <keyframe instant="0.1">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="3.0">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="10.0">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="90" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="30.0">
-                <translation x="100.0" y="0.0" z="20.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="90" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="50.0">
-                <translation x="100.0" y="0.0" z="-70.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="180" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-            <keyframe instant="70.0">
-                <translation x="100.0" y="0.0" z="-150.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="270" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-            <keyframe instant="80.0">
-                <translation x="100.0" y="0.0" z="-150.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="360" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-            <keyframe instant="110.0">
-                <translation x="100.0" y="0.0" z="-70.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="360" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-
-            <keyframe instant="130.0">
-                <translation x="100.0" y="0.0" z="20.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="270" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-            
-            <keyframe instant="150.0">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="270" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-            <keyframe instant="153.0">
-                <translation x="0.0" y="0.0" z="0.0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="360" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1.0" sy="1.0" sz="1.0" />
-            </keyframe>
-        </keyframeanim>
 
         <keyframeanim id="propulsersOn">
             <keyframe instant="2.5">
@@ -579,7 +476,6 @@
                 <componentref id="stars" />
                 <componentref id="sun" />
                 <componentref id="planets" />
-                <componentref id="spaceship" />
             </children>
         </component>
 
@@ -1803,13 +1699,12 @@
         <!-- Spaceship -->
         <component id="spaceship">
             <transformation>
-                <translate x="30.0" y="0.0" z="100.0" />
+                <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="defaultMaterial" />
             </materials>
             <texture id="none" />
-            <animation id="spaceshipAnimation" />
             <children>
                 <componentref id="spaceshipBody" />
                 <componentref id="star" /> 

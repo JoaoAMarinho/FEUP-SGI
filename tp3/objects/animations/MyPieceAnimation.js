@@ -23,7 +23,9 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     if (this.endPos.col > 7) {
       finalInstant = (endTime != null) ? endTime : 3000;
-      this.addMoveToAuxiliarBoardAnimation(endTime);
+      this.addWaitAnimation(endTime);
+      this.addMoveUpAnimation();
+      this.addMoveToFinalPosition();
     }
 
     if (this.capturing) {
@@ -35,22 +37,8 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     this.addFinalAnimation(finalInstant);
   }
 
-  addInitialAnimation() {
-    let transformation = {
-      translate: [0.0, 0.0, 0.0],
-      scale: [1.0, 1.0, 1.0],
-      rotate: [0.0, 0.0, 0.0],
-    };
-
-    const keyframe = {
-      transformation,
-      instant: 0,
-    };
-
-    this.keyframes.push(keyframe);
-  }
-
-  addMoveToAuxiliarBoardAnimation(endTime) {
+  // animations for the auxiliar board moves
+  addWaitAnimation(endTime) {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
       scale: [1.0, 1.0, 1.0],
@@ -67,6 +55,36 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
       this.addFinalAnimation(3000);
   }
 
+  addMoveUpAnimation() {
+    const transformation = {
+      translate: [0.0, 3.0, 0.0],
+      scale: [1.0, 1.0, 1.0],
+      rotate: vec3.create(),
+    };
+
+    let keyframe = {
+      transformation,
+      instant: 1200,
+    };
+
+    this.keyframes.push(keyframe);
+  }
+
+  addMoveToFinalPosition() {
+    const transformation = {
+      translate: [this.translationVect.col, 3.0, this.translationVect.row],
+      scale: [1.0, 1.0, 1.0],
+      rotate: vec3.create(),
+    };
+
+    let keyframe = {
+      transformation,
+      instant: 2230,
+    };
+    this.keyframes.push(keyframe);
+  }
+
+  // animations for the capture moves
   addColisionAnimation() {
     let sizeFactor = this.piece.sizeFactor;
     const transformation = {
@@ -105,6 +123,22 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     this.keyframes.push(keyframe);
     return keyframe.instant;
+  }
+
+  // comon to both movements
+  addInitialAnimation() {
+    let transformation = {
+      translate: [0.0, 0.0, 0.0],
+      scale: [1.0, 1.0, 1.0],
+      rotate: [0.0, 0.0, 0.0],
+    };
+
+    const keyframe = {
+      transformation,
+      instant: 0,
+    };
+
+    this.keyframes.push(keyframe);
   }
 
   addFinalAnimation(finalInstant) {
