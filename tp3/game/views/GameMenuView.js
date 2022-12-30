@@ -124,7 +124,7 @@ export default class GameMenuView {
     this.displayText(scores[1].toString(), [38, 16.8, -50], [4, 4, 4], purple);
 
     if (disableButtons) {
-      this.displayText(ICONS.Undo, [-30, 19, -50], [4, 4, 4], purpleDisabled);
+      this.displayText(ICONS.Undo, [-30, 18.8, -50], [4, 4, 4], purpleDisabled);
       this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], purpleDisabled);
     } else {
       this.displayButton([ICONS.Undo, "Undo"], [-30, 18.8, -50], [4, 4, 4], purple);
