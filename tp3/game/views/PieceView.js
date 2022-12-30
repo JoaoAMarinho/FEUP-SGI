@@ -4,14 +4,18 @@ export default class PieceView {
   }
 
   display(pos, piece) {  
+    let { height } = pos;
     const component = piece.component;
 
+    if (!height) height = 3;
+
     let node = this.scene.graph.components[component];
+
 
     this.scene.pushMatrix();
 
     this.scene.scale(0.5, 0.5, 0.5);
-    this.scene.translate(8*pos.col, 3, 8*pos.row);
+    this.scene.translate(8*pos.col, height, 8*pos.row);
     this.scene.graph.processNode(node, null, null);
 
     if (piece.isQueen) {

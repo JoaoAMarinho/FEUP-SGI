@@ -218,6 +218,7 @@ export default class GameBoard {
 
   // Utils
   emptyPosition({row, col}) {
+    col = Math.floor(col);
     if (col > 7) {
       const pieceId = this.auxiliarBoard[row][col - 8];
       this.auxiliarBoard[row][col - 8] = Empty;

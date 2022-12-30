@@ -210,9 +210,10 @@ export default class GameController {
   undoHandler() {
     if (this.animator.hasAnimations()) return;
 
-    const { playerTurn, board, scores, mandatoryPlay } = this.previousSequence;
+    const { playerTurn, board, auxiliarBoard, scores, mandatoryPlay } = this.previousSequence;
 
     this.gameBoard.setBoard(board);
+    this.gameBoard.setAuxiliarBoard(auxiliarBoard);
     this.scores = scores;
     this.changePlayer(playerTurn);
 
@@ -328,7 +329,7 @@ export default class GameController {
       this.pickedMove
     );
 
-    let animation = new MyPieceAnimation(
+    const animation = new MyPieceAnimation(
       this.scene,
       playerPiece,
       this.pickedPiece,
@@ -358,13 +359,13 @@ export default class GameController {
     this.animator.addPieceAnimation(animation);
     this.addAnimationToSequence(animation);
 
-    if (this.gameBoard.capturing) this.setupCaptureAnimation(totalTime);
+    if (this.gameBoard.capturing) this.setupCaptureAnimations(totalTime);
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
   }
 
-  setupCaptureAnimation(endTime) {
+  setupCaptureAnimations(endTime) {
     const intermediatePos = this.gameBoard.intermediatePosition(
       this.pickedPiece,
       this.pickedMove
@@ -374,6 +375,7 @@ export default class GameController {
     const auxiliarBoardPos = this.gameBoard.getAuxiliarBoardPosition(
       1 - this.playerTurn
     );
+    auxiliarBoardPos.col += 0.5;
 
     const animation = this.addAnimation([
       piece,
@@ -383,7 +385,7 @@ export default class GameController {
       endTime,
     ]);
 
-    const captureAnimation = this.addAnimation([
+    this.addAnimation([
       this.camera.getPosition(),
       intermediatePos,
       auxiliarBoardPos,
@@ -428,6 +430,8 @@ export default class GameController {
         this.gameBoard.emptyPosition(animation.endPos);
       } else if (animation instanceof MyEvolutionAnimation)
        this.animator.setEvolutionAnimation(animation);
+      else
+        this.animator.setCaptureAnimation(animation);
     }
 
     this.previousSequence = sequence;

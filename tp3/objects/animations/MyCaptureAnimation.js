@@ -64,13 +64,13 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     return randomPoint;
   }
 
-  setupKeyframes() {
+  setupKeyframes(endTime) {
     this.addInitialAnimation();
     this.addMoveToPiecePosition();
     this.addMoveUpAnimation();
     this.addMoveToFinalPosition();
     this.addMoveDownAnimation();
-    this.addFinalAnimation();
+    this.addFinalAnimation(endTime);
   }
 
   addInitialAnimation() {
@@ -141,7 +141,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   addMoveDownAnimation() {
     const transformation = {
-      translate: [this.endPos.col * 4, 4.0, this.endPos.row * 4],
+      translate: [this.endPos.col * 4, 3.0, this.endPos.row * 4],
 
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
@@ -156,11 +156,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     super.updateTimes();
   }
 
-  addFinalAnimation() {
+  addFinalAnimation(endTime) {
     const transformation = {
       translate: [
         this.endPos.col * 4 + this.translationVect.col * 5,
-        4.0,
+        3.0,
         this.endPos.row * 4 + this.translationVect.row * 5,
       ],
 
@@ -170,7 +170,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
     const keyframe = {
       transformation,
-      instant: 5000,
+      instant: endTime,
     };
 
     this.keyframes.push(keyframe);

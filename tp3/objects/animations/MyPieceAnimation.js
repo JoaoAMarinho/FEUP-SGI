@@ -20,13 +20,15 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   setupKeyframes(endTime) {
     this.addInitialAnimation();
     let finalInstant = 600;
+    let offset = 0;
 
     if (this.endPos.col > 7) {
+      offset += 2;
       finalInstant = (endTime != null) ? endTime : 2400;
       this.addWaitAnimation();
       this.addMoveUpAnimation();
       this.addMoveToFinalPosition();
-      this.addFinalAnimation(2300);
+      this.addFinalAnimation(2300, offset);
     }
 
     if (this.capturing) {
@@ -36,7 +38,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
       this.addFinalAnimation(1500);
     }
 
-    this.addFinalAnimation(finalInstant);
+    this.addFinalAnimation(finalInstant, offset);
   }
 
   // animations for the auxiliar board moves
@@ -139,11 +141,11 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
-  addFinalAnimation(finalInstant) {
+  addFinalAnimation(finalInstant, offset=0) {
     const transformation = {
       translate: [
         this.translationVect.col,
-        0.0,
+        0.0-offset,
         this.translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],

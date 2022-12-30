@@ -39,12 +39,13 @@ export default class GameAnimator {
     return animation;
   }
 
-  createCaptureAnimation(startPos, intermediatePos, endPos) {
+  createCaptureAnimation(startPos, intermediatePos, endPos, endTime) {
     const animation = new MyCaptureAnimation(
       this.scene,
       startPos,
       intermediatePos,
       endPos,
+      endTime
     );
     this.setCaptureAnimation(animation);
     return animation;

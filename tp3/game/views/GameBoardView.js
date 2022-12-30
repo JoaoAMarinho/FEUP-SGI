@@ -16,12 +16,7 @@ export default class GameBoardView {
     // GameBoard parts
     this.baseBorders = new MyCylinder(scene, "", 25.456, 25.456, 2, 4, 1);
     this.baseBottom = new MyRectangle(scene, "", [-4, 32], [-4, 32]);
-
-    this.auxiliarBoard = {
-      row: 0,
-      col: 8 * 4 + 1,
-    };
-
+    
     const texture = new CGFtexture(this.scene, "./scenes/images/granit.jpg");
 
     this.blackMaterial = new CGFappearance(scene);
@@ -40,8 +35,6 @@ export default class GameBoardView {
     this.whiteMaterial.setShininess(120);
 
     this.whiteMaterial.setTexture(texture);
-
-    
   }
 
   display(canClick, clickedPos = null) {
@@ -173,6 +166,6 @@ export default class GameBoardView {
     const piece = this.gameBoard.getAuxiliarBoardPiece({row, col})
 
     if (piece == null) return;
-    this.piecesViewer.display({row: row, col: col + 8}, piece);
+    this.piecesViewer.display({row: row, col: col + 8.5, height: -1}, piece);
   }
 }
