@@ -166,15 +166,14 @@
             <children>
                 <componentref id="background" />
                 <componentref id="floor" />
-                <!-- <componentref id="sled" /> -->
-                <componentref id="forest" />
+                <componentref id="forests" />
             </children>
         </component>
 
         <component id="sled">
             <transformation>
                 <translate x="0" y="0" z="0" />
-                <scale x="0.03" y="0.03" z="0.03" />
+                <scale x="0.02" y="0.02" z="0.02" />
             </transformation>
             <materials>
                 <material id="defaultMaterial" />
@@ -185,9 +184,34 @@
             </children>
         </component>
         
+        <component id="forests">
+            <transformation>
+                <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest1" />
+                <componentref id="forest2" />
+                <componentref id="forest3" />
+                <componentref id="forest4" />
+                <componentref id="forest5" />
+                <componentref id="forest6" />
+                <componentref id="forest7" />
+                <componentref id="forest8" />
+                <componentref id="forest9" />
+                <componentref id="forest10" />
+                <componentref id="forest11" />
+                <componentref id="forest12" />
+                <componentref id="forest13" />
+                <componentref id="forest14" />
+            </children>
+        </component>
+
         <component id="forest">
             <transformation>
-                <translate x="10" y="-2" z="0" />
             </transformation>
             <materials>
                 <material id="defaultMaterial" />
@@ -201,10 +225,193 @@
             </children>
         </component>
 
+        <!-- Left wood-->
+        <component id="forest1">
+            <transformation>
+                <translate x="10" y="0" z="-10" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest2">
+            <transformation>
+                <translate x="15" y="0" z="-15" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+        <component id="forest3">
+            <transformation>
+                <translate x="12" y="0" z="-20" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <!--Right Wood-->
+        <component id="forest4">
+            <transformation>
+                <translate x="12" y="0" z="34" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+        <component id="forest5">
+            <transformation>
+                <translate x="20" y="0" z="40" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <!-- Front wood-->
+        <component id="forest6">
+            <transformation>
+                <translate x="40" y="0" z="16" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+        <component id="forest7">
+            <transformation>
+                <translate x="39" y="0" z="19" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest8">
+            <transformation>
+                <translate x="20" y="0" z="25" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <!--Back Wood-->
+        <component id="forest9">
+            <transformation>
+                <translate x="-36" y="0" z="16" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest10">
+            <transformation>
+                <translate x="-25" y="0" z="24" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest11">
+            <transformation>
+                <translate x="-18" y="0" z="4" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest12">
+            <transformation>
+                <translate x="40" y="0" z="16" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+        <component id="forest13">
+            <transformation>
+                <translate x="39" y="0" z="19" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="forest14">
+            <transformation>
+                <translate x="20" y="0" z="25" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <componentref id="forest" />
+            </children>
+        </component>
+    
+
          <!-- Stars background -->
         <component id="background">
             <transformation>
-                <scale x="-1000.0" y="-1000.0" z="-1000.0" />
+                <scale x="-100.0" y="-100.0" z="-100.0" />
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
@@ -215,7 +422,8 @@
                 <primitiveref id="sphere" />
             </children>
         </component>    
-         <!-- Stars background -->
+
+         <!-- Snow Floor -->
         <component id="floor">
             <transformation>
                 <translate x="0" y="-2.5" z="0" />
@@ -675,7 +883,7 @@
             </children>
         </component>
 
- <!-- Star Logo -->
+        <!-- Star Logo -->
         <component id="star">
             <transformation>
                 <rotate axis="z" angle="90" />

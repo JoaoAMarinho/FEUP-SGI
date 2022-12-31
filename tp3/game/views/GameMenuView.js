@@ -165,7 +165,8 @@ export default class GameMenuView {
   }
 
   displayGameOverMenu(winner) {
-    this.displayBackground(this.material);
+    console.log(this.theme)
+    this.displayBackground(this.theme.material);
     this.setUpDisplay();
 
 

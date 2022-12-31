@@ -145,7 +145,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     const transformation = {
       translate: [
         this.translationVect.col+offset,
-        0.0-offset/2,
+        0.0-offset,
         this.translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],
