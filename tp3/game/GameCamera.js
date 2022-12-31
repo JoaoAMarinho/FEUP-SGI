@@ -2,27 +2,27 @@ export default class GameCamera {
   constructor(camera) {
     this.camera = camera;
 
-    this.target = vec3.fromValues(16, 0, 16);
+    this.target = vec3.fromValues(14, 0, 14);
     this._up = vec3.fromValues(0, 1, 0);
 
     this.cameraIndex = 0;
     this.cameraPositions = [
       {
         // Player 1
-        position: vec3.fromValues(16, 2, -5),
+        position: vec3.fromValues(14, 15, -22),
       },
       {
         // General
-        position: vec3.fromValues(-40, 10, 14),
+        position: vec3.fromValues(-30, 20, 14),
       },
       {
         // Player 2
-        position: vec3.fromValues(16, 4, 50),
+        position: vec3.fromValues(14, 15, 50),
       },
     ];
 
     this.cameraAnimation = null;
-    this.changeCamera();
+    this.changeCamera(1);
   }
 
   getPosition() {
