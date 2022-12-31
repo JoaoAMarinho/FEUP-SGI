@@ -146,20 +146,20 @@ export default class GameMenuView {
     this.pickId = 15;
 
     this.displayTime(gameTime);
-    this.displayText("Blacks", [24, 19.3, -50], [4, 4, 4], this.theme.color);
-    this.displayText(scores[0].toString(), [38, 19.3, -50], [4, 4, 4], this.theme.color);
-    this.displayText("Whites", [24, 16.8, -50], [4, 4, 4], this.theme.color);
-    this.displayText(scores[1].toString(), [38, 16.8, -50], [4, 4, 4], this.theme.color);
+    this.displayText("Blacks", [18, 19.3, -50], [4, 4, 4], this.theme.color);
+    this.displayText(scores[0].toString(), [32, 19.3, -50], [4, 4, 4], this.theme.color);
+    this.displayText("Whites", [18, 16.8, -50], [4, 4, 4], this.theme.color);
+    this.displayText(scores[1].toString(), [32, 16.8, -50], [4, 4, 4], this.theme.color);
 
     if (disableButtons) {
-      this.displayText(ICONS.Undo, [-30, 18.8, -50], [4, 4, 4], this.theme.disableColor);
-      this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], this.theme.disableColor);
+      this.displayText(ICONS.Undo, [-27, 18.8, -50], [4, 4, 4], this.theme.disableColor);
+      this.displayText(ICONS.Film, [-24, 18.8, -50], [4, 4, 4], this.theme.disableColor);
     } else {
-      this.displayButton([ICONS.Undo, "Undo"], [-30, 18.8, -50], [4, 4, 4], this.theme.color);
-      this.displayButton([ICONS.Film, "Film"], [-27, 18.8, -50], [4, 4, 4], this.theme.color);
+      this.displayButton([ICONS.Undo, "Undo"], [-27, 18.8, -50], [4, 4, 4], this.theme.color);
+      this.displayButton([ICONS.Film, "Film"], [-24, 18.8, -50], [4, 4, 4], this.theme.color);
     }
-    this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], this.theme.color);
-    this.displayButton([ICONS.Camera, "Camera"], [-33, 18.8, -50], [4, 4, 4], this.theme.color);
+    this.displayButton([ICONS.Home, "Home"], [-33, 18.8, -50], [4, 4, 4], this.theme.color);
+    this.displayButton([ICONS.Camera, "Camera"], [-30, 18.8, -50], [4, 4, 4], this.theme.color);
 
     this.resetDisplay();
   }
