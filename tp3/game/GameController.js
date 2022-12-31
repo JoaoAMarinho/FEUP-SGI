@@ -3,6 +3,7 @@ import GameBoardView from "./views/GameBoardView.js";
 import { MySceneGraph } from "../MySceneGraph.js";
 import GameAnimator from "./GameAnimator.js";
 import GameCamera from "./GameCamera.js";
+import GameLight from "./GameLight.js";
 import GameMenuView from "./views/GameMenuView.js";
 import * as Utils from "./GameUtils.js";
 import GameSequences from "./models/GameSequences.js";
@@ -32,6 +33,7 @@ export default class GameController {
 
     this.gameState = STATES.Menu;
     this.camera = new GameCamera(scene.camera);
+    this.light = new GameLight(scene);
     this.animator = new GameAnimator(scene);
     this.menuViewer = new GameMenuView(scene);
     this.gameSequences = new GameSequences();
@@ -57,6 +59,7 @@ export default class GameController {
     this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
 
     this.animator.setViewers(this.gameBoardViewer, this.gameSettings.transporter);
+    this.camera.resetPosition();
 
     this.gameBoard.setValidMoves(this.playerTurn);
     this.changeState(STATES.PickPiece);
@@ -81,6 +84,7 @@ export default class GameController {
   update(time) {
     this.animator.update(time);
     this.camera.update(time);
+    this.light.update(time);
 
     if ([STATES.PickPiece, STATES.PickMove].includes(this.gameState)) {
       this.gameTime -= time;
@@ -367,7 +371,11 @@ export default class GameController {
     this.animator.addPieceAnimation(animation);
     this.addAnimationToSequence(animation);
 
-    if (this.gameBoard.capturing) this.setupCaptureAnimations(totalTime);
+    if (this.gameBoard.capturing) {
+      this.setupCaptureAnimations(totalTime);
+      this.light.setAnimationFromKeyframes(animation);
+    }
+    else this.light.startAnimation(this.pickedPiece, this.pickedMove);
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
@@ -510,7 +518,6 @@ export default class GameController {
       }
       this.scene.pickResults.splice(0, this.scene.pickResults.length);
     }
-    console.log(click)
     return click;
   }
 }

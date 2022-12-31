@@ -106,7 +106,7 @@ export default class GameAnimator {
       this.scene.pushMatrix();
       if (this.upgradingAnimation.isActive()) {
         this.upgradingAnimation.apply();
-        this.piecesViewer.displayCrown(this.upgradingAnimation.startPos);
+        this.piecesViewer.displayCrown();
       }
       this.scene.popMatrix();
     }
