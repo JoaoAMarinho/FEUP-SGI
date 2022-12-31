@@ -56,7 +56,7 @@ export default class GameController {
       this.scene,
       this.gameSettings.pieceSizeFactor
     );
-    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard);
+    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard,this.gameSettings.textureBoard);
 
     this.animator.setViewers(this.gameBoardViewer, this.gameSettings.transporter);
     this.camera.resetPosition();
@@ -70,12 +70,14 @@ export default class GameController {
       Space: {
         theme: "space.xml",
         pieceSizeFactor: 6.4,
-        transporter: "spaceship"
+        transporter: "spaceship",
+        textureBoard: "granit.jpg"
       },
       Christmas: {
         theme: "christmas.xml",
-        pieceSizeFactor: 0.5,
-        transporter: "wood"
+        pieceSizeFactor: 5,
+        transporter: "star",
+        textureBoard: "christmas.jpg"
       },
     };
     return settings[this.gameSettings];

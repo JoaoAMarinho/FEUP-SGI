@@ -9,6 +9,9 @@ const ICONS = Object.freeze({
   Undo: ".",
   Checker: ",",
   Satellite: ";",
+  Santa: "~",
+  SnowFlake: "@",
+  ChritmasHat: "+",
 });
 
 export default class GameMenuView {
@@ -24,7 +27,7 @@ export default class GameMenuView {
       "./shaders/font.frag"
     );
 
-    this.dims = { rows: 3, cols: 23 };
+    this.dims = { rows: 4, cols: 23 };
     this.textShader.setUniformsValues({
       dims: [this.dims.cols, this.dims.rows],
     });
@@ -32,14 +35,14 @@ export default class GameMenuView {
     this.rect = new MyRectangle(this.scene, '', [-0.5, 0.5], [-0.5, 0.5]);
 
     this.setFontDict();
-    this.setBackground();
+    this.setThemes();
   }
 
   setFontDict() {
     const letters = [
       ..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
     ];
-    letters.push(":", ICONS.Camera, ICONS.Film, ICONS.Undo, ICONS.Checker, ICONS.Satellite, ICONS.Home);
+    letters.push(":", ICONS.Camera, ICONS.Film, ICONS.Undo, ICONS.Checker, ICONS.Satellite, ICONS.Home, ICONS.Santa, ICONS.SnowFlake, ICONS.ChritmasHat);
     this.fontDict = {};
 
     for (let i = 0; i < this.dims.rows; i++)
@@ -47,15 +50,40 @@ export default class GameMenuView {
         this.fontDict[letters[j + i * this.dims.cols]] = [j, i];
   }
 
-  setBackground() {
+  setThemes() {
     this.background = new MySphere(this.scene, '', 100, 60, 60);
-    this.backgroundMaterial = new CGFappearance(this.scene);
-    this.backgroundMaterial.setEmission(0.5, 0.5, 0.5, 1.0);
-    this.backgroundMaterial.setAmbient(1.0, 1.0, 1.0, 1.0);
-    this.backgroundMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
-    this.backgroundMaterial.setSpecular(1.0, 1.0, 1.0, 1.0);
+    const spacebBackgroundMaterial = new CGFappearance(this.scene);
+    spacebBackgroundMaterial.setEmission(0.5, 0.5, 0.5, 1.0);
+    spacebBackgroundMaterial.setAmbient(1.0, 1.0, 1.0, 1.0);
+    spacebBackgroundMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
+    spacebBackgroundMaterial.setSpecular(1.0, 1.0, 1.0, 1.0);
+    
+    let texture = new CGFtexture(this.scene, './scenes/images/stars.jpg');
+    spacebBackgroundMaterial.setTexture(texture);
 
-    this.spaceTexture = new CGFtexture(this.scene, './scenes/images/stars.jpg');
+    const christmasBackgroundMaterial = new CGFappearance(this.scene);
+    christmasBackgroundMaterial.setEmission(1.0, 1.0, 1.0, 1.0);
+    christmasBackgroundMaterial.setAmbient(1.0, 1.0, 1.0, 1.0);
+    christmasBackgroundMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
+    christmasBackgroundMaterial.setSpecular(1.0, 1.0, 1.0, 1.0);
+
+    texture = new CGFtexture(this.scene, './scenes/images/snow.png');
+    christmasBackgroundMaterial.setTexture(texture);
+
+    this.themes = {
+      Space: {
+        background: spacebBackgroundMaterial,
+        color: [0.29, 0.4, 69, 1.0],
+        disableColor: [0.29, 0.4, 69, 0.7],
+      },
+      Christmas: {
+        background: christmasBackgroundMaterial,
+        color: [1.0, 0.2, 0.2, 1.0],
+        disableColor: [1.0, 0.2, 0.2, 0.7],
+      }
+    }
+
+
   }
 
   getFontPosition(letter) {
@@ -76,34 +104,37 @@ export default class GameMenuView {
   }
 
   displayMainMenu(clickedMode) {
-    const white = [1.0, 1.0, 1.0, 1.0];
-    const purple = [0.29, 0.4, 69, 1.0];
-    const purpleDisabled = [0.29, 0.4, 69, 0.7];
-
-    let spaceColor = purple;
-    let christmasColor = purpleDisabled;
-    let texture = this.spaceTexture;
-
-    if (clickedMode == "Christmas") {
-      spaceColor = purpleDisabled;
-      christmasColor = purple;
-      texture = this.christmasTexture;
-    }
-
-    this.displayBackground(texture);
-    this.texture = texture;
-    this.setUpDisplay();
-
+    this.theme = clickedMode == "Christmas" ? this.themes.Christmas : this.themes.Space;
     this.pickId = 15;
+
+    const white = [1.0, 1.0, 1.0, 1.0];
+    let spaceColor = this.theme.color;
+    let christmasColor = this.theme.disableColor;
+
+    this.displayBackground(this.theme.background);
+    this.setUpDisplay();
+   
+    if (clickedMode == "Christmas") {
+      spaceColor = this.theme.disableColor;
+      christmasColor = this.theme.color;
+
+      this.displayText(ICONS.SnowFlake, [27, -20, -50], [6, 6, 6], white);
+      this.displayText(ICONS.SnowFlake, [-23, 7.2, -50], [12, 12, 12], white);
+      this.displayText(ICONS.SnowFlake, [15, 19, -50], [6, 6, 6], white);
+      this.displayText(ICONS.SnowFlake, [-18, -5, -50], [8, 8, 8], white);
+      this.displayText(ICONS.SnowFlake, [-2, 30, -50], [9, 9, 9], white);
+    }
     
     this.displayText("Checkers", [-19, 9, -50], [12, 12, 12], white);
-    this.displayButton(["Play"], [-4, 0, -50], [6, 6, 6], purple);
+    this.displayButton(["Play"], [-4, 0, -50], [6, 6, 6], this.theme.color);
 
     this.displayButton(["Space"], [-14, -8, -50], [4, 4, 4], spaceColor);
     this.displayText(ICONS.Satellite, [-16, -7.5, -50], [6, 6, 6]);
 
     this.displayButton(["Christmas"], [6, -8, -50], [4, 4, 4], christmasColor);
-    this.displayText(ICONS.Checker, [12.5, -7.2, -50], [4, 4, 4]);
+    this.displayText(ICONS.ChritmasHat, [5.5, -6.7, -50], [4, 4, 4]);
+
+
 
     this.resetDisplay();
   }
@@ -111,41 +142,38 @@ export default class GameMenuView {
   displayGameMenu(scores, gameTime, disableButtons) {
     this.setUpDisplay();
     
-    const purpleDisabled = [0.29, 0.4, 69, 0.3];
-    const purple = [0.29, 0.4, 69, 1.0];
 
     this.pickId = 15;
 
     this.displayTime(gameTime);
-    this.displayText("Blacks", [25, 19.3, -50], [4, 4, 4], purple);
-    this.displayText(scores[0].toString(), [38, 19.3, -50], [4, 4, 4], purple);
-    this.displayText("Whites", [25, 16.8, -50], [4, 4, 4], purple);
-    this.displayText(scores[1].toString(), [38, 16.8, -50], [4, 4, 4], purple);
+    this.displayText("Blacks", [24, 19.3, -50], [4, 4, 4], this.theme.color);
+    this.displayText(scores[0].toString(), [38, 19.3, -50], [4, 4, 4], this.theme.color);
+    this.displayText("Whites", [24, 16.8, -50], [4, 4, 4], this.theme.color);
+    this.displayText(scores[1].toString(), [38, 16.8, -50], [4, 4, 4], this.theme.color);
 
     if (disableButtons) {
-      this.displayText(ICONS.Undo, [-30, 18.8, -50], [4, 4, 4], purpleDisabled);
-      this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], purpleDisabled);
+      this.displayText(ICONS.Undo, [-30, 18.8, -50], [4, 4, 4], this.theme.disableColor);
+      this.displayText(ICONS.Film, [-27, 18.8, -50], [4, 4, 4], this.theme.disableColor);
     } else {
-      this.displayButton([ICONS.Undo, "Undo"], [-30, 18.8, -50], [4, 4, 4], purple);
-      this.displayButton([ICONS.Film, "Film"], [-27, 18.8, -50], [4, 4, 4], purple);
+      this.displayButton([ICONS.Undo, "Undo"], [-30, 18.8, -50], [4, 4, 4], this.theme.color);
+      this.displayButton([ICONS.Film, "Film"], [-27, 18.8, -50], [4, 4, 4], this.theme.color);
     }
-    this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], purple);
-    this.displayButton([ICONS.Camera, "Camera"], [-33, 18.8, -50], [4, 4, 4], purple);
+    this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], this.theme.color);
+    this.displayButton([ICONS.Camera, "Camera"], [-33, 18.8, -50], [4, 4, 4], this.theme.color);
 
     this.resetDisplay();
   }
 
   displayGameOverMenu(winner) {
-    this.displayBackground(this.texture);
+    this.displayBackground(this.material);
     this.setUpDisplay();
 
-    const purple = [0.29, 0.4, 69, 1.0];
 
     const winnerText = winner ? "Whites" : "Blacks"; 
-    this.displayText(winnerText, [-14, 10, -50], [12, 12, 12], purple);
-    this.displayText("WIN", [-4, 2, -50], [12, 12, 12], purple);
-    this.displayButton([ICONS.Home, "Home"], [20, -10, -50], [4, 4, 4], purple);
-    this.displayText("Menu", [11, -9, -50], [4, 4, 4], purple);
+    this.displayText(winnerText, [-14, 10, -50], [12, 12, 12], this.theme.color);
+    this.displayText("WIN", [-4, 2, -50], [12, 12, 12], this.theme.color);
+    this.displayButton([ICONS.Home, "Home"], [20, -10, -50], [4, 4, 4], this.theme.color);
+    this.displayText("Menu", [11, -9, -50], [4, 4, 4], this.theme.color);
     this.resetDisplay();
 
   }
@@ -166,14 +194,13 @@ export default class GameMenuView {
     this.displayText(seconds[1], [2, 18.9, -50], [4, 4, 4], white);
   }
 
-  displayBackground(texture) {
+  displayBackground(material) {
     this.scene.pushMatrix();
 
     this.scene.scale(-1, -1, -1);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
 
-    this.backgroundMaterial.setTexture(texture);
-    this.backgroundMaterial.apply();
+    material.apply();
     this.background.display();
 
     this.scene.popMatrix();

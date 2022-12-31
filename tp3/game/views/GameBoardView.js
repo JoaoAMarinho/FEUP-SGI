@@ -5,7 +5,7 @@ import TileView from "./TileView.js";
 import PieceView from "./PieceView.js";
 
 export default class GameBoardView {
-  constructor(scene, gameBoard) {
+  constructor(scene, gameBoard, themeTexture) {
     this.scene = scene;
     this.gameBoard = gameBoard;
 
@@ -17,23 +17,21 @@ export default class GameBoardView {
     this.baseBorders = new MyCylinder(scene, "", 25.456, 25.456, 2, 4, 1);
     this.baseBottom = new MyRectangle(scene, "", [-4, 32], [-4, 32]);
     
-    const texture = new CGFtexture(this.scene, "./scenes/images/granit.jpg");
 
-    this.blackMaterial = new CGFappearance(scene);
-    this.blackMaterial.setEmission(0.0, 0.2, 1.0, 1);
-    this.blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
-    this.blackMaterial.setDiffuse(0.05, 0.05, 0.05, 1);
-    this.blackMaterial.setSpecular(0.05, 0.05, 0.05, 1);
-    this.blackMaterial.setShininess(120);
+    this.setMaterial(themeTexture);
+  }
 
-    this.blackMaterial.setTexture(texture);
+  setMaterial(themeTexture) {
 
-    this.whiteMaterial = new CGFappearance(scene);
-    this.whiteMaterial.setAmbient(1, 1, 1, 1);
-    this.whiteMaterial.setDiffuse(0, 0, 0, 1);
-    this.whiteMaterial.setSpecular(0, 0, 0, 1);
-    this.whiteMaterial.setShininess(120);
+    const texture = new CGFtexture(this.scene, `./scenes/images/${themeTexture}`);
 
+    this.material = new CGFappearance(this.scene);
+    this.material.setEmission(0.7, 0.7, 0.7, 1);
+    this.material.setAmbient(0.05, 0.05, 0.05, 1);
+    this.material.setDiffuse(0.05, 0.05, 0.05, 1);
+    this.material.setSpecular(0.05, 0.05, 0.05, 1);
+    this.material.setShininess(120);
+    this.material.setTexture(texture);
   }
 
   display(canClick, clickedPos = null) {
@@ -56,7 +54,7 @@ export default class GameBoardView {
 
     this.scene.translate(0, -2, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBottom.display();
 
     this.scene.popMatrix();
@@ -66,7 +64,7 @@ export default class GameBoardView {
 
     this.scene.translate(0, 0, 28);
     this.scene.rotate(-Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBottom.display();
 
     this.scene.popMatrix();
@@ -77,7 +75,7 @@ export default class GameBoardView {
 
     this.scene.rotate(Math.PI / 4, 0, 1, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBorders.display();
 
     this.scene.popMatrix();
@@ -105,7 +103,7 @@ export default class GameBoardView {
     this.scene.scale(3 / 9, 1, 1);
     this.scene.translate(-14, 0, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBottom.display();
 
     this.scene.popMatrix();
@@ -120,7 +118,7 @@ export default class GameBoardView {
     this.scene.scale(1, -1, 1);
     this.scene.rotate(Math.PI / 4, 0, 1, 0);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBorders.display();
 
     this.scene.popMatrix();
@@ -133,7 +131,7 @@ export default class GameBoardView {
     this.scene.translate(14, 0, 0);
     this.scene.scale(-1, 1, 1);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.blackMaterial.apply();
+    this.material.apply();
     this.baseBottom.display();
 
     this.scene.popMatrix();
