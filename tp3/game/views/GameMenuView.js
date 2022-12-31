@@ -67,7 +67,7 @@ export default class GameMenuView {
     christmasBackgroundMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
     christmasBackgroundMaterial.setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    texture = new CGFtexture(this.scene, './scenes/images/snow.png');
+    texture = new CGFtexture(this.scene, './scenes/images/tree.png');
     christmasBackgroundMaterial.setTexture(texture);
 
     this.themes = {
@@ -165,8 +165,7 @@ export default class GameMenuView {
   }
 
   displayGameOverMenu(winner) {
-    console.log(this.theme)
-    this.displayBackground(this.theme.material);
+    this.displayBackground(this.theme.background);
     this.setUpDisplay();
 
 
