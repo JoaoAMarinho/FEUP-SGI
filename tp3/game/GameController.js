@@ -76,7 +76,7 @@ export default class GameController {
       Christmas: {
         theme: "christmas.xml",
         pieceSizeFactor: 5,
-        transporter: "star",
+        transporter: "sled",
         textureBoard: "christmas.jpg"
       },
     };

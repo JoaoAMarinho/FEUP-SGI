@@ -14,6 +14,7 @@ import { MyTorus } from "./objects/primitives/MyTorus.js";
 import { MyPatch } from "./objects/primitives/MyPatch.js";
 import { MyNode } from "./objects/MyNode.js";
 import { MyKeyframeAnimation } from "./objects/animations/MykeyFrameAnimation.js";
+import { CGFOBJModel } from "./objects/obj/CGFOBJModel.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 var DEFAULT_VERT_PATH = "./shaders/defaultVertShader.vert";
@@ -56,6 +57,7 @@ export class MySceneGraph {
     this.primitives = {}; // CFGObject dictionary.
     this.components = {}; // MyNode dictionary.
     this.shaders = {}; // CFGShader dictionary.
+    this.objs = [];
 
     this.scene.shaderComponents = []; // Component Ids array.
 
@@ -100,7 +102,21 @@ export class MySceneGraph {
     this.loadedOk = true;
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-    this.scene.onGraphLoaded();
+    if (this.objs.length == 0)
+      this.scene.onGraphLoaded();
+  }
+
+  loadedObj(idx, ok) {
+    if (!ok) {
+      this.onXMLError("Error loading obj file, with index: " + idx + ".");
+      this.loadedOk = false;
+    } else {
+      this.objs[idx] = true;
+    }
+
+    if (this.objs.every((x) => x)) {
+      this.scene.onGraphLoaded();
+    }
   }
 
   /**
@@ -647,9 +663,9 @@ export class MySceneGraph {
       // Parse texture
       var file = this.reader.getString(children[i], "file");
 
-      if (!file.endsWith(".jpg") && !file.endsWith(".png")) {
+      if (!file.endsWith(".jpg") && !file.endsWith(".png") && !file.endsWith(".bmp")) {
         this.onXMLMinorError(
-          "File must be of type .jpg or .png (conflict: ID = " + textureID + ")"
+          "File must be of type .jpg, .png or .bmp (conflict: ID = " + textureID + ")"
         );
         continue;
       }
@@ -1270,10 +1286,11 @@ export class MySceneGraph {
           grandChildren[0].nodeName != "cylinder" &&
           grandChildren[0].nodeName != "sphere" &&
           grandChildren[0].nodeName != "torus" &&
-          grandChildren[0].nodeName != "patch")
+          grandChildren[0].nodeName != "patch" &&
+          grandChildren[0].nodeName != "obj")
       ) {
         this.onXMLMinorError(
-          "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+          "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or obj)"
         );
         continue;
       }
@@ -1295,6 +1312,8 @@ export class MySceneGraph {
         error = this.parseTorus(grandChildren[0], primitiveId);
       } else if (primitiveType == "patch") {
         error = this.parsePatch(grandChildren[0], primitiveId);
+      } else if (primitiveType == "obj") {
+        error = this.parseObj(grandChildren[0], primitiveId);
       } else {
         error = "non existing primitive '" + primitiveType + "'";
       }
@@ -1687,6 +1706,42 @@ export class MySceneGraph {
       controlPoints.push(aux);
     }
     return controlPoints;
+  }
+
+  /**
+   * @method parseObj
+   * Parses a <obj> element.
+   * @param {obj element} obj
+   * @param {String} primitiveId
+   * @return null on success, otherwise an error message
+   */
+  parseObj(obj, primitiveId) {
+    // file
+    var file = this.reader.getString(obj, "file");
+
+    if (file == null)
+      return (
+        "Unable to parse file of the primitive for ID = " +
+        primitiveId
+      );
+
+    if (!file.endsWith(".obj"))
+      return (
+        "File must be of type .obj (conflict: ID = " + primitiveId + ")"
+      );
+
+    if (!this.fileExists(file))
+      return (
+        "File " + file + " does no exist (conflict: ID = " + primitiveId + ")"
+      );
+
+    this.objs.push(false);
+    this.primitives[primitiveId] = new CGFOBJModel(
+      this.scene,
+      file,
+      this.objs.length - 1
+    );
+    return null;
   }
 
   /**

@@ -1,5 +1,4 @@
-import { CGFscene } from "../lib/CGF.js";
-import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { CGFaxis, CGFcamera, CGFscene } from "../lib/CGF.js";
 
 /**
  * XMLscene
@@ -166,6 +165,7 @@ export class XMLscene extends CGFscene {
     }
 
     this.initLights();
+
     this.sceneInited = true;
   }
 

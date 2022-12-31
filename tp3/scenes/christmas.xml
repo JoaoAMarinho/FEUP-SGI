@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="snow" axis_length="5"/>
+    <scene root="christmas" axis_length="5"/>
 
     <views default="Origin">
 
@@ -38,6 +38,9 @@
         <texture id="glassTexture" file="scenes/images/glass.jpg" />
 
         <texture id="crownTexture" file="scenes/images/crown.jpg" />
+
+        <texture id="sledTexture" file="scenes/images/sled.bmp" />
+        <texture id="forestTexture" file="scenes/images/forest.png" />
     </textures>
 
     <materials>
@@ -133,12 +136,27 @@
         <primitive id="square20">
             <rectangle x1="-10" y1="-10" x2="10" y2="10" />
         </primitive>
+        <primitive id="sled">
+            <obj file="scenes/models/santa-sled.obj" />
+        </primitive>
+        <primitive id="bigTree">
+            <obj file="scenes/models/big-tree.obj" />
+        </primitive>
+        <primitive id="smallTree">
+            <obj file="scenes/models/small-tree.obj" />
+        </primitive>
+        <primitive id="nakedTree">
+            <obj file="scenes/models/naked-tree.obj" />
+        </primitive>
+        <primitive id="rock">
+            <obj file="scenes/models/rock.obj" />
+        </primitive>
     </primitives>
 
     <components>
 
-        <!-- Space scene -->
-        <component id="snow">
+        <!-- Christmas scene -->
+        <component id="christmas">
             <transformation>
             </transformation>
             <materials>
@@ -148,6 +166,38 @@
             <children>
                 <componentref id="background" />
                 <componentref id="floor" />
+                <!-- <componentref id="sled" /> -->
+                <componentref id="forest" />
+            </children>
+        </component>
+
+        <component id="sled">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="0.03" y="0.03" z="0.03" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="sledTexture" />
+            <children>
+                <primitiveref id="sled" />
+            </children>
+        </component>
+        
+        <component id="forest">
+            <transformation>
+                <translate x="10" y="-2" z="0" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="forestTexture" />
+            <children>
+                <primitiveref id="bigTree" />
+                <primitiveref id="smallTree" />
+                <primitiveref id="nakedTree" />
+                <primitiveref id="rock" />
             </children>
         </component>
 
