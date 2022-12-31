@@ -1,8 +1,20 @@
+/**
+ * @class PieceView
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ */
 export default class PieceView {
   constructor(scene) {
     this.scene = scene;
   }
 
+  /**
+   * @method display
+   * Displays the piece at a given position
+   * @param {Object} pos 
+   * @param {Piece Object} piece 
+   * @param {Integer} colOffset 
+   */
   display(pos, piece, colOffset = 0) {  
     let { height } = pos;
     const component = piece.component;

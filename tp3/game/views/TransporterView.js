@@ -1,9 +1,20 @@
+/**
+ * @class TransporterView
+ * Creates a transporter view
+ * @param {XMLscene} scene - Reference to MyScene object
+ * @param {String} component
+ */
 export default class TransporterView {
     constructor(scene, component) {
       this.scene = scene;
       this.component = component;
     }
   
+    /**
+     * @method display
+     * Displays the transporter at a given angle
+     * @param {Integer} angle 
+     */
     display(angle) {
       let node = this.scene.graph.components[this.component];
       this.scene.pushMatrix();

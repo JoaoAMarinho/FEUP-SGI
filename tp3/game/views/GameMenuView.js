@@ -14,6 +14,11 @@ const ICONS = Object.freeze({
   ChritmasHat: "+",
 });
 
+/**
+ * @class GameMenuView
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ */
 export default class GameMenuView {
   constructor(scene) {
     this.scene = scene;
@@ -38,6 +43,10 @@ export default class GameMenuView {
     this.setThemes();
   }
 
+  /**
+   * @method setFontDict
+   * Sets the font dictionary
+   */
   setFontDict() {
     const letters = [
       ..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
@@ -50,6 +59,10 @@ export default class GameMenuView {
         this.fontDict[letters[j + i * this.dims.cols]] = [j, i];
   }
 
+  /**
+   * @method setThemes
+   * Sets the themes for the game 
+   */
   setThemes() {
     this.background = new MySphere(this.scene, '', 100, 60, 60);
     const spacebBackgroundMaterial = new CGFappearance(this.scene);
@@ -82,14 +95,22 @@ export default class GameMenuView {
         disableColor: [1.0, 0.2, 0.2, 0.7],
       }
     }
-
-
   }
 
+  /**
+   * @method getFontPosition
+   * Gets the position of the letter in the font texture
+   * @param {Char} letter 
+   * @returns {Array} - Array with the position of the letter in the font texture
+   */
   getFontPosition(letter) {
     return this.fontDict[letter];
   }
 
+  /**
+   * @method setUpDisplay
+   * Sets up the display for the menu
+   */
   setUpDisplay() {
     this.scene.setActiveShaderSimple(this.textShader);
     this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
@@ -97,12 +118,21 @@ export default class GameMenuView {
     this.scene.loadIdentity();
   }
 
+  /**
+   * @method resetDisplay
+   * Resets the display for the menu
+   */
   resetDisplay() {
     this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
     this.scene.setActiveShaderSimple(this.scene.defaultShader);
     this.scene.clearPickRegistration();
   }
 
+  /**
+   * @method displayMainMenu
+   * Displays the main menu according to the clicked button  
+   * @param {Object} clickedMode 
+   */
   displayMainMenu(clickedMode) {
     this.theme = clickedMode == "Christmas" ? this.themes.Christmas : this.themes.Space;
     this.pickId = 15;
@@ -134,11 +164,16 @@ export default class GameMenuView {
     this.displayButton(["Christmas"], [6, -8, -50], [4, 4, 4], christmasColor);
     this.displayText(ICONS.ChritmasHat, [5.5, -6.7, -50], [4, 4, 4]);
 
-
-
     this.resetDisplay();
   }
 
+  /**
+   * @method displayGameMenu
+   * Displays the game menu information
+   * @param {Array} scores 
+   * @param {Array} gameTime 
+   * @param {Boolean} disableButtons 
+   */
   displayGameMenu(scores, gameTime, disableButtons) {
     this.setUpDisplay();
     
@@ -164,10 +199,14 @@ export default class GameMenuView {
     this.resetDisplay();
   }
 
+  /**
+   * @method displayGameOverMenu
+   * Displays the game over menu according to selected theme
+   * @param {Integer} winner 
+   */
   displayGameOverMenu(winner) {
     this.displayBackground(this.theme.background);
     this.setUpDisplay();
-
 
     const winnerText = winner ? "Whites" : "Blacks"; 
     this.displayText(winnerText, [-14, 10, -50], [12, 12, 12], this.theme.color);
@@ -178,6 +217,11 @@ export default class GameMenuView {
 
   }
 
+  /**
+   * @method displayTime
+   * Displays the time in the game menu
+   * @param {Array} gameTime 
+   */
   displayTime(gameTime) {
     const white = [1.0, 1.0, 1.0, 1.0];
 
@@ -194,6 +238,11 @@ export default class GameMenuView {
     this.displayText(seconds[1], [2, 18.9, -50], [4, 4, 4], white);
   }
 
+  /**
+   * @method displayBackground
+   * Displays the background according to selected theme
+   * @param {CGFappearance Object} material 
+   */
   displayBackground(material) {
     this.scene.pushMatrix();
 
@@ -206,6 +255,14 @@ export default class GameMenuView {
     this.scene.popMatrix();
   }
 
+  /**
+   * @method displayButton
+   * Displays a button with text and a pickable area
+   * @param {Array} text 
+   * @param {Object} position 
+   * @param {Array} scale 
+   * @param {Array} displayColor 
+   */
   displayButton(text, position, scale, displayColor) {
     const button = text.length > 1 ? text[1] : text[0];
 
@@ -213,6 +270,14 @@ export default class GameMenuView {
     this.displayText(text[0], position, scale, displayColor);
   }
 
+  /**
+   * @method displayText
+   * Displays a text
+   * @param {String} text 
+   * @param {Object} position 
+   * @param {Array} scale 
+   * @param {Array} displayColor 
+   */
   displayText(text, position, scale, displayColor=null) {
     this.scene.pushMatrix();
     this.scene.translate(...position);

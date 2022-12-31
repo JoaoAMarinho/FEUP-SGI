@@ -1,3 +1,9 @@
+/**
+ * @class GameCamera
+ * @classdesc Class that represents the camera of the game
+ * @constructor
+ * @param {CGFcamera} camera - Reference to the camera
+ */
 export default class GameCamera {
   constructor(camera) {
     this.camera = camera;
@@ -25,11 +31,20 @@ export default class GameCamera {
     this.changeCamera(1);
   }
 
+  /**
+   * @method getPosition
+   * @returns {Array} camera position
+   */
   getPosition() {
     const pos = this.camera.position 
     return vec3.fromValues(pos[0], pos[1], pos[2]);
   }
 
+  /**
+   * @method inPlace
+   * Checks if the camera is in place
+   * @returns {Boolean} true if the camera is in place
+   */
   inPlace() {
     const { position } = this.cameraPositions[this.cameraIndex];
     const curPos = vec3.fromValues(
@@ -55,7 +70,11 @@ export default class GameCamera {
     );
   }
 
-
+  /**
+   * @method changeCamera
+   * Changes the camera position
+   * @param {Integer} cameraIndex - Index of the camera position
+    */
   changeCamera(cameraIndex = null) {
     this.cameraIndex = cameraIndex == null ? (this.cameraIndex + 1) % this.cameraPositions.length : cameraIndex;
 
@@ -67,6 +86,11 @@ export default class GameCamera {
     };
   }
 
+  /**
+   * @method update
+   *  Updates the camera position
+   * @param {integer} time 
+   */
   update(time) {
     if (this.cameraAnimation == null) return;
 
@@ -116,6 +140,10 @@ export default class GameCamera {
     }
   }
 
+  /**
+   * @method resetPosition
+   * Resets the camera position
+   */
   resetPosition() {
     this.changeCamera(1);
   }

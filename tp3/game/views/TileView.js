@@ -1,5 +1,10 @@
 import {  CGFplane, CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 
+/**
+ * @class TileView
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ */
 export default class TileView {
   constructor(scene) {
     this.scene = scene;
@@ -34,6 +39,13 @@ export default class TileView {
     this.movableMaterial.setShininess(120);
   }
 
+  /**
+   * @method display
+   * Displays the tile at a given position
+   * @param {Integer} row 
+   * @param {Integer} col 
+   * @param {Integer} highlight 
+   */
   display(row, col, highlight = false) {
     this.scene.pushMatrix();
 

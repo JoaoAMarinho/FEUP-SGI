@@ -1,23 +1,47 @@
+/**
+ * @class GameLight 
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ */
 export default class GameLight {
   constructor(scene) {
+
+    // Light created for the game
     this.light = scene.lights[0];
     this.lightAnimations = [];
 
     this.height = 5.0;
   }
 
+  /**
+   * @method getPosition
+   * @returns {Array} light position
+   */
   getPosition() {
     return this.light.location;
   }
 
+  /**
+   * @method setPosition
+   * @param {Object} position 
+   */
   setPosition(position) {
     this.light.setPosition(...position, 1.0);
   }
 
+  /**
+   * @method setEnabled
+   * @param {Boolean} enable 
+   */
   setEnabled(enable) {
     this.light.enabled = enable;
   }
 
+  /**
+   * @method startAnimation
+   * @param {Object} startPos 
+   * @param {Object} endPos 
+   */
   startAnimation(startPos, endPos) {
     this.addInitialAnimation(startPos);
 
@@ -28,6 +52,11 @@ export default class GameLight {
     this.setEnabled(true);
   }
 
+  /**
+   * @method setAnimationFromKeyframes
+   * Creates a light animation from a keyframe animation
+   * @param {Animation Object} animation 
+   */
   setAnimationFromKeyframes(animation) {
     this.addInitialAnimation(animation.startPos);
     
@@ -47,12 +76,23 @@ export default class GameLight {
     this.setEnabled(true);
   }
 
+  /**
+   * @method updateTimes
+   * Updates the start and end times of the animation
+   * @param {Integer} startTime 
+   * @param {Integer} endTime 
+   */
   updateTimes(startTime, endTime) {
     this.startTime = startTime;
     this.endTime = endTime;
     this.totalTime = 0;
   }
 
+  /**
+   * @method addInitialAnimation
+   * Adds the initial animation to the light animation array
+   * @param {Object} startPos 
+   */
   addInitialAnimation(startPos) {
     this.lightAnimations = [];
     this.animationIdx = 0;
@@ -65,6 +105,12 @@ export default class GameLight {
     });
   }
 
+  /**
+   * @method addFinalAnimation
+   * Adds the final animation to the light animation array
+   * @param {Object} endPos 
+   * @param {Object} finalInstant 
+   */
   addFinalAnimation(endPos, finalInstant) {
     this.lightAnimations.push({
       pos: [endPos.col * 4, this.height, endPos.row * 4],
@@ -72,6 +118,12 @@ export default class GameLight {
     });
   }
 
+  /**
+   * @method update
+   * Updates the light position
+   * @param {Integer} time 
+   * @returns 
+   */
   update(time) {
     if (this.lightAnimations.length == 0) return;
 
