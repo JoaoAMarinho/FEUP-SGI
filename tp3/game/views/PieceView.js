@@ -19,12 +19,12 @@ export default class PieceView {
     this.scene.graph.processNode(node, null, null);
 
     if (piece.isQueen) {
-      this.displayCrown(pos);
+      this.displayCrown();
     }
     this.scene.popMatrix();
   }
 
-  displayCrown(pos) {
+  displayCrown() {
     const node = this.scene.graph.components['crown'];
     this.scene.graph.processNode(node, null, null);
   }

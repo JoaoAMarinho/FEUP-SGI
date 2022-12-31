@@ -41,6 +41,21 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     this.addFinalAnimation(finalInstant, offset);
   }
 
+  addInitialAnimation() {
+    let transformation = {
+      translate: [0.0, 0.0, 0.0],
+      scale: [1.0, 1.0, 1.0],
+      rotate: [0.0, 0.0, 0.0],
+    };
+
+    const keyframe = {
+      transformation,
+      instant: 0,
+    };
+
+    this.keyframes.push(keyframe);
+  }
+
   // animations for the auxiliar board moves
   addWaitAnimation() {
     let transformation = {
@@ -124,21 +139,6 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     this.keyframes.push(keyframe);
     return keyframe.instant;
-  }
-
-  addInitialAnimation() {
-    let transformation = {
-      translate: [0.0, 0.0, 0.0],
-      scale: [1.0, 1.0, 1.0],
-      rotate: [0.0, 0.0, 0.0],
-    };
-
-    const keyframe = {
-      transformation,
-      instant: 0,
-    };
-
-    this.keyframes.push(keyframe);
   }
 
   addFinalAnimation(finalInstant, offset=0) {
