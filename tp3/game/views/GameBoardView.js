@@ -4,6 +4,13 @@ import { CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 import TileView from "./TileView.js";
 import PieceView from "./PieceView.js";
 
+/**
+ * @class GameBoardView
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ * @param {GameBoard} gameBoard - Reference to GameBoard object
+ * @param {String} themeTexture - Texture of the game board
+ */
 export default class GameBoardView {
   constructor(scene, gameBoard, themeTexture) {
     this.scene = scene;
@@ -21,6 +28,11 @@ export default class GameBoardView {
     this.setMaterial(themeTexture);
   }
 
+  /**
+   * @method setMaterial
+   * Sets the material of the game board
+   * @param {String} themeTexture - Texture of the game board
+   */
   setMaterial(themeTexture) {
 
     const texture = new CGFtexture(this.scene, `./scenes/images/${themeTexture}`);
@@ -34,12 +46,22 @@ export default class GameBoardView {
     this.material.setTexture(texture);
   }
 
+  /**
+   * @method display
+   * Displays the game board
+   * @param {Boolean} canClick - If the game board can be clicked
+   * @param {Object} clickedPos - Position of the clicked tile
+   */
   display(canClick, clickedPos = null) {
     this.displayMainBoard();
     this.displayAuxiliarBoard();
     this.displayCells(canClick, clickedPos);
   }
 
+  /**
+   * @method displayMainBoard
+   * Displays the main game board
+   */
   displayMainBoard() {
     // Display borders
     this.scene.pushMatrix();
@@ -70,6 +92,10 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
+  /**
+   * @method displayBoard
+   * Displays the borders of the game board
+   */
   displayBoard() {
     this.scene.pushMatrix();
 
@@ -81,12 +107,20 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
+  /**
+   * @method displayAuxiliarBoard
+   * Displays the auxiliar game board
+   */
   displayAuxiliarBoard() {
     this.displayAuxiliarBoardOutside();
     this.displayAuxiliarBoardInside();
     this.displayAuxiliarBoardPieces();
   }
 
+  /**
+   * @method displayAuxiliarBoardOutside
+   * Displays the outside of the auxiliar game board
+   */
   displayAuxiliarBoardOutside() {
     this.scene.pushMatrix();
 
@@ -109,6 +143,10 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
+  /**
+   * @method displayAuxiliarBoardInside
+   * Displays the inside of the auxiliar game board
+   */
   displayAuxiliarBoardInside() {
     // Display borders
     this.scene.pushMatrix();
@@ -137,6 +175,12 @@ export default class GameBoardView {
     this.scene.popMatrix();
   }
 
+  /**
+   * @method displayCells
+   * Displays the cells of the game board and the pieces on them
+   * @param {Boolean} canClick - If the game board can be clicked
+   * @param {Object} clickedPos - Position of the clicked tile
+   */
   displayCells(canClick, clickedPos) {
     const [clicablePositions, nonClickablePositions] =
       this.gameBoard.filterClicablePositions(clickedPos, canClick);
@@ -156,15 +200,24 @@ export default class GameBoardView {
     this.scene.clearPickRegistration();
   }
 
+  /**
+   * @method displayAuxiliarBoardPieces
+   * Displays the pieces on the auxiliar game board
+   */
   displayAuxiliarBoardPieces() {
     const auxiliarBoard = this.gameBoard.auxiliarBoard;
 
     for(let i=0; i < auxiliarBoard.length; i++)
       for (let j = 0; j < auxiliarBoard[1].length; j++)
         this.displayAuxiliarBoardPiece(i, j);
-      
   }
 
+  /**
+   * @method displayPiece
+   * Displays a piece on the game board
+   * @param {Object} pos - Position of the piece
+   * @returns 
+   */
   displayPiece(pos) {
     const piece = this.gameBoard.getPlayerPiece(pos);
 
@@ -172,6 +225,12 @@ export default class GameBoardView {
     this.piecesViewer.display(pos, piece);
   }
 
+  /**
+   * @method displayAuxiliarBoardPiece
+   * Displays a piece on the auxiliar game board
+   * @param {Integer} row - Row of the piece
+   * @param {Integer} col - Column of the piece
+   */
   displayAuxiliarBoardPiece(row, col) {
     const piece = this.gameBoard.getAuxiliarBoardPiece({row, col})
 
