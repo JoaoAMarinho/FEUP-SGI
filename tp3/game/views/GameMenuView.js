@@ -132,8 +132,6 @@ export default class GameMenuView {
     this.displayButton([ICONS.Home, "Home"], [-36, 18.8, -50], [4, 4, 4], purple);
     this.displayButton([ICONS.Camera, "Camera"], [-33, 18.8, -50], [4, 4, 4], purple);
 
-
-
     this.resetDisplay();
   }
 
@@ -143,9 +141,9 @@ export default class GameMenuView {
 
     const purple = [0.29, 0.4, 69, 1.0];
 
-    const winnerColor = winner ? "Whites" : "Blacks"; 
-    this.displayText(winnerColor, [-12, 10, -50], [12, 12, 12], purple);
-    this.displayText("WIN", [-3, 4, -50], [12, 12, 12], purple);
+    const winnerText = winner ? "Whites" : "Blacks"; 
+    this.displayText(winnerText, [-14, 10, -50], [12, 12, 12], purple);
+    this.displayText("WIN", [-4, 2, -50], [12, 12, 12], purple);
     this.displayButton([ICONS.Home, "Home"], [20, -10, -50], [4, 4, 4], purple);
     this.displayText("Menu", [11, -9, -50], [4, 4, 4], purple);
     this.resetDisplay();
