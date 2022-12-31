@@ -17,16 +17,16 @@ export default class GameBoard {
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
 
-    this.board = [
-      [Empty, Empty, Empty, 'X', Empty, Empty, Empty, Empty],
-      ['Y', Empty, Empty, Empty, Empty, Empty, 'Y', Empty],
-      [Empty, 'X', Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-      [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
-      [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-    ];
+    // this.board = [
+    //   [Empty, Empty, Empty, 'X', Empty, Empty, Empty, Empty],
+    //   ['Y', Empty, Empty, Empty, Empty, Empty, 'Y', Empty],
+    //   [Empty, 'X', Empty, Empty, Empty, Empty, Empty, Empty],
+    //   [Empty, Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
+    //   [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+    //   ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+    //   [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
+    //   [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
+    // ];
 
     this.scene = scene;
   }
