@@ -46,10 +46,12 @@ export default class GameController {
     this.pickedPiece = null;
     this.pickedMove = null;
     this.mandatoryPlay = null;
-
+    
     this.scores = [0, 0];
-
+    
     this.gameSettings = this.initSettings();
+    this.audio = this.gameSettings.audio;
+
     this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
 
     this.gameBoard = new GameBoard(
@@ -66,18 +68,23 @@ export default class GameController {
   }
 
   initSettings() {
+    const christmasAudio = new Audio('scenes/music/christmas.mp3');
+    const spaceAudio = new Audio('scenes/music/music.mp3');
+
     const settings = {
       Space: {
         theme: "space.xml",
         pieceSizeFactor: 6.4,
         transporter: "spaceship",
-        textureBoard: "granit.jpg"
+        textureBoard: "granit.jpg",
+        audio: spaceAudio
       },
       Christmas: {
         theme: "christmas.xml",
         pieceSizeFactor: 5,
         transporter: "sled",
-        textureBoard: "christmas.jpg"
+        textureBoard: "christmas.jpg",
+        audio: christmasAudio
       },
     };
     return settings[this.gameSettings];
@@ -91,6 +98,20 @@ export default class GameController {
     if ([STATES.PickPiece, STATES.PickMove].includes(this.gameState)) {
       this.gameTime -= time;
     }
+
+    this.updateMusic();
+  }
+
+  updateMusic() {
+    if (!this.audio) return;
+
+    if (this.musicActive) {
+        this.audio.loop = true;
+        this.audio.volume = 0.3;
+        this.audio.play();
+    } else {
+      this.audio.pause();
+    }
   }
 
   manage() {
@@ -98,8 +119,10 @@ export default class GameController {
 
     if (this.gameState == STATES.Menu) {
       this.menuHandler(click);
+      this.musicActive = false;
       return;
     }
+    this.musicActive = true;
 
     if (this.gameState == STATES.GameOver) {
       this.gameOverHandler(click);
