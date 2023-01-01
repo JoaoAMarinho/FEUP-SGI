@@ -12,10 +12,10 @@ const AxisCombination = [
  * @extends MyKeyframeAnimation
  * @constructor
  * @param {CGFscene} scene - Reference to MyScene object
- * @param {Object} startPos
- * @param {Object} intermediatePos
- * @param {Object} endPos
- * @param {Integer} endTime
+ * @param {Object} startPos - Starting position
+ * @param {Object} intermediatePos - Intermediate position
+ * @param {Object} endPos - Ending position
+ * @param {Integer} endTime - End time
  */
 export class MyCaptureAnimation extends MyKeyframeAnimation {
   constructor(scene, startPos, intermediatePos, endPos, endTime) {
@@ -38,7 +38,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   /**
    * @method calculateStartPos
-   * Calculates the position where the piece will be captured and the direction it will have to face to capture the piece
+   * Calculates the start position and the direction it will have to face to capture the piece
    */
   calculateStartPos() {
     let direction = [
@@ -53,11 +53,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
   }
 
   /**
-   * @method findPointInNormalPlane 
+   * @method findPointInNormalPlane
    * Finds a random point in the plane defined by the normal vector and the point
-   * @param {Array} point
-   * @param {Array} normal
-   * @returns {Array} random point
+   * @param {Array} point - Point in the plane
+   * @param {Array} normal - Normal vector
+   * @returns {Array} - Random point
    */
   findPointInNormalPlane(point, normal) {
     const randomCombination =
@@ -88,8 +88,8 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   /**
    * @method setupKeyframes
-   * Sets up the keyframes for the animation 
-   * @param {Integer} endTime
+   * Sets up the keyframes for the animation
+   * @param {Integer} endTime - Animation end time
    */
   setupKeyframes(endTime) {
     this.addInitialAnimation();
@@ -102,7 +102,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   /**
    * @method addInitialAnimation
-   * Adds the initial animation to the keyframes array 
+   * Adds the initial animation to the keyframes array
    */
   addInitialAnimation() {
     let transformation = {
@@ -143,7 +143,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
 
   /**
    * @method addMoveUpAnimation
-   * Adds the animation to move the transporter piece up 
+   * Adds the animation to move the transporter piece up
    */
   addMoveUpAnimation() {
     const transformation = {
@@ -208,7 +208,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
   /**
    * @method addFinalAnimation
    * Adds the final animation to the keyframes array
-   * @param {Integer} endTime
+   * @param {Integer} endTime - Animation end time
    */
   addFinalAnimation(endTime) {
     const transformation = {
@@ -234,7 +234,7 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
   /**
    * @method update
    * Updates the animation of the transporter piece
-   * @param {Integer} t
+   * @param {Integer} t - Time since last update
    * @override
    */
   update(t) {

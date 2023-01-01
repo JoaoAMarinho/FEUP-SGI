@@ -23,7 +23,6 @@ export default class GameBoardView {
     // GameBoard parts
     this.baseBorders = new MyCylinder(scene, "", 25.456, 25.456, 2, 4, 1);
     this.baseBottom = new MyRectangle(scene, "", [-4, 32], [-4, 32]);
-    
 
     this.setMaterial(themeTexture);
   }
@@ -34,8 +33,10 @@ export default class GameBoardView {
    * @param {String} themeTexture - Texture of the game board
    */
   setMaterial(themeTexture) {
-
-    const texture = new CGFtexture(this.scene, `./scenes/images/${themeTexture}`);
+    const texture = new CGFtexture(
+      this.scene,
+      `./scenes/images/${themeTexture}`
+    );
 
     this.material = new CGFappearance(this.scene);
     this.material.setEmission(0.7, 0.7, 0.7, 1);
@@ -48,7 +49,7 @@ export default class GameBoardView {
 
   /**
    * @method display
-   * Displays the game board
+   * Displays the game boards
    * @param {Boolean} canClick - If the game board can be clicked
    * @param {Object} clickedPos - Position of the clicked tile
    */
@@ -68,7 +69,7 @@ export default class GameBoardView {
 
     this.scene.translate(14, 0, 14);
     this.displayBoard();
-    
+
     this.scene.popMatrix();
 
     // Display bottom base
@@ -207,7 +208,7 @@ export default class GameBoardView {
   displayAuxiliarBoardPieces() {
     const auxiliarBoard = this.gameBoard.auxiliarBoard;
 
-    for(let i=0; i < auxiliarBoard.length; i++)
+    for (let i = 0; i < auxiliarBoard.length; i++)
       for (let j = 0; j < auxiliarBoard[1].length; j++)
         this.displayAuxiliarBoardPiece(i, j);
   }
@@ -216,7 +217,6 @@ export default class GameBoardView {
    * @method displayPiece
    * Displays a piece on the game board
    * @param {Object} pos - Position of the piece
-   * @returns 
    */
   displayPiece(pos) {
     const piece = this.gameBoard.getPlayerPiece(pos);
@@ -232,9 +232,9 @@ export default class GameBoardView {
    * @param {Integer} col - Column of the piece
    */
   displayAuxiliarBoardPiece(row, col) {
-    const piece = this.gameBoard.getAuxiliarBoardPiece({row, col})
+    const piece = this.gameBoard.getAuxiliarBoardPiece({ row, col });
 
     if (piece == null) return;
-    this.piecesViewer.display({row, col: col + 8, height: -0.5}, piece, 2);
+    this.piecesViewer.display({ row, col: col + 8, height: -0.5 }, piece, 2);
   }
 }

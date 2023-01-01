@@ -5,47 +5,31 @@ const Empty = " ";
 /**
  * @class GameBoard
  * @constructor
- * @param {XMLscene} scene - Reference to MyScene object
+ * @param {CGFscene} scene - Reference to MyScene object
  * @param {Integer} pieceSizeFactor - Factor for the collision animation
  */
 export default class GameBoard {
   constructor(scene, pieceSizeFactor) {
-    this.player1Pieces = [new Piece(scene, 0, pieceSizeFactor), new Piece(scene, 0, pieceSizeFactor, true)];
-    this.player2Pieces = [new Piece(scene, 1, pieceSizeFactor), new Piece(scene, 1, pieceSizeFactor, true)];
+    this.scene = scene;
+
+    this.player1Pieces = [
+      new Piece(scene, 0, pieceSizeFactor),
+      new Piece(scene, 0, pieceSizeFactor, true),
+    ];
+    this.player2Pieces = [
+      new Piece(scene, 1, pieceSizeFactor),
+      new Piece(scene, 1, pieceSizeFactor, true),
+    ];
 
     this.board = new Array(8);
     for (let i = 0; i < this.board.length; i++) {
       this.board[i] = new Array(8).fill(Empty);
     }
 
-    this.createAuxiliarBoard();
-
     this.fillBoard(0, this.player1Pieces[0].id);
     this.fillBoard(5, this.player2Pieces[0].id);
 
-    // this.board = [
-    //   [Empty, Empty, Empty, 'X', Empty, Empty, Empty, Empty],
-    //   ['Y', Empty, Empty, Empty, Empty, Empty, 'Y', Empty],
-    //   [Empty, 'X', Empty, Empty, Empty, Empty, Empty, Empty],
-    //   [Empty, Empty, 'Y', Empty, Empty, Empty, Empty, Empty],
-    //   [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-    //   ['X', Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-    //   [Empty, 'Y', Empty, 'Y', Empty, Empty, Empty, Empty],
-    //   [Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty],
-    // ];
-
-    this.scene = scene;
-  }
-
-  /**
-   * @method createAuxiliarBoard
-   * Creates an auxiliar board to store the pieces that are being animated
-   */
-  createAuxiliarBoard() {
-    this.auxiliarBoard = new Array(8);
-    for (let i = 0; i < this.auxiliarBoard.length; i++) {
-      this.auxiliarBoard[i] = new Array(3).fill(Empty);
-    }
+    this.createAuxiliarBoard();
   }
 
   /**
@@ -53,7 +37,7 @@ export default class GameBoard {
    * Fills the board with the pieces of a player
    * @param {Integer} start - Start row
    * @param {String} piece - Piece id
-    */
+   */
   fillBoard(start, piece) {
     for (let i = start; i < start + 3; i++) {
       for (let j = 0; j < 8; j++) {
@@ -65,12 +49,23 @@ export default class GameBoard {
   }
 
   /**
-   * @method setBoard 
+   * @method createAuxiliarBoard
+   * Creates an auxiliar board to store the pieces that are being captured
+   */
+  createAuxiliarBoard() {
+    this.auxiliarBoard = new Array(8);
+    for (let i = 0; i < this.auxiliarBoard.length; i++) {
+      this.auxiliarBoard[i] = new Array(3).fill(Empty);
+    }
+  }
+
+  /**
+   * @method setBoard
    * Sets the board to a given board
    * @param {Array} board - Board to be set
-   * @param {Boolean} copy - If true, the board is copied
+   * @param {Boolean} copy - If true, creates a copy of the given board
    */
-  setBoard(board, copy=false) {
+  setBoard(board, copy = false) {
     this.board = copy ? board.map((row) => row.slice()) : board;
   }
 
@@ -78,9 +73,9 @@ export default class GameBoard {
    * @method setAuxiliarBoard
    * Sets the auxiliar board to a given board
    * @param {Array} board - Board to be set
-   * @param {Boolean} copy - If true, the board is copied
+   * @param {Boolean} copy - If true, creates a copy of the given board
    */
-  setAuxiliarBoard(board, copy=false) {
+  setAuxiliarBoard(board, copy = false) {
     this.auxiliarBoard = copy ? board.map((row) => row.slice()) : board;
   }
 
@@ -88,7 +83,7 @@ export default class GameBoard {
    * @method getBoardCopy
    * Returns a copy of the board
    * @return {Array} - Copy of the board
-    */
+   */
   getBoardCopy() {
     return this.board.map((row) => row.slice());
   }
@@ -114,7 +109,7 @@ export default class GameBoard {
 
   /**
    * @method getPlayerPieces
-   * Returns the pieces of a given player 
+   * Returns the pieces of a given player
    * @param {Integer} player - Player id
    * @return {Array} - Pieces of the player
    */
@@ -124,11 +119,10 @@ export default class GameBoard {
 
   /**
    * @method setValidMoves
-   * Sets the valid moves of a given player 
+   * Sets the valid moves of a given player
    * If a start position is given, only the moves from that position are set
    * @param {Integer} player - Player id
-   * @param {Object} startPos - capture mandatory position
-   * @return {Object} - Valid moves
+   * @param {Object} startPos - Capture mandatory position
    */
   setValidMoves(player, startPos = null) {
     const { moves, capturing } = this.getValidMoves(player, startPos);
@@ -141,7 +135,7 @@ export default class GameBoard {
    * Returns the valid moves of a given player
    * If a start position is given, only the moves from that position are returned
    * @param {Integer} player - Player id
-   * @param {Object} startPos - capture mandatory position
+   * @param {Object} startPos - Capture mandatory position
    * @return {Object} - Valid moves
    */
   getValidMoves(player, startPos = null) {
@@ -214,7 +208,7 @@ export default class GameBoard {
    * @method getAuxiliarBoardPosition
    * Returns the position of the first empty space in the auxiliar board for a given player
    * @param {Integer} player - Player id
-   * @return {Object} - Position of the first empty space
+   * @return {Object} - Position of the first empty space in reference to the main board
    */
   getAuxiliarBoardPosition(player) {
     const rowIncrement = player ? 4 : 0;
@@ -265,14 +259,15 @@ export default class GameBoard {
 
   /**
    * @method executeMove
-   * Executes a move in the board by  placing a piece in a given position
+   * Executes a move in the board by placing a piece in a given position
    * @param {Integer} piece - Piece id
    * @param {Integer} player - Player id
    * @param {Object} endPos - Position to move to
    */
   executeMove(piece, player, endPos) {
     const playerPieces = this.getPlayerPieces(player);
-    const playerPiece = piece === playerPieces[0].id ? playerPieces[0] : playerPieces[1];
+    const playerPiece =
+      piece === playerPieces[0].id ? playerPieces[0] : playerPieces[1];
 
     if (playerPiece.isQueen || playerPiece.endRow == endPos.row)
       this.board[endPos.row][endPos.col] = playerPieces[1].id;
@@ -286,8 +281,8 @@ export default class GameBoard {
    * @param {Integer} piece - Piece id
    */
   fillAuxiliarBoard(player, piece) {
-    const pos = this.getAuxiliarBoardPosition(1 -player);
-    this.auxiliarBoard[pos.row][pos.col-8] = piece;
+    const pos = this.getAuxiliarBoardPosition(1 - player);
+    this.auxiliarBoard[pos.row][pos.col - 8] = piece;
   }
 
   /**
@@ -301,12 +296,14 @@ export default class GameBoard {
   isUpgradeMove(player, startPos, endPos) {
     const piece = this.board[startPos.row][startPos.col];
     const playerPieces = this.getPlayerPieces(player);
-    return piece === playerPieces[0].id && endPos.row === playerPieces[0].endRow;
+    return (
+      piece === playerPieces[0].id && endPos.row === playerPieces[0].endRow
+    );
   }
 
   /**
    * @method filterClicablePositions
-   * Returns the clicable and non clicable positions for a given player
+   * Returns the clicable and non clicable positions for a given clicked position
    * @param {Object} clickedPos - Position of the clicked piece
    * @param {Boolean} canClick - If the player can click
    * @return {Array} - Array with the clicable and non clicable positions
@@ -314,12 +311,12 @@ export default class GameBoard {
   filterClicablePositions(clickedPos, canClick) {
     const clicablePositions = [];
     const nonClickablePositions = [];
-    
+
     for (let row = 0; row < this.board.length; row++)
       for (let col = 0; col < this.board.length; col++)
-        nonClickablePositions.push(JSON.stringify({ row, col}));
-    if(!canClick) return [[], nonClickablePositions];
-    
+        nonClickablePositions.push(JSON.stringify({ row, col }));
+    if (!canClick) return [[], nonClickablePositions];
+
     if (clickedPos != null) clickedPos = JSON.stringify(clickedPos);
 
     for (const pos of Object.keys(this.moves)) {
@@ -340,11 +337,11 @@ export default class GameBoard {
 
   /**
    * @method emptyPosition
-   * Empties a position in the board
+   * Empties a position in the board or auxiliar board
    * @param {Object} pos - Position to empty
    * @return {Integer} - Piece id
    */
-  emptyPosition({row, col}) {
+  emptyPosition({ row, col }) {
     col = Math.floor(col);
     if (col > 7) {
       const pieceId = this.auxiliarBoard[row][col - 8];
@@ -371,12 +368,12 @@ export default class GameBoard {
   }
 
   /**
-   * @method isEmpty  
+   * @method isEmpty
    * Returns if a position is empty
    * @param {Object} pos - Position to check
    * @return {Boolean} - If the position is empty
    */
-  isEmpty({row, col}) {
+  isEmpty({ row, col }) {
     return this.board[row][col] === Empty;
   }
 
@@ -386,7 +383,7 @@ export default class GameBoard {
    * @param {Object} pos - Position to check
    * @return {Boolean} - If the position is outside the board
    */
-  outsideBoard({row, col}) {
+  outsideBoard({ row, col }) {
     return row < 0 || row > 7 || col < 0 || col > 7;
   }
 
@@ -401,14 +398,18 @@ export default class GameBoard {
 
   /**
    * @method getPieceFromId
-   * Returns a piece object from a given id 
+   * Returns a piece object from a given id
    * @param {Integer} id - Piece id
    * @return {Object} - Piece object
    */
   getPieceFromId(id) {
     if (id.length > 1)
-      return id == this.player1Pieces[1].id ? this.player1Pieces[1] : this.player2Pieces[1];
-    return id == this.player1Pieces[0].id ? this.player1Pieces[0] : this.player2Pieces[0]; 
+      return id == this.player1Pieces[1].id
+        ? this.player1Pieces[1]
+        : this.player2Pieces[1];
+    return id == this.player1Pieces[0].id
+      ? this.player1Pieces[0]
+      : this.player2Pieces[0];
   }
 
   /**
@@ -417,10 +418,10 @@ export default class GameBoard {
    * @param {Object} pos - Position to get the piece from
    * @return {Object} - Piece object
    */
-  getPlayerPiece({row, col}) {
+  getPlayerPiece({ row, col }) {
     const pieceId = this.board[row][col];
     if (pieceId == Empty) return null;
-    
+
     return this.getPieceFromId(pieceId);
   }
 
@@ -430,11 +431,10 @@ export default class GameBoard {
    * @param {Object} pos - Position to get the piece from
    * @return {Object} - Piece object
    */
-  getAuxiliarBoardPiece({row, col}) {
+  getAuxiliarBoardPiece({ row, col }) {
     const pieceId = this.auxiliarBoard[row][col];
     if (pieceId == Empty) return null;
 
     return this.getPieceFromId(pieceId);
   }
-
 }

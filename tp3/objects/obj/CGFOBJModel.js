@@ -52,11 +52,12 @@ export class CGFOBJModel extends CGFobject {
    */
   onResourceError(string) {
     console.log("Error loading resource " + this.url + ": " + string);
+    this.scene.graph.loadedObj(this.idx, false);
   }
 
   /**
    * @method onResourceReady
-   * Callback for when the OBJ file is loaded successfully 
+   * Callback for when the OBJ file is loaded successfully
    * @param {String} string - OBJ file contents
    */
   onResourceReady(string) {

@@ -1,7 +1,7 @@
 import { CGFobject } from "../../../lib/CGF.js";
 
 /**
- * MyTriangle
+ * @class MyTriangle
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id -  Object identifier

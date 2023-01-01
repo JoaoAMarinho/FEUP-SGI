@@ -1,11 +1,10 @@
 /**
- * @class GameLight 
+ * @class GameLight
  * @constructor
  * @param {XMLscene} scene - Reference to MyScene object
  */
 export default class GameLight {
   constructor(scene) {
-
     // Light created for the game
     this.light = scene.lights[0];
     this.lightAnimations = [];
@@ -14,16 +13,9 @@ export default class GameLight {
   }
 
   /**
-   * @method getPosition
-   * @returns {Array} light position
-   */
-  getPosition() {
-    return this.light.location;
-  }
-
-  /**
    * @method setPosition
-   * @param {Object} position 
+   * Sets the light position
+   * @param {Object} position - New light position
    */
   setPosition(position) {
     this.light.setPosition(...position, 1.0);
@@ -31,7 +23,8 @@ export default class GameLight {
 
   /**
    * @method setEnabled
-   * @param {Boolean} enable 
+   * Enables or disables the light
+   * @param {Boolean} enable - New light state
    */
   setEnabled(enable) {
     this.light.enabled = enable;
@@ -39,8 +32,9 @@ export default class GameLight {
 
   /**
    * @method startAnimation
-   * @param {Object} startPos 
-   * @param {Object} endPos 
+   * Starts the light animation
+   * @param {Object} startPos - Light start position
+   * @param {Object} endPos - Light end position
    */
   startAnimation(startPos, endPos) {
     this.addInitialAnimation(startPos);
@@ -54,33 +48,43 @@ export default class GameLight {
 
   /**
    * @method setAnimationFromKeyframes
-   * Creates a light animation from a keyframe animation
-   * @param {Animation Object} animation 
+   * Creates a light animation from a MyKeyframeAnimation
+   * @param {MyKeyframeAnimation} animation
    */
   setAnimationFromKeyframes(animation) {
     this.addInitialAnimation(animation.startPos);
-    
-    const startPos = {row: animation.startPos.row * 4, col: animation.startPos.col * 4};
+
+    const startPos = {
+      row: animation.startPos.row * 4,
+      col: animation.startPos.col * 4,
+    };
     const keyframes = animation.keyframes;
 
-    for (let i = 1; i < keyframes.length-1; i++) {
+    for (let i = 1; i < keyframes.length - 1; i++) {
       const keyframe = keyframes[i];
-      const pos = [keyframe.transformation.translate[0] + startPos.col, this.height, keyframe.transformation.translate[2] + startPos.row];
+      const pos = [
+        keyframe.transformation.translate[0] + startPos.col,
+        this.height,
+        keyframe.transformation.translate[2] + startPos.row,
+      ];
       this.lightAnimations.push({
         pos,
         instant: keyframe.instant,
       });
     }
 
-    this.updateTimes(0, this.lightAnimations[this.lightAnimations.length-1].instant);
+    this.updateTimes(
+      0,
+      this.lightAnimations[this.lightAnimations.length - 1].instant
+    );
     this.setEnabled(true);
   }
 
   /**
    * @method updateTimes
    * Updates the start and end times of the animation
-   * @param {Integer} startTime 
-   * @param {Integer} endTime 
+   * @param {Integer} startTime - Start time
+   * @param {Integer} endTime - End time
    */
   updateTimes(startTime, endTime) {
     this.startTime = startTime;
@@ -91,7 +95,7 @@ export default class GameLight {
   /**
    * @method addInitialAnimation
    * Adds the initial animation to the light animation array
-   * @param {Object} startPos 
+   * @param {Object} startPos - Start position
    */
   addInitialAnimation(startPos) {
     this.lightAnimations = [];
@@ -108,8 +112,8 @@ export default class GameLight {
   /**
    * @method addFinalAnimation
    * Adds the final animation to the light animation array
-   * @param {Object} endPos 
-   * @param {Object} finalInstant 
+   * @param {Object} endPos
+   * @param {Object} finalInstant
    */
   addFinalAnimation(endPos, finalInstant) {
     this.lightAnimations.push({
@@ -121,8 +125,7 @@ export default class GameLight {
   /**
    * @method update
    * Updates the light position
-   * @param {Integer} time 
-   * @returns 
+   * @param {Integer} time - Time elapsed since last update
    */
   update(time) {
     if (this.lightAnimations.length == 0) return;
@@ -136,7 +139,9 @@ export default class GameLight {
       return;
     }
 
-    while (this.totalTime > this.lightAnimations[this.animationIdx+1].instant) {
+    while (
+      this.totalTime > this.lightAnimations[this.animationIdx + 1].instant
+    ) {
       this.animationIdx++;
       if (this.animationIdx == this.lightAnimations.length - 1) break;
     }
@@ -149,12 +154,7 @@ export default class GameLight {
       (nextAnimation.instant - currentAnimation.instant);
 
     let newPos = [];
-    vec3.lerp(
-      newPos,
-      currentAnimation.pos,
-      nextAnimation.pos,
-      timePercentage
-    );
+    vec3.lerp(newPos, currentAnimation.pos, nextAnimation.pos, timePercentage);
     this.setPosition(newPos);
   }
 }

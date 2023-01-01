@@ -1,7 +1,7 @@
 import { CGFaxis, CGFcamera, CGFscene } from "../lib/CGF.js";
 
 /**
- * XMLscene
+ * @class XMLscene
  * @constructor
  * @param {MyInterface} myinterface  - Reference to MyInterface object
  */
@@ -50,7 +50,7 @@ export class XMLscene extends CGFscene {
    */
   initCameras() {
     this.camera = new CGFcamera(
-      45*Math.PI / 180,
+      (45 * Math.PI) / 180,
       0.1,
       10000000,
       vec3.fromValues(15, 15, 15),
@@ -127,6 +127,8 @@ export class XMLscene extends CGFscene {
 
   /**
    * @method setGameController
+   * Sets the game controller
+   * @param {GameController} gameController - New game controller
    */
   setGameController(gameController) {
     this.gameController = gameController;
@@ -159,7 +161,7 @@ export class XMLscene extends CGFscene {
       Object.keys(this.graph.views).forEach((key) => {
         this.cameraIds[key] = key;
       });
-      
+
       this.updateCamera();
       this.interface.addCameraControls();
     }
@@ -207,16 +209,15 @@ export class XMLscene extends CGFscene {
   /**
    * @method update
    * Verify checked keys
+   * @param {Number} t - Current time
    */
   update(t) {
     var elapsedTime = this.time == undefined ? 0 : t - this.time;
     this.time = t;
 
-    if (this.gameController)
-      this.gameController.update(elapsedTime);
+    if (this.gameController) this.gameController.update(elapsedTime);
 
-    if (!this.sceneInited)
-      return;
+    if (!this.sceneInited) return;
 
     // this.checkKeys();
     this.graph.updateAnimations(elapsedTime);
@@ -247,7 +248,7 @@ export class XMLscene extends CGFscene {
 
   /**
    * @method reset
-   * Reset scene lights to default position and puts scene in uninitialized state
+   * Reset scene lights and puts scene in uninitialized state
    */
   reset() {
     this.sceneInited = false;

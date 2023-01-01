@@ -5,11 +5,11 @@ import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
  * @extends MyKeyframeAnimation
  * @constructor
  * @param {CGFscene} scene - Reference to MyScene object
- * @param {Piece Object} piece
- * @param {Object} startPos
- * @param {Object} endPos
- * @param {Boolean} capturing
- * @param {Integer} endTime
+ * @param {Piece Object} piece - Piece to be animated
+ * @param {Object} startPos - Starting position
+ * @param {Object} endPos - Ending position
+ * @param {Boolean} capturing - If the piece is capturing another piece
+ * @param {Integer} endTime - End time
  */
 export class MyPieceAnimation extends MyKeyframeAnimation {
   constructor(scene, piece, startPos, endPos, capturing, endTime) {
@@ -30,8 +30,8 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
   /**
    * @method setupKeyframes
-   * Sets up the keyframes for the animation 
-   * @param {Integer} endTime
+   * Sets up the keyframes for the animation
+   * @param {Integer} endTime - Animation end time
    */
   setupKeyframes(endTime) {
     this.addInitialAnimation();
@@ -40,7 +40,7 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
     if (this.endPos.col > 7) {
       offset = 2;
-      finalInstant = (endTime != null) ? endTime : 2400;
+      finalInstant = endTime != null ? endTime : 2400;
       this.addWaitAnimation();
       this.addMoveUpAnimation();
       this.addMoveToFinalPosition();
@@ -78,8 +78,8 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
 
   /**
    * @method addWaitAnimation
-   * Adds the wait animation to the keyframes 
-    */
+   * Adds the wait animation to the keyframes
+   */
   addWaitAnimation() {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
@@ -88,15 +88,15 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
     };
 
     const keyframe = {
-        transformation,
-        instant: 500,
+      transformation,
+      instant: 500,
     };
     this.keyframes.push(keyframe);
   }
 
   /**
    * @method addMoveUpAnimation
-   * Adds the move up animation to the keyframes 
+   * Adds the move up animation to the keyframes
    */
   addMoveUpAnimation() {
     const transformation = {
@@ -134,19 +134,23 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   /**
    * @method addColisionAnimation
    * Adds the colision animation to the keyframes
-   * @returns {Integer} finalInstant
+   * @returns {Integer} - Final instant
    */
   addColisionAnimation() {
     let sizeFactor = this.piece.sizeFactor;
     const transformation = {
-        translate: [this.translationVect.col / sizeFactor, 0.0, this.translationVect.row / sizeFactor],
-        scale: [1.0, 1.0, 1.0],
-        rotate: vec3.create(),
+      translate: [
+        this.translationVect.col / sizeFactor,
+        0.0,
+        this.translationVect.row / sizeFactor,
+      ],
+      scale: [1.0, 1.0, 1.0],
+      rotate: vec3.create(),
     };
-  
+
     let keyframe = {
-        transformation,
-        instant: 500,
+      transformation,
+      instant: 500,
     };
 
     this.keyframes.push(keyframe);
@@ -156,12 +160,16 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   /**
    * @method addReboundAnimation
    * Adds the rebound animation to the keyframes
-   * @returns {Integer} finalInstant
-  */
+   * @returns {Integer} - Final instant
+   */
   addReboundAnimation() {
     const sizeFactor = this.piece.sizeFactor + 0.3;
     const transformation = {
-      translate: [this.translationVect.col / sizeFactor, 0.0, this.translationVect.row / sizeFactor],
+      translate: [
+        this.translationVect.col / sizeFactor,
+        0.0,
+        this.translationVect.row / sizeFactor,
+      ],
       scale: [1.0, 1.0, 1.0],
       rotate: vec3.create(),
     };
@@ -171,10 +179,10 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
       instant: 750,
     };
     this.keyframes.push(keyframe);
-    
+
     keyframe = {
-        transformation,
-        instant: 1000,
+      transformation,
+      instant: 1000,
     };
 
     this.keyframes.push(keyframe);
@@ -184,21 +192,21 @@ export class MyPieceAnimation extends MyKeyframeAnimation {
   /**
    * @method addFinalAnimation
    * Adds the final animation to the keyframes
-   * @param {Integer} finalInstant
-   * @param {Integer} offset
+   * @param {Integer} finalInstant - End time
+   * @param {Integer} offset - Animation offset
    */
-  addFinalAnimation(finalInstant, offset=0) {
+  addFinalAnimation(finalInstant, offset = 0) {
     const transformation = {
       translate: [
-        this.translationVect.col+offset,
-        0.0-offset,
+        this.translationVect.col + offset,
+        0.0 - offset,
         this.translationVect.row,
       ],
       scale: [1.0, 1.0, 1.0],
       rotate: [0.0, 0.0, 0.0],
     };
 
-    const keyframe= {
+    const keyframe = {
       transformation,
       instant: finalInstant,
     };

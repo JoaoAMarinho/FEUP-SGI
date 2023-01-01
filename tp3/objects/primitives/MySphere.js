@@ -1,7 +1,7 @@
 import { CGFobject } from "../../../lib/CGF.js";
 
 /**
- * MySphere
+ * @class MySphere
  * @method constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id - Object identifier

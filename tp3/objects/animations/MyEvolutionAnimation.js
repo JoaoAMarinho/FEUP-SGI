@@ -5,8 +5,8 @@ import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
  * @extends MyKeyframeAnimation
  * @constructor
  * @param {CGFscene} scene - Reference to MyScene object
- * @param {Object} startPos
- * @param {Integer} startTime
+ * @param {Object} startPos - Starting position
+ * @param {Integer} startTime - Start time
  */
 export class MyEvolutionAnimation extends MyKeyframeAnimation {
   constructor(scene, startPos, startTime) {
@@ -19,8 +19,8 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
 
   /**
    * @method setupKeyframes
-   * Sets up the keyframes for the animation 
-   * @param {Integer} startTime
+   * Sets up the keyframes for the animation
+   * @param {Integer} startTime - Animation start time
    */
   setupKeyframes(startTime) {
     let transformation = {

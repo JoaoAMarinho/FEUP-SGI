@@ -29,9 +29,9 @@ const TurnTime = 300000; // 5 min in miliseconds
 
 /**
  * @class GameController
- * @classdesc Class that controls the game flow 
+ * @classdesc Class that controls the game flow
  * @constructor
- * @param {CGFscene} scene - the scene
+ * @param {XMLscene} scene - Reference to MyScene object
  */
 export default class GameController {
   constructor(scene) {
@@ -48,7 +48,7 @@ export default class GameController {
 
   /**
    * @method startGame
-   * Starts a new game 
+   * Starts a new game
    */
   startGame() {
     this.playerTurn = PlayerIdx.Player1;
@@ -56,9 +56,9 @@ export default class GameController {
     this.pickedPiece = null;
     this.pickedMove = null;
     this.mandatoryPlay = null;
-    
+
     this.scores = [0, 0];
-    
+
     this.gameSettings = this.initSettings();
     this.startMusic();
     this.audio = this.gameSettings.audio;
@@ -69,9 +69,16 @@ export default class GameController {
       this.scene,
       this.gameSettings.pieceSizeFactor
     );
-    this.gameBoardViewer = new GameBoardView(this.scene, this.gameBoard,this.gameSettings.textureBoard);
+    this.gameBoardViewer = new GameBoardView(
+      this.scene,
+      this.gameBoard,
+      this.gameSettings.textureBoard
+    );
 
-    this.animator.setViewers(this.gameBoardViewer, this.gameSettings.transporter);
+    this.animator.setViewers(
+      this.gameBoardViewer,
+      this.gameSettings.transporter
+    );
     this.camera.resetPosition();
 
     this.gameBoard.setValidMoves(this.playerTurn);
@@ -80,12 +87,12 @@ export default class GameController {
 
   /**
    * @method initSettings
-   * Initializes the game settings 
-   * @returns {Object} settings - the game settings
+   * Initializes the game settings
+   * @returns {Object} - The game settings
    */
   initSettings() {
-    const christmasAudio = new Audio('scenes/music/christmas.mp3');
-    const spaceAudio = new Audio('scenes/music/music.mp3');
+    const christmasAudio = new Audio("scenes/music/christmas.mp3");
+    const spaceAudio = new Audio("scenes/music/music.mp3");
 
     const settings = {
       Space: {
@@ -93,19 +100,23 @@ export default class GameController {
         pieceSizeFactor: 6.4,
         transporter: "spaceship",
         textureBoard: "granit.jpg",
-        audio: spaceAudio
+        audio: spaceAudio,
       },
       Christmas: {
         theme: "christmas.xml",
         pieceSizeFactor: 5,
         transporter: "sled",
         textureBoard: "christmas.jpg",
-        audio: christmasAudio
+        audio: christmasAudio,
       },
     };
     return settings[this.gameSettings];
   }
 
+  /**
+   * @method startMusic
+   * Starts the game music
+   */
   startMusic() {
     const audio = this.gameSettings.audio;
     audio.loop = true;
@@ -115,7 +126,7 @@ export default class GameController {
 
   /**
    * @method update
-   * Updates the game 
+   * Updates the game
    * @param {Integer} time - the time elapsed since the last update
    */
   update(time) {
@@ -130,7 +141,7 @@ export default class GameController {
 
   /**
    * @method manage
-   * Manages the game according to the current state 
+   * Manages the game according to the current state
    */
   manage() {
     const click = this.clicked();
@@ -180,8 +191,8 @@ export default class GameController {
 
   /**
    * @method menuHandler
-   * Handles the menu state 
-   * @param {Object} clickedButton 
+   * Handles the menu state
+   * @param {Object} clickedButton - Clicked button
    */
   menuHandler(clickedButton) {
     if (clickedButton == null) return;
@@ -197,8 +208,7 @@ export default class GameController {
   /**
    * @method gameOverHandler
    * Handles the game over state
-   * @param {Object} clickedButton 
-   * @returns 
+   * @param {Object} clickedButton - Clicked button
    */
   gameOverHandler(clickedButton) {
     if (clickedButton == null) return;
@@ -213,7 +223,7 @@ export default class GameController {
   /**
    * @method pickPieceHandler
    * Handles the pick piece state
-   * @param {Object} clickedPos 
+   * @param {Object} clickedPos - Clicked position
    */
   pickPieceHandler(clickedPos) {
     this.pickedPiece = { row: clickedPos.row, col: clickedPos.col };
@@ -221,9 +231,9 @@ export default class GameController {
   }
 
   /**
-   * @method pickMoveHandler 
+   * @method pickMoveHandler
    * Handles the pick move state
-   * @param {Object} clickedPos 
+   * @param {Object} clickedPos - Clicked position
    */
   pickMoveHandler(clickedPos) {
     const { row, col, isMovement } = clickedPos;
@@ -248,7 +258,7 @@ export default class GameController {
 
   /**
    * @method movePieceHandler
-   * Handles the move piece state 
+   * Handles the move piece state
    */
   movePieceHandler() {
     if (this.animator.hasAnimations()) return;
@@ -285,7 +295,8 @@ export default class GameController {
   undoHandler() {
     if (this.animator.hasAnimations()) return;
 
-    const { playerTurn, board, auxiliarBoard, scores, mandatoryPlay } = this.previousSequence;
+    const { playerTurn, board, auxiliarBoard, scores, mandatoryPlay } =
+      this.previousSequence;
 
     this.gameBoard.setBoard(board);
     this.gameBoard.setAuxiliarBoard(auxiliarBoard);
@@ -325,8 +336,7 @@ export default class GameController {
         this.gameBoard.emptyPosition(animation.startPos);
       } else if (animation instanceof MyEvolutionAnimation)
         this.animator.setEvolutionAnimation(animation);
-      else
-        this.animator.setCaptureAnimation(animation);
+      else this.animator.setCaptureAnimation(animation);
     }
 
     this.filmSequence++;
@@ -334,7 +344,7 @@ export default class GameController {
 
   /**
    * @method verifyEndGame
-   * Verifies if the game has ended 
+   * Verifies if the game has ended
    */
   verifyEndGame() {
     // Time out
@@ -370,7 +380,7 @@ export default class GameController {
 
   /**
    * @method display
-   * Displays the game according to the current state 
+   * Displays the game according to the current state
    */
   display() {
     if (this.gameState == STATES.Menu) {
@@ -407,7 +417,7 @@ export default class GameController {
 
   /**
    * @method switchTurns
-   * Switches the current player 
+   * Switches the current player
    */
   switchTurns() {
     this.pickedMove = null;
@@ -465,8 +475,7 @@ export default class GameController {
     if (this.gameBoard.capturing) {
       this.setupCaptureAnimations(totalTime);
       this.light.setAnimationFromKeyframes(animation);
-    }
-    else this.light.startAnimation(this.pickedPiece, this.pickedMove);
+    } else this.light.startAnimation(this.pickedPiece, this.pickedMove);
 
     this.currentPieceID = this.gameBoard.emptyPosition(this.pickedPiece);
     this.changeState(STATES.MovePiece);
@@ -475,8 +484,8 @@ export default class GameController {
   /**
    * @method setupCaptureAnimations
    * Sets up the animations for the capture of a piece and adds the current board to the game sequences list
-   * @param {Object} endTime 
-   * @returns {Object} The end time of the capture animation 
+   * @param {Object} endTime - Animations end time
+   * @returns {Integer} - The end time of the capture animation
    */
   setupCaptureAnimations(endTime) {
     const intermediatePos = this.gameBoard.intermediatePosition(
@@ -497,12 +506,10 @@ export default class GameController {
       endTime,
     ]);
 
-    this.addAnimation([
-      this.camera.getPosition(),
-      intermediatePos,
-      auxiliarBoardPos,
-      endTime,
-    ], "capture");
+    this.addAnimation(
+      [this.camera.getPosition(), intermediatePos, auxiliarBoardPos, endTime],
+      "capture"
+    );
 
     this.intermediatePieceID = this.gameBoard.emptyPosition(intermediatePos);
     return animation.endTime;
@@ -510,17 +517,17 @@ export default class GameController {
 
   /**
    * @method addAnimation
-   * Adds an animation to the game sequence 
-   * @param {Array} animationParams 
-   * @param {String} animationType 
-   * @returns 
+   * Adds an animation to the game sequence
+   * @param {Array} animationParams - Animation parameters
+   * @param {String} animationType - Animation type
+   * @returns {Animation Object} - Created animation
    */
   addAnimation(animationParams, animationType = "piece") {
     let animation;
 
     if (animationType == "piece")
       animation = this.animator.createPieceAnimation(...animationParams);
-    else if (animationType == "evolution") 
+    else if (animationType == "evolution")
       animation = this.animator.createEvolutionAnimation(...animationParams);
     else animation = this.animator.createCaptureAnimation(...animationParams);
 
@@ -532,7 +539,7 @@ export default class GameController {
   /**
    * @method addAnimationToSequence
    * Adds an animation to the game sequence
-   * @param {Animation Object} animation 
+   * @param {Animation Object} animation
    */
   addAnimationToSequence(animation) {
     this.gameSequences.addAnimation(animation);
@@ -540,7 +547,7 @@ export default class GameController {
 
   /**
    * @method undoMove
-   * Undoes the last move made by the player  
+   * Undoes the last move made
    */
   undoMove() {
     const sequence = this.gameSequences.undo();
@@ -556,9 +563,8 @@ export default class GameController {
         this.animator.addPieceAnimation(animation);
         this.gameBoard.emptyPosition(animation.endPos);
       } else if (animation instanceof MyEvolutionAnimation)
-       this.animator.setEvolutionAnimation(animation);
-      else
-        this.animator.setCaptureAnimation(animation);
+        this.animator.setEvolutionAnimation(animation);
+      else this.animator.setCaptureAnimation(animation);
     }
 
     this.previousSequence = sequence;
@@ -567,7 +573,7 @@ export default class GameController {
 
   /**
    * @method beginFilm
-   * Begins the film of the game 
+   * Begins the film of the game
    */
   beginFilm() {
     if (!this.gameSequences.hasSequences()) return;
@@ -583,7 +589,7 @@ export default class GameController {
   /**
    * @method changeState
    * Changes the game state
-   * @param {Integer} state 
+   * @param {Integer} state - New game state
    */
   changeState(state) {
     this.gameState = state;
@@ -591,8 +597,8 @@ export default class GameController {
 
   /**
    * @method changePlayer
-   * Changes the player turn
-   * @param {Integer} player 
+   * Changes the player turn and resets the turn time
+   * @param {Integer} player - New player turn
    */
   changePlayer(player = null) {
     this.gameTime = TurnTime;
@@ -615,9 +621,9 @@ export default class GameController {
 
   /**
    * @method clickHandler
-   * Handles the click of the player 
-   * @param {Object} click
-   * @returns {Boolean} True if the click was handled, false otherwise
+   * Handles the click of the player
+   * @param {Object} click - Click button
+   * @returns {Boolean} - True if the click was handled, false otherwise
    */
   clickHandler(click) {
     if (click == null) return true;
@@ -643,8 +649,8 @@ export default class GameController {
 
   /**
    * @method clicked
-   * Checks if the player clicked on the board
-   * @returns {Object} The position of the click on the board
+   * Checks if the player has done a click
+   * @returns {Object} - Click properties
    */
   clicked() {
     if (this.scene.pickMode) return null;

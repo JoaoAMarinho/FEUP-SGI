@@ -1,7 +1,7 @@
 import { CGFinterface, CGFapplication, dat } from "../lib/CGF.js";
 
 /**
- * MyInterface
+ * @class MyInterface
  * @constructor
  */
 export class MyInterface extends CGFinterface {
@@ -20,7 +20,7 @@ export class MyInterface extends CGFinterface {
     //  http://workshop.chromeexperiments.com/examples/gui
 
     this.gui = new dat.GUI();
-    this.gui.hide()
+    this.gui.hide();
 
     // add a group of controls (and open/expand by defult)
 

@@ -1,4 +1,4 @@
-import {  CGFplane, CGFappearance, CGFtexture } from "../../../lib/CGF.js";
+import { CGFplane, CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 
 /**
  * @class TileView
@@ -42,16 +42,16 @@ export default class TileView {
   /**
    * @method display
    * Displays the tile at a given position
-   * @param {Integer} row 
-   * @param {Integer} col 
-   * @param {Integer} highlight 
+   * @param {Integer} row - Tile row
+   * @param {Integer} col - Tile column
+   * @param {Boolean} highlight - If the tile should be highlighted
    */
   display(row, col, highlight = false) {
     this.scene.pushMatrix();
 
     this.scene.scale(4, 1, 4);
     this.scene.translate(col, 0.2, row);
-  
+
     if (highlight) {
       this.highlightedMaterial.apply();
     } else if ((row + col) % 2 != 0) {

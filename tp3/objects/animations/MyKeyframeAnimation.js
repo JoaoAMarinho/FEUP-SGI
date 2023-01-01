@@ -128,15 +128,13 @@ export class MyKeyframeAnimation extends MyAnimation {
     for (let i = this.keyframes.length - 1; i >= 0; i--) {
       const keyframe = this.keyframes[i];
       keyframe.transformation.rotate = keyframe.transformation.rotate.map(
-        (x) => -1*x
+        (x) => -1 * x
       );
 
-      if (tempInstant != null)
-        instant += tempInstant - keyframe.instant;
-      
+      if (tempInstant != null) instant += tempInstant - keyframe.instant;
+
       tempInstant = keyframe.instant;
       keyframe.instant = instant;
-
 
       newKeyframes.push(keyframe);
     }

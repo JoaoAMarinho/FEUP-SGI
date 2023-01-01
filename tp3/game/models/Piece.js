@@ -21,15 +21,15 @@ export default class Piece {
   /**
    * @method getPieceID
    * Returns the piece ID based on the player and if it's a queen
-   * @returns {String} Piece ID
+   * @returns {String} - Piece ID
    */
   getPieceID() {
     let ids = ["X", "XX"];
-    this.component = 'player1';
+    this.component = "player1";
 
     if (this.player) {
       ids = ["Y", "YY"];
-      this.component = 'player2';
+      this.component = "player2";
     }
     return this.isQueen ? ids[1] : ids[0];
   }
@@ -37,7 +37,7 @@ export default class Piece {
   /**
    * @method getVectors
    * Returns the piece vectors based on the player and if it's a queen
-   * @returns {Array} Piece vectors
+   * @returns {Array} - Piece vectors
    */
   getVectors() {
     if (this.isQueen) {
@@ -65,7 +65,7 @@ export default class Piece {
   /**
    * @method getEndRow
    * Returns the end row based on the player
-   * @returns {Integer} End row
+   * @returns {Integer} - End row
    */
   getEndRow() {
     if (this.player) {

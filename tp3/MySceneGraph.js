@@ -33,7 +33,7 @@ var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
 
 /**
- * MySceneGraph
+ * @class MySceneGraph
  * @constructor
  * @param {String} filename - XML filename to be parsed
  * @param {CGFscene} scene - Reference to XMLscene object
@@ -102,10 +102,15 @@ export class MySceneGraph {
     this.loadedOk = true;
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-    if (this.objs.length == 0)
-      this.scene.onGraphLoaded();
+    if (this.objs.length == 0) this.scene.onGraphLoaded();
   }
 
+  /**
+   * @method loadedObj
+   * Callback to be executed after OBJ loading
+   * @param {Integer} idx - OBJ index
+   * @param {Boolean} ok - If the OBJ was loaded successfully
+   */
   loadedObj(idx, ok) {
     if (!ok) {
       this.onXMLError("Error loading obj file, with index: " + idx + ".");
@@ -663,9 +668,15 @@ export class MySceneGraph {
       // Parse texture
       var file = this.reader.getString(children[i], "file");
 
-      if (!file.endsWith(".jpg") && !file.endsWith(".png") && !file.endsWith(".bmp")) {
+      if (
+        !file.endsWith(".jpg") &&
+        !file.endsWith(".png") &&
+        !file.endsWith(".bmp")
+      ) {
         this.onXMLMinorError(
-          "File must be of type .jpg, .png or .bmp (conflict: ID = " + textureID + ")"
+          "File must be of type .jpg, .png or .bmp (conflict: ID = " +
+            textureID +
+            ")"
         );
         continue;
       }
@@ -1720,15 +1731,10 @@ export class MySceneGraph {
     var file = this.reader.getString(obj, "file");
 
     if (file == null)
-      return (
-        "Unable to parse file of the primitive for ID = " +
-        primitiveId
-      );
+      return "Unable to parse file of the primitive for ID = " + primitiveId;
 
     if (!file.endsWith(".obj"))
-      return (
-        "File must be of type .obj (conflict: ID = " + primitiveId + ")"
-      );
+      return "File must be of type .obj (conflict: ID = " + primitiveId + ")";
 
     if (!this.fileExists(file))
       return (

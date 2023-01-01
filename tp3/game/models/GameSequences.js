@@ -11,7 +11,7 @@ export default class GameSequences {
   /**
    * @method getSequence
    * Gets a sequence from the sequences array by index
-   * @param {Integer} idx 
+   * @param {Integer} idx - Sequence index
    * @returns {Object} sequence
    */
   getSequence(idx) {
@@ -22,7 +22,7 @@ export default class GameSequences {
   /**
    * @method hasSequences
    * Checks if there are sequences in the array of sequences
-   * @returns {Boolean} true if there are sequences
+   * @returns {Boolean} - True if there are sequences
    */
   hasSequences() {
     return this.sequences.length > 0;
@@ -30,12 +30,12 @@ export default class GameSequences {
 
   /**
    * @method addSequence
-   * Adds a sequence to the array of sequences 
-   * @param {Array} board
-   * @param {Array} auxiliarBoard
-   * @param {Integer} playerTurn
-   * @param {Array} scores
-   * @param {Boolean} mandatoryPlay
+   * Adds a sequence to the array of sequences
+   * @param {Array} board - Sequence board
+   * @param {Array} auxiliarBoard - Sequence auxiliar board
+   * @param {Integer} playerTurn - Player turn
+   * @param {Array} scores - Player scores
+   * @param {Boolean} mandatoryPlay - True if the player has to play in the start position
    */
   addSequence(board, auxiliarBoard, playerTurn, scores, mandatoryPlay) {
     this.sequences.push({
@@ -50,8 +50,8 @@ export default class GameSequences {
 
   /**
    * @method addAnimation
-   * Adds an animation to the last sequence in the array of sequences 
-   * @param {Animation Object} animation
+   * Adds an animation to the last sequence in the array of sequences
+   * @param {Animation Object} animation - Animation object
    */
   addAnimation(animation) {
     this.sequences[this.sequences.length - 1].moves.push(animation);
@@ -60,7 +60,7 @@ export default class GameSequences {
   /**
    * @method undo
    * Removes the last sequence from the array of sequences
-   * @returns {Object} sequence
+   * @returns {Object} - Sequence
    */
   undo() {
     return this.sequences.pop();
@@ -69,7 +69,7 @@ export default class GameSequences {
   /**
    * @method updateSequence
    * Updates the last sequence in the array of sequences
-   * @param {Object} Sequence
+   * @param {Object} val - New sequence values
    */
   updateSequence(val) {
     this.sequences[this.sequences.length - 1] = {

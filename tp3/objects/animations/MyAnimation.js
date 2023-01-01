@@ -1,5 +1,5 @@
 /**
- * MyAnimation
+ * @class MyAnimation
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  */
@@ -47,7 +47,8 @@ export class MyAnimation {
 
   /**
    * @method isActive
-   * @returns if the animation is active
+   * Checks if the animation is active
+   * @returns {Boolean} - If the animation is active
    */
   isActive() {
     return this.active;
@@ -55,7 +56,8 @@ export class MyAnimation {
 
   /**
    * @method hasEnded
-   * @returns if the animation has ended
+   * Checks if the animation has ended
+   * @returns {Boolean} - If the animation has ended
    */
   hasEnded() {
     return this.totalTime > this.endTime;

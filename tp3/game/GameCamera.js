@@ -33,17 +33,17 @@ export default class GameCamera {
 
   /**
    * @method getPosition
-   * @returns {Array} camera position
+   * @returns {Array} - Camera position
    */
   getPosition() {
-    const pos = this.camera.position 
+    const pos = this.camera.position;
     return vec3.fromValues(pos[0], pos[1], pos[2]);
   }
 
   /**
    * @method inPlace
    * Checks if the camera is in place
-   * @returns {Boolean} true if the camera is in place
+   * @returns {Boolean} - True if the camera is in place
    */
   inPlace() {
     const { position } = this.cameraPositions[this.cameraIndex];
@@ -72,11 +72,14 @@ export default class GameCamera {
 
   /**
    * @method changeCamera
-   * Changes the camera position
-   * @param {Integer} cameraIndex - Index of the camera position
-    */
+   * Changes the camera position to the next one if not in place
+   * @param {Integer} cameraIndex - Index of the camera position to change to
+   */
   changeCamera(cameraIndex = null) {
-    this.cameraIndex = cameraIndex == null ? (this.cameraIndex + 1) % this.cameraPositions.length : cameraIndex;
+    this.cameraIndex =
+      cameraIndex == null
+        ? (this.cameraIndex + 1) % this.cameraPositions.length
+        : cameraIndex;
 
     if (this.cameraAnimation != null || this.inPlace()) return;
 
@@ -88,8 +91,8 @@ export default class GameCamera {
 
   /**
    * @method update
-   *  Updates the camera position
-   * @param {integer} time 
+   * Updates the camera position
+   * @param {integer} time - Time elapsed since last update
    */
   update(time) {
     if (this.cameraAnimation == null) return;

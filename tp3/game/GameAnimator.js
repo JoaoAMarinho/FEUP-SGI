@@ -19,8 +19,8 @@ export default class GameAnimator {
   /**
    * @method setViewers
    * Sets the viewers for the game
-   * @param {GameBoard Viewer Object} gameBoardViewer 
-   * @param {String} transporter 
+   * @param {GameBoardView} gameBoardViewer - Game board viewer
+   * @param {String} transporter - Transporter component ID
    */
   setViewers(gameBoardViewer, transporter) {
     this.piecesViewer = gameBoardViewer.piecesViewer;
@@ -29,13 +29,13 @@ export default class GameAnimator {
 
   /**
    * @method createPieceAnimation
-   * Creates a piece animation 
-   * @param {Piece Object} piece 
-   * @param {Object} startPos 
-   * @param {Object} endPos 
-   * @param {Boolean} capturing 
-   * @param {Integer} endTime 
-   * @returns 
+   * Creates a piece animation
+   * @param {Piece} piece - Piece object
+   * @param {Object} startPos - Start position
+   * @param {Object} endPos - End position
+   * @param {Boolean} capturing - If the piece is capturing
+   * @param {Integer} endTime - Animation end time
+   * @returns {MyPieceAnimation} - Created animation
    */
   createPieceAnimation(piece, startPos, endPos, capturing, endTime = null) {
     const animation = new MyPieceAnimation(
@@ -53,28 +53,24 @@ export default class GameAnimator {
   /**
    * @method createEvolutionAnimation
    * Creates an evolution animation
-   * @param {Object} position 
-   * @param {Integer} startTime 
-   * @returns 
+   * @param {Object} position - Animation position
+   * @param {Integer} startTime - Animation start time
+   * @returns {MyEvolutionAnimation} - Created animation
    */
   createEvolutionAnimation(position, startTime) {
-    const animation = new MyEvolutionAnimation(
-      this.scene,
-      position,
-      startTime
-    );
+    const animation = new MyEvolutionAnimation(this.scene, position, startTime);
     this.setEvolutionAnimation(animation);
     return animation;
   }
 
   /**
    * @method createCaptureAnimation
-   * Creates a capture animation 
-   * @param {Object} startPos 
-   * @param {Object} intermediatePos 
-   * @param {Object} endPos 
-   * @param {Integer} endTime 
-   * @returns 
+   * Creates a capture animation
+   * @param {Object} startPos - Animation start position
+   * @param {Object} intermediatePos - Animation intermediate position
+   * @param {Object} endPos - Animation end position
+   * @param {Integer} endTime - Animation end time
+   * @returns {MyCaptureAnimation} - Created animation
    */
   createCaptureAnimation(startPos, intermediatePos, endPos, endTime) {
     const animation = new MyCaptureAnimation(
@@ -91,7 +87,7 @@ export default class GameAnimator {
   /**
    * @method addPieceAnimation
    * Adds a piece animation to the list of animations
-   * @param {Piece Animation Object} animation 
+   * @param {MyPieceAnimation} animation
    */
   addPieceAnimation(animation) {
     this.pieceAnimations.push(animation);
@@ -100,7 +96,7 @@ export default class GameAnimator {
   /**
    * @method setEvolutionAnimation
    * Sets the evolution animation
-   * @param {Evolution Animation Object} animation 
+   * @param {MyEvolutionAnimation} animation
    */
   setEvolutionAnimation(animation) {
     this.upgradingAnimation = animation;
@@ -109,7 +105,7 @@ export default class GameAnimator {
   /**
    * @method setCaptureAnimation
    * Sets the capture animation
-   * @param {Capture Animation Object} animation 
+   * @param {MyCaptureAnimation} animation
    */
   setCaptureAnimation(animation) {
     this.captureAnimation = animation;
@@ -118,7 +114,7 @@ export default class GameAnimator {
   /**
    * @method hasAnimations
    * Checks if there are any animations
-   * @returns {Boolean} true if there are animations, false otherwise
+   * @returns {Boolean} - True if there are animations, false otherwise
    */
   hasAnimations() {
     return this.pieceAnimations.length > 0 || this.upgradingAnimation != null;
@@ -138,15 +134,15 @@ export default class GameAnimator {
 
     if (this.upgradingAnimation != null && this.upgradingAnimation.hasEnded())
       this.upgradingAnimation = null;
-  
+
     if (this.captureAnimation != null && this.captureAnimation.hasEnded())
       this.captureAnimation = null;
   }
 
   /**
    * @method update
-   * Updates the animations 
-   * @param {Integer} time 
+   * Updates the animations
+   * @param {Integer} time - Time since last call
    */
   update(time) {
     this.pieceAnimations.forEach((animation) => {
@@ -160,7 +156,7 @@ export default class GameAnimator {
 
   /**
    * @method display
-   * Displays the animations 
+   * Displays the animations
    */
   display() {
     this.pieceAnimations.forEach((animation) => {

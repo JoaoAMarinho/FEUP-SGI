@@ -1,5 +1,5 @@
 /**
- * MyNode
+ * @class MyNode
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id - Object identifier

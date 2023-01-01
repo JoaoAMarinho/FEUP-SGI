@@ -1,7 +1,7 @@
 import { CGFnurbsObject, CGFnurbsSurface } from "../../../lib/CGF.js";
 
 /**
- * MyPatch
+ * @class MyPatch
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id - Object identifier

@@ -1,6 +1,5 @@
- 
 /**
- * @param {Integer} time 
+ * @param {Integer} time - Time in milliseconds
  * @returns time string in minutes and seconds
  */
 export function parseTime(time) {
@@ -11,8 +10,8 @@ export function parseTime(time) {
 }
 
 /**
- * @param {Integer} min
- * @param {Integer} max
+ * @param {Integer} min - Minimum value
+ * @param {Integer} max - Maximum value
  * @returns random integer between min and max
  */
 export function getRandomInt(min, max) {

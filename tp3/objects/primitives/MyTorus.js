@@ -1,7 +1,7 @@
 import { CGFobject } from "../../../lib/CGF.js";
 
 /**
- * MyTorus
+ * @class MyTorus
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  * @param {String} id - Object identifier
