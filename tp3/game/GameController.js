@@ -60,6 +60,7 @@ export default class GameController {
     this.scores = [0, 0];
     
     this.gameSettings = this.initSettings();
+    this.startMusic();
     this.audio = this.gameSettings.audio;
 
     this.theme = new MySceneGraph(this.gameSettings.theme, this.scene);
@@ -105,6 +106,13 @@ export default class GameController {
     return settings[this.gameSettings];
   }
 
+  startMusic() {
+    const audio = this.gameSettings.audio;
+    audio.loop = true;
+    audio.volume = 0.3;
+    audio.play();
+  }
+
   /**
    * @method update
    * Updates the game 
@@ -118,24 +126,6 @@ export default class GameController {
     if ([STATES.PickPiece, STATES.PickMove].includes(this.gameState)) {
       this.gameTime -= time;
     }
-
-    this.updateMusic();
-  }
-
-  /**
-   * @method updateMusic
-   * Updates the music 
-   */
-  updateMusic() {
-    if (!this.audio) return;
-
-    if (this.musicActive) {
-        this.audio.loop = true;
-        this.audio.volume = 0.3;
-        this.audio.play();
-    } else {
-      this.audio.pause();
-    }
   }
 
   /**
@@ -147,10 +137,8 @@ export default class GameController {
 
     if (this.gameState == STATES.Menu) {
       this.menuHandler(click);
-      this.musicActive = false;
       return;
     }
-    this.musicActive = true;
 
     if (this.gameState == STATES.GameOver) {
       this.gameOverHandler(click);
@@ -619,6 +607,7 @@ export default class GameController {
     this.animator.resetAnimations();
     this.camera.resetPosition();
     this.gameSequences.reset();
+    this.gameSettings.audio.pause();
     this.gameSettings = "Space";
     this.scene.reset();
     this.changeState(STATES.Menu);
