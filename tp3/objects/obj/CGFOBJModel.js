@@ -13,6 +13,14 @@
 import { CGFobject } from "../../../lib/CGF.js";
 import { CGFresourceReader } from "./CGFResourceReader.js";
 
+/**
+ * @class CGFOBJModel
+ * @constructor
+ * @param {XMLscene} scene - Reference to MyScene object
+ * @param {String} url - Path to the OBJ file
+ * @param {Integer} idx - Index of the object in the scene
+ * @param {Boolean} wireframe - Whether to display the object as wireframe
+ */
 export class CGFOBJModel extends CGFobject {
   constructor(scene, url, idx, wireframe) {
     super(scene);
@@ -37,10 +45,20 @@ export class CGFOBJModel extends CGFobject {
     this.rr.open(url, this);
   }
 
+  /**
+   * @method onResourceError
+   * Callback for when an error occurs while loading the OBJ file
+   * @param {String} string - Error message
+   */
   onResourceError(string) {
     console.log("Error loading resource " + this.url + ": " + string);
   }
 
+  /**
+   * @method onResourceReady
+   * Callback for when the OBJ file is loaded successfully 
+   * @param {String} string - OBJ file contents
+   */
   onResourceReady(string) {
     function procVert(model, str) {
       str = str.trim();
@@ -166,5 +184,10 @@ export class CGFOBJModel extends CGFobject {
     this.initGLBuffers();
   }
 
+  /**
+   * @method updateTexCoords
+   * Updates the list of texture coordinates of the object
+   * @param {Array} coords - Array of texture coordinates
+   */
   updateTexCoords(coords) {}
 }

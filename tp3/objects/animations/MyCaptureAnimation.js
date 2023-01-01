@@ -7,6 +7,16 @@ const AxisCombination = [
   [0, 1, 1],
 ];
 
+/**
+ * @class MyCaptureAnimation
+ * @extends MyKeyframeAnimation
+ * @constructor
+ * @param {CGFscene} scene - Reference to MyScene object
+ * @param {Object} startPos
+ * @param {Object} intermediatePos
+ * @param {Object} endPos
+ * @param {Integer} endTime
+ */
 export class MyCaptureAnimation extends MyKeyframeAnimation {
   constructor(scene, startPos, intermediatePos, endPos, endTime) {
     super(scene);
@@ -26,6 +36,10 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.setupKeyframes(endTime);
   }
 
+  /**
+   * @method calculateStartPos
+   * Calculates the position where the piece will be captured and the direction it will have to face to capture the piece
+   */
   calculateStartPos() {
     let direction = [
       this.intermediatePos.col * 4 - this.startPos[0],
@@ -38,6 +52,13 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.startPos = this.findPointInNormalPlane(this.startPos, direction);
   }
 
+  /**
+   * @method findPointInNormalPlane 
+   * Finds a random point in the plane defined by the normal vector and the point
+   * @param {Array} point
+   * @param {Array} normal
+   * @returns {Array} random point
+   */
   findPointInNormalPlane(point, normal) {
     const randomCombination =
       AxisCombination[Math.floor(Math.random() * AxisCombination.length)];
@@ -65,6 +86,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     return randomPoint;
   }
 
+  /**
+   * @method setupKeyframes
+   * Sets up the keyframes for the animation 
+   * @param {Integer} endTime
+   */
   setupKeyframes(endTime) {
     this.addInitialAnimation();
     this.addMoveToPiecePosition();
@@ -74,6 +100,10 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.addFinalAnimation(endTime);
   }
 
+  /**
+   * @method addInitialAnimation
+   * Adds the initial animation to the keyframes array 
+   */
   addInitialAnimation() {
     let transformation = {
       translate: [...this.startPos],
@@ -89,6 +119,10 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
+  /**
+   * @method addMoveToPiecePosition
+   * Adds the animation to move the transporter piece to the position where it will capture the piece
+   */
   addMoveToPiecePosition() {
     let transformation = {
       translate: [
@@ -107,6 +141,10 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
+  /**
+   * @method addMoveUpAnimation
+   * Adds the animation to move the transporter piece up 
+   */
   addMoveUpAnimation() {
     const transformation = {
       translate: [
@@ -126,6 +164,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
+  /**
+   * @method addMoveToFinalPosition
+   * Adds the animation to move the transporter piece to the final position of the captured piece
+   * Also adds the rotation for the transporter piece to face the captured piece
+   */
   addMoveToFinalPosition() {
     const transformation = {
       translate: [this.endPos.col, 14.0, this.endPos.row],
@@ -140,6 +183,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
+  /**
+   * @method addMoveDownAnimation
+   * Adds the animation to move the transporter piece down to the final position of the captured piece
+   * Also adds the rotation for the transporter piece to leave
+   */
   addMoveDownAnimation() {
     const transformation = {
       translate: [this.endPos.col, 1.8, this.endPos.row],
@@ -157,6 +205,11 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     super.updateTimes();
   }
 
+  /**
+   * @method addFinalAnimation
+   * Adds the final animation to the keyframes array
+   * @param {Integer} endTime
+   */
   addFinalAnimation(endTime) {
     const transformation = {
       translate: [
@@ -178,6 +231,12 @@ export class MyCaptureAnimation extends MyKeyframeAnimation {
     super.updateTimes();
   }
 
+  /**
+   * @method update
+   * Updates the animation of the transporter piece
+   * @param {Integer} t
+   * @override
+   */
   update(t) {
     if (this.keyframeIndex == 1) {
       this.facing = Math.atan2(

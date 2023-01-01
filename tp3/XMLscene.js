@@ -245,6 +245,10 @@ export class XMLscene extends CGFscene {
     }
   }
 
+  /**
+   * @method reset
+   * Reset scene lights to default position and puts scene in uninitialized state
+   */
   reset() {
     this.sceneInited = false;
     for (let i = 0; i < 8; i++) {

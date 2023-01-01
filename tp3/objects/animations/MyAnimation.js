@@ -38,7 +38,6 @@ export class MyAnimation {
   /**
    * @method apply
    * Applies the animation (transformation matrix) to the scene object if it active
-   * @returns none
    */
   apply() {
     if (!this.active) return;
@@ -48,7 +47,7 @@ export class MyAnimation {
 
   /**
    * @method isActive
-   * @returns active attribute
+   * @returns if the animation is active
    */
   isActive() {
     return this.active;
@@ -62,6 +61,10 @@ export class MyAnimation {
     return this.totalTime > this.endTime;
   }
 
+  /**
+   * @method reset
+   * Resets the animation to its initial state (totalTime = 0, active = false)
+   */
   reset() {
     this.totalTime = 0;
     this.active = false;

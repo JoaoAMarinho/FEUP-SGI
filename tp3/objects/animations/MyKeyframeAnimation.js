@@ -1,7 +1,8 @@
 import { MyAnimation } from "./MyAnimation.js";
 
 /**
- * MyKeyframeAnimation
+ * @class MyKeyframeAnimation
+ * @extends MyAnimation
  * @constructor
  * @param {CGFscene} scene - Reference to XMLscene object
  */
@@ -39,7 +40,6 @@ export class MyKeyframeAnimation extends MyAnimation {
    * @method update
    * Calculates the new currentTransformation attribute according to current keyframe and fraction of elapsed time
    * @param {integer} t - Time since last update call
-   * @returns none
    */
   update(t) {
     this.totalTime += t;
@@ -116,6 +116,10 @@ export class MyKeyframeAnimation extends MyAnimation {
     mat4.scale(this.currentTransformation, matrix, scale);
   }
 
+  /**
+   * @method revert
+   * Reverts the animation by inverting the keyframes and their instants
+   */
   revert() {
     const newKeyframes = [];
     let instant = 0;
@@ -142,6 +146,11 @@ export class MyKeyframeAnimation extends MyAnimation {
     this.updateTimes();
   }
 
+  /**
+   * @method reset
+   * Resets the animation to its initial state
+   * @override
+   */
   reset() {
     super.reset();
     this.keyframeIndex = 0;

@@ -1,5 +1,13 @@
 import { MyKeyframeAnimation } from "./MykeyFrameAnimation.js";
 
+/**
+ * @class MyEvolutionAnimation
+ * @extends MyKeyframeAnimation
+ * @constructor
+ * @param {CGFscene} scene - Reference to MyScene object
+ * @param {Object} startPos
+ * @param {Integer} startTime
+ */
 export class MyEvolutionAnimation extends MyKeyframeAnimation {
   constructor(scene, startPos, startTime) {
     super(scene);
@@ -9,6 +17,11 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
     super.updateTimes();
   }
 
+  /**
+   * @method setupKeyframes
+   * Sets up the keyframes for the animation 
+   * @param {Integer} startTime
+   */
   setupKeyframes(startTime) {
     let transformation = {
       translate: [0.0, 0.0, 0.0],
@@ -37,6 +50,11 @@ export class MyEvolutionAnimation extends MyKeyframeAnimation {
     this.keyframes.push(keyframe);
   }
 
+  /**
+   * @method apply
+   * @override
+   * Applies the animation to the piece but also translates it to the correct position due to the scale of the animation
+   */
   apply() {
     this.scene.translate(4 * this.startPos.col, 1.5, 4 * this.startPos.row);
     super.apply();
