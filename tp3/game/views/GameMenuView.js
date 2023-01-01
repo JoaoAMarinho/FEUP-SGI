@@ -24,7 +24,7 @@ export default class GameMenuView {
     this.scene = scene;
     this.appearance = new CGFappearance(this.scene);
 
-    const texture = new CGFtexture(this.scene, "./textures/font.png");
+    const texture = new CGFtexture(this.scene, "./scenes/images/font.png");
     this.appearance.setTexture(texture);
     this.textShader = new CGFshader(
       this.scene.gl,
