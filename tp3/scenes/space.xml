@@ -181,13 +181,6 @@
             <specular r="0.14" g="0.45" b="0.61" a="1.0" />
         </material>
 
-        <material id="orangeMaterial" shininess="50">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.65" b="0.0" a="1.0" />
-            <diffuse r="1.0" g="0.65" b="0.0" a="1.0" />
-            <specular r="1.0" g="0.65" b="0.0" a="1.0" />
-        </material>
-
         <material id="crownMaterial" shininess="10">
             <emission r="0.855" g="0.647" b="0.125" a="1.0" />
             <ambient r="0.855" g="0.647" b="0.125" a="1.0" />
@@ -2074,7 +2067,7 @@
                 <scale x="0.5" y="0.5" z="2.0" />
             </transformation>
             <materials>
-                <material id="defaultMaterial" />
+                <material id="sunMaterial" />
             </materials>
             <texture id="sunTexture" length_s="1.0" length_t="1.0" />
             <animation id="propulsersOn" />
@@ -2180,19 +2173,6 @@
             <texture id="none" />
             <children>
                 <componentref id="starArmRight" />
-            </children>
-        </component>
-
-        <!-- King Piece -->
-        <component id="king" >
-            <transformation>
-            </transformation>
-            <materials>
-            <material id="defaultMaterial" />
-            </materials>
-            <texture id="none" />
-            <children>
-            <componentref id="crown" />
             </children>
         </component>
 
@@ -2447,7 +2427,5 @@
                 <componentref id="crownPeak" />
             </children>
         </component>
-
-
     </components>
 </sxs>
