@@ -337,6 +337,8 @@ export default class GameController {
         this.gameBoard.emptyPosition(animation.startPos);
       } else if (animation instanceof MyEvolutionAnimation)
         this.animator.setEvolutionAnimation(animation);
+      else
+        this.animator.setCaptureAnimation(animation);
     }
 
     this.filmSequence++;
@@ -512,7 +514,6 @@ export default class GameController {
       intermediatePos,
       auxiliarBoardPos,
       endTime,
-
     ], "capture");
 
     this.intermediatePieceID = this.gameBoard.emptyPosition(intermediatePos);

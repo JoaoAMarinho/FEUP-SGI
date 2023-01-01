@@ -252,6 +252,7 @@ export class XMLscene extends CGFscene {
   reset() {
     this.sceneInited = false;
     for (let i = 0; i < 8; i++) {
+      this.lights[i].disable();
       this.lights[i].setPosition(200, 200, 200, 1);
     }
   }
