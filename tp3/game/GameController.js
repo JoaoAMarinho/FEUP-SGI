@@ -92,7 +92,7 @@ export default class GameController {
    */
   initSettings() {
     const christmasAudio = new Audio("scenes/music/christmas.mp3");
-    const spaceAudio = new Audio("scenes/music/music.mp3");
+    const spaceAudio = new Audio("scenes/music/space.mp3");
 
     const settings = {
       Space: {
